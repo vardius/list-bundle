@@ -1,0 +1,35 @@
+{
+    "name": "vardius/list-bundle",
+    "title": "List Bundle",
+    "description": "Provides lists builder",
+    "keywords": [
+        "list", "list view", "list builder"
+    ],
+    "license": "MIT",
+    "homepage": "http://rafallorenz.com",
+    "authors": [
+        {
+            "name": "Rafał Lorenz",
+            "url": "http://rafallorenz.com"
+        }
+    ],
+    "maintainers": [
+        {
+          "name": "Rafał Lorenz",
+          "url": "http://rafallorenz.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "symfony/symfony": "2.6.*"
+    },
+    "target-dir": "Vardius/Bundle/ListBundle",
+    "autoload": {
+        "psr-0": { "Vardius\\Bundle\\ListBundle": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    }
+}
