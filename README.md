@@ -150,7 +150,7 @@ Create your provider class:
     }
 
 ### 6. Create view for your list
-Return to your view list data
+Use [VardiusCrudBundle](https://github.com/Vardius/crud-bundle) or return to your view list data
 
     $params = [
         'data' => $listView->getData(new ListDataEvent($repository, $event->getRequest())),
