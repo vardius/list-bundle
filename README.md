@@ -106,7 +106,7 @@ Entity class
 
 Service:
 
-        <service id="app.product.list_view" class="%vardius_list.list_view.class%" factory-service="vardius_list.list_view.factory" factory-method="get"/>
+        <service id="app.product.list_view" class="Lorenz\MainBundle\ListView\ProductProvider" parent="vardius_list.list_view.provider"/>
 
 ### 5. Configure your ListViewProvider class
 You can configure your list in the provider class, you can specify the limit of entries per page,
