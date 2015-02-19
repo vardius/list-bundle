@@ -23,22 +23,22 @@ class Action
     /** @var  string */
     protected $path;
     /** @var  string */
-    protected $type;
-    /** @var  string */
     protected $icon;
+    /** @var  array */
+    protected $parameters;
 
     /**
      * @param string $path
      * @param string $name
-     * @param string $type
      * @param string $icon
+     * @param array $parameters
      */
-    function __construct($path, $name = null, $type = 'row', $icon = null)
+    function __construct($path, $name = null, $icon = null, $parameters = [])
     {
         $this->name = $name;
         $this->path = $path;
-        $this->type = $type;
         $this->icon = $icon;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -76,22 +76,6 @@ class Action
     /**
      * @return string
      */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return string
-     */
     public function getIcon()
     {
         return $this->icon;
@@ -103,5 +87,21 @@ class Action
     public function setIcon($icon)
     {
         $this->icon = $icon;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * @param array $parameters
+     */
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
     }
 }

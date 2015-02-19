@@ -18,27 +18,41 @@ namespace Vardius\Bundle\ListBundle\Column\Type;
  */
 class CallableColumnType extends AbstractColumnType
 {
-    /** @var array */
-    protected $options = ['method'];
-
     /**
-     * @param mixed $entity
-     * @return mixed|string
+     * {@inheritdoc}
      */
     public function getData($entity = null)
     {
-        $callable = $this->options['method'];
-        if (is_callable($callable)) {
-            return call_user_func_array($callable, [$entity]);
+        $callback = null;
+
+        if (array_key_exists('callback', $this->options)) {
+            $callable = $this->options['callback'];
+
+            if (is_callable($callable)) {
+                $callback = call_user_func_array($callable, [$entity]);
+            }
         }
 
-        return $this->getName();
+        return $this->templating->render($this->getView(), [
+            'property' => $callback,
+            'isDate' => ($callback instanceof \DateTime),
+        ]);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTypeName()
+    function getOptions()
+    {
+        $options = parent::getOptions();
+
+        return array_merge($options, ['callback']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
     {
         return 'callable';
     }

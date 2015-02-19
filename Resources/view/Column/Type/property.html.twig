@@ -1,0 +1,5 @@
+{% if isDate %}
+    {{ property|date("m/d/Y") }}
+{% else %}
+    {{ property }}
+{% endif %}

@@ -18,6 +18,7 @@
         <parameter key="vardius_list.column_type.property.class">Vardius\Bundle\ListBundle\Column\Type\PropertyColumnType</parameter>
         <parameter key="vardius_list.column_type.option.class">Vardius\Bundle\ListBundle\Column\Type\OptionColumnType</parameter>
         <parameter key="vardius_list.column_type.callable.class">Vardius\Bundle\ListBundle\Column\Type\CallableColumnType</parameter>
+        <parameter key="vardius_list.column_type.action.class">Vardius\Bundle\ListBundle\Column\Type\ActionColumnType</parameter>
         <!--ACTION-->
         <parameter key="vardius_list.action.class">Vardius\Bundle\ListBundle\Action\Action</parameter>
         <parameter key="vardius_list.action.factory.class">Vardius\Bundle\ListBundle\Action\Factory\ActionFactory</parameter>
@@ -34,6 +35,7 @@
 
         <service id="vardius_list.column.factory" class="%vardius_list.column.factory.class%">
             <argument type="service" id="vardius_list.column_type_pool"/>
+            <argument type="service" id="templating"/>
         </service>
 
         <service id="vardius_list.filter.factory" class="%vardius_list.filter.factory.class%"/>
@@ -44,15 +46,25 @@
             <argument type="service" id="vardius_list.list_view.factory"/>
         </service>
 
+        <!--COLUMN POOL-->
         <service id="vardius_list.column_type_pool" class="%vardius_list.column_type_pool.class%" />
 
+        <!--COLUM TYPES-->
         <service id="vardius_list.column_type.property" class="%vardius_list.column_type.property.class%">
             <tag name="vardius_list.column_type" />
         </service>
+
         <service id="vardius_list.column_type.option" class="%vardius_list.column_type.option.class%">
             <tag name="vardius_list.column_type" />
         </service>
+
         <service id="vardius_list.column_type.callable" class="%vardius_list.column_type.callable.class%">
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.action" class="%vardius_list.column_type.action.class%">
+            <argument type="service" id="vardius_list.action.factory"/>
+
             <tag name="vardius_list.column_type" />
         </service>
     </services>

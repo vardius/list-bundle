@@ -15,6 +15,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactory;
 use Vardius\Bundle\ListBundle\Action\Factory\ActionFactory;
 use Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory;
+use Vardius\Bundle\ListBundle\Event\FactoryEvent;
 use Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory;
 use Vardius\Bundle\ListBundle\ListView\ListView;
 
@@ -57,7 +58,8 @@ class ListViewFactory
      */
     public function get()
     {
-        $listView = new ListView($this->formFactory, $this->columnFactory, $this->actionFactory, $this->filterFactory, $this->dispatcher);
+        $event = new FactoryEvent($this->formFactory, $this->columnFactory, $this->actionFactory, $this->filterFactory);
+        $listView = new ListView($event, $this->dispatcher);
 
         return $listView;
     }

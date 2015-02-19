@@ -9,7 +9,7 @@ ABOUT
 ==================================================
 Contributors:
 
-* [Rafał Lorenz](https://rafallorenz.com)
+* [Rafał Lorenz](http://rafallorenz.com)
 
 Want to contribute ? Feel free to send pull requests!
 
@@ -18,8 +18,6 @@ We are using the github [issue tracker](https://github.com/vardius/list-bundle/i
 
 HOW TO USE
 ==================================================
-
-Pagination enable soon...
 
 Installation
 ----------------
@@ -122,6 +120,8 @@ Declare your filter form as a service:
 
 Create your provider class:
 
+    use Vardius\Bundle\ListBundle\Action\Action;
+
     class ProductProvider extends ListViewProvider
     {
         /**
@@ -136,21 +136,43 @@ Create your provider class:
             $listView
                 ->setLimit(10) // set the entries per page
                 ->addColumn('name', 'property') // add column
-                ->addColumn('custom', 'callable', function(Product $product){
-                    return 'custom value';
+                ->addColumn('custom', 'callable', [
+                    'callback' => function(Product $product){
+                          return 'custom value';
+                      },
+                ])
+                ->addColumn('', 'action', [
+                    'actions' => [
+                        [
+                            'path' => 'app.product_controller.edit',
+                            'name' => 'edit',
+                            'icon' => 'fa-edit',
+                        ],
+                    ],
+                ])
+                ->addFilter('product_filter', function (FilterEvent $event) {
+
+                    $formData = $event->getData();
+                    $queryBuilder = $event->getQueryBuilder();
+
+                    $aliases = $queryBuilder->getRootAliases();
+                    $alias = Arrays::getFirstElement($aliases);
+
+                    $name = $formData['name'];
+
+                    $queryBuilder
+                        ->andWhere($alias.'.name = :name'))
+                        ->setParameter('name', $name);
+
+                    return $queryBuilder;
                 })
-                ->addFilter('product_filter', function (ListEvent $event) {
-                    return $event->getQueryBuilder();
-                })
-                ->addAction('action_route_path', 'action_display_name', 'row', [
-                    'icon' => 'fa-edit',
-                ]);
+                ->addAction('app.product_controller.list', 'Product List', 'fa-list');
         }
 
     }
 
 ### 6. Create view for your list
-Use [VardiusCrudBundle](https://github.com/Vardius/crud-bundle) or return to your view list data
+Return to your view list data
 
     $params = [
         'data' => $listView->getData(new ListDataEvent($repository, $event->getRequest())),

@@ -19,22 +19,20 @@ namespace Vardius\Bundle\ListBundle\Column\Type;
 class OptionColumnType extends AbstractColumnType
 {
     /**
-     * @param mixed $entity
-     * @return string
+     * {@inheritdoc}
      */
     public function getData($entity = null)
     {
-        if ($entity !== null) {
-            return '<input type="checkbox" class="list-option-' . $this->getName() . '" name="' . $this->getName() . '" value="' . $entity->getId() . '" />';
-        }
-
-        return '<input type="checkbox" class="list-option-' . $this->getName() . '" name="' . $this->getName() . '" value="" />';
+        return $this->templating->render($this->getView(), [
+            'option' => $this,
+            'entity' => $entity,
+        ]);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTypeName()
+    public function getName()
     {
         return 'option';
     }

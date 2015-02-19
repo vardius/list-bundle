@@ -23,8 +23,6 @@ abstract class ListViewProvider implements ListViewProviderInterface
 {
     /** @var ListViewFactory */
     protected $listViewFactory;
-    /** @var  AbstractType */
-    protected $filterFormType;
 
     /**
      * @param ListViewFactory $listViewFactory

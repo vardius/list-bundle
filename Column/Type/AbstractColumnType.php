@@ -11,6 +11,8 @@
 namespace Vardius\Bundle\ListBundle\Column\Type;
 
 
+use Symfony\Bridge\Twig\TwigEngine;
+
 /**
  * ColumnType
  *
@@ -19,43 +21,99 @@ namespace Vardius\Bundle\ListBundle\Column\Type;
 abstract class AbstractColumnType implements ColumnTypeInterface
 {
     /** @var array */
-    protected $options = [];
+    protected $options = [
+        'label',
+    ];
     /** @var  string */
-    protected $name;
+    protected $property;
+
+    /** @var  string */
+    protected $templating;
+
+    protected $templatePath = 'VardiusListBundle:Column\\Type:';
 
     /**
-     * @param mixed $entity
-     * @return mixed
+     * {@inheritdoc}
      */
-    abstract public function getData($entity = null);
+    public function setTemplateEngine(TwigEngine $templating)
+    {
+        $this->templating = $templating;
+    }
 
-    /** array */
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplateEngine()
+    {
+        return $this->templating;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     function getOptions()
     {
         return $this->options;
     }
 
     /**
-     * @param array $options
+     * {@inheritdoc}
      */
-    public function applyOptions($options)
+    public function setOptions($options)
     {
-        $this->options = array_merge($this->options, $options);
+        $this->options = $options;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getProperty()
     {
-        return $this->name;
+        return $this->property;
     }
 
     /**
-     * @param string $name
+     * {@inheritdoc}
      */
-    public function setName($name)
+    public function setProperty($property)
     {
-        $this->name = $name;
+        $this->property = $property;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        if (array_key_exists('label', $this->options)) {
+
+            return $this->options['label'];
+        }
+
+        return $this->getProperty();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return $this->templatePath;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTemplatePath($templatePath)
+    {
+        $this->templatePath = $templatePath;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getView()
+    {
+        return $this->getTemplatePath() . $this->getName();
     }
 }

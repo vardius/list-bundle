@@ -15,19 +15,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Vardius\Bundle\ListBundle\Action\Action;
-use Vardius\Bundle\ListBundle\Action\Factory\ActionFactory;
 use Vardius\Bundle\ListBundle\Column\Column;
+use Vardius\Bundle\ListBundle\Event\FactoryEvent;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvents;
-use Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
-use Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory;
 
 /**
  * ListView
@@ -38,15 +35,8 @@ class ListView
 {
     /** @var  EventDispatcherInterface */
     protected $dispatcher;
-    /** @var FormFactory */
-    protected $formFactory;
-    /** @var  ColumnFactory */
-    protected $columnFactory;
-    /** @var  ActionFactory */
-    protected $actionFactory;
-    /** @var  ListViewFilterFactory */
-    protected $filterFactory;
-    /** @var ArrayCollection */
+    /** @var FactoryEvent */
+    protected $factoryEvent;
     protected $filters;
     /** @var array */
     protected $filterForms = [];
@@ -58,18 +48,12 @@ class ListView
     protected $actions;
 
     /**
-     * @param FormFactory $formFactory
-     * @param ColumnFactory $columnFactory
-     * @param ActionFactory $actionFactory
-     * @param ListViewFilterFactory $filterFactory
+     * @param FactoryEvent $event
      * @param EventDispatcherInterface $eventDispatcher
      */
-    function __construct(FormFactory $formFactory, ColumnFactory $columnFactory, ActionFactory $actionFactory, ListViewFilterFactory $filterFactory, EventDispatcherInterface $eventDispatcher)
+    function __construct(FactoryEvent $event, EventDispatcherInterface $eventDispatcher)
     {
-        $this->formFactory = $formFactory;
-        $this->columnFactory = $columnFactory;
-        $this->actionFactory = $actionFactory;
-        $this->filterFactory = $filterFactory;
+        $this->factoryEvent = $event;
         $this->dispatcher = $eventDispatcher;
         $this->columns = new ArrayCollection();
         $this->rowActions = new ArrayCollection();
@@ -88,7 +72,7 @@ class ListView
 
         $data = $event->getData();
         if ($data instanceof EntityRepository) {
-            $queryBuilder = $data->createQueryBuilder('d');
+            $queryBuilder = $data->createQueryBuilder($data->getClassName());
         } elseif ($data instanceof QueryBuilder) {
             $queryBuilder = $data;
         } else {
@@ -96,7 +80,8 @@ class ListView
         }
 
         $routeName = $event->getRouteName();
-        $this->dispatchEvent(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
+
+        $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
         $queryBuilder
             ->setFirstResult($offset)
@@ -109,26 +94,22 @@ class ListView
 
         /** @var ListViewFilter $filter */
         foreach ($this->filters as $filter) {
-            $form = $this->formFactory->create($filter->getFormType(), []);
+
+            $formFactory = $this->factoryEvent->getFormFactory();
+            $form = $formFactory->create($filter->getFormType(), []);
+
             $form->handleRequest($event->getRequest());
+
             $this->filterForms[] = $form;
 
             $filterEvent = new FilterEvent($routeName, $queryBuilder, $form);
-            $this->dispatchEvent(ListEvents::FILTER, $filterEvent);
+            $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
             $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
         }
 
-        $this->dispatchEvent(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
+        $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
         return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * @param FilterEvent $filterEvent
-     */
-    public function dispatchEvent(FilterEvent $filterEvent)
-    {
-        $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
     }
 
     /**
@@ -173,7 +154,8 @@ class ListView
      */
     public function addFilter($formType, $filters)
     {
-        $filter = $this->filterFactory->get($formType, $filters);
+        $filterFactory = $this->factoryEvent->getFilterFactory();
+        $filter = $filterFactory->get($formType, $filters);
         $this->filters->add($filter);
 
         return $this;
@@ -185,9 +167,7 @@ class ListView
      */
     public function removeFilter(ListViewFilter $filter)
     {
-        if ($this->filters->contains($filter)) {
-            $this->filters->removeElement($filter);
-        }
+        $this->filters->removeElement($filter);
 
         return $this;
     }
@@ -208,7 +188,8 @@ class ListView
      */
     public function addColumn($name, $type, array $options = [])
     {
-        $column = $this->columnFactory->get($name, $type, $options);
+        $columnFactory = $this->factoryEvent->getColumnFactory();
+        $column = $columnFactory->get($name, $type, $options);
         $this->columns->add($column);
 
         return $this;
@@ -220,9 +201,7 @@ class ListView
      */
     public function removeColumn(Column $column)
     {
-        if ($this->columns->contains($column)) {
-            $this->columns->removeElement($column);
-        }
+        $this->columns->removeElement($column);
 
         return $this;
     }
@@ -238,13 +217,14 @@ class ListView
     /**
      * @param string $name
      * @param string $path
-     * @param string $type
      * @param string $icon
+     * @param array $parameters
      * @return $this
      */
-    public function addAction($path, $name = null, $type = 'row', $icon = null)
+    public function addAction($path, $name = null, $icon = null, $parameters = [])
     {
-        $action = $this->actionFactory->get($path, $name, $type, $icon);
+        $actionFactory = $this->factoryEvent->getActionFactory();
+        $action = $this->$actionFactory->get($path, $name, $icon, $parameters);
         $this->actions->add($action);
 
         return $this;
@@ -256,9 +236,7 @@ class ListView
      */
     public function removeAction(Action $column)
     {
-        if ($this->actions->contains($column)) {
-            $this->actions->removeElement($column);
-        }
+        $this->actions->removeElement($column);
 
         return $this;
     }

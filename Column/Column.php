@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Column;
 
+use Symfony\Bridge\Twig\TwigEngine;
 use Vardius\Bundle\ListBundle\Column\Type\AbstractColumnType;
 
 /**
@@ -19,34 +20,28 @@ use Vardius\Bundle\ListBundle\Column\Type\AbstractColumnType;
  */
 class Column
 {
-    /** @var  string */
-    protected $name;
     /** @var  AbstractColumnType */
     protected $type;
-    /** @var  array */
-    protected $options;
 
     /**
-     * @param string $name
+     * @param string $property
      * @param AbstractColumnType $type
      * @param array $options
      */
-    function __construct($name, AbstractColumnType $type, array $options = [])
+    function __construct($property, AbstractColumnType $type, array $options = [], TwigEngine $templating)
     {
-        $this->name = $name;
         $this->type = $type;
-        $this->options = $options;
-
-        $this->type->applyOptions($this->options);
-        $this->type->setName($this->name);
+        $this->type->setOptions($options);
+        $this->type->setProperty($property);
+        $this->type->setTemplateEngine($templating);
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getProperty()
     {
-        return $this->name;
+        return $this->type->getProperty();
     }
 
     /**
@@ -62,7 +57,7 @@ class Column
      */
     public function getOptions()
     {
-        return $this->options;
+        return $this->type->getOptions();
     }
 
     /**

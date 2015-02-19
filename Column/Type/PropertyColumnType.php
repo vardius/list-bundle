@@ -19,22 +19,26 @@ namespace Vardius\Bundle\ListBundle\Column\Type;
 class PropertyColumnType extends AbstractColumnType
 {
     /**
-     * @param mixed $entity
-     * @return string
+     * {@inheritdoc}
      */
     public function getData($entity = null)
     {
+        $property = $this->getProperty();
+
         if ($entity !== null) {
-            return $entity->get{ucfirst($this->getName())}();
+            $property = $entity->get{ucfirst($this->getProperty())}();
         }
 
-        return $this->getName();
+        return $this->templating->render($this->getView(), [
+            'property' => $property,
+            'isDate' => ($property instanceof \DateTime),
+        ]);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTypeName()
+    public function getName()
     {
         return 'property';
     }

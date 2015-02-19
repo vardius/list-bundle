@@ -10,8 +10,8 @@
 
 namespace Vardius\Bundle\ListBundle\Action\Factory;
 
-use Vardius\Bundle\ListBundle\Action\Action;
 
+use Vardius\Bundle\ListBundle\Action\Action;
 
 /**
  * ActionFactory
@@ -21,28 +21,22 @@ use Vardius\Bundle\ListBundle\Action\Action;
 class ActionFactory
 {
     /**
-     * Allowed types of actions
-     * @var array
-     */
-    protected static $allowedTypes = ['row', 'global'];
-
-    /**
      * @param string $path
      * @param string $name
-     * @param string $type
      * @param string $icon
+     * @param array $parameters
      * @return Action
      */
-    public function get($path, $name = null, $type = 'row', $icon = null)
+    public function get($path, $name = null, $icon = null, $parameters = [])
     {
-        if (!in_array($type, self::$allowedTypes)) {
-            throw new \InvalidArgumentException('The type "' . $type . '" does not exist. Known types are: ", ' . implode(",", self::$allowedTypes) . '"');
-        }
-
         if ($name === null && $icon === null) {
-            throw new \InvalidArgumentException('One of the parameters (name or icon) has to be provided');
+            throw new \InvalidArgumentException('One of the arguments (name or icon) has to be provided');
         }
 
-        return new Action($path, $name, $type, $icon);
+        if (!is_array($parameters)) {
+            throw new \InvalidArgumentException('The $parameters mast be an array. ' . $parameters . ' given');
+        }
+
+        return new Action($path, $name, $icon, $parameters);
     }
 }

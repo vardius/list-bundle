@@ -11,6 +11,7 @@
 namespace Vardius\Bundle\ListBundle\Column\Factory;
 
 
+use Symfony\Bridge\Twig\TwigEngine;
 use Vardius\Bundle\ListBundle\Column\Column;
 use Vardius\Bundle\ListBundle\Column\Type\AbstractColumnType;
 use Vardius\Bundle\ListBundle\Column\Type\ColumnTypePool;
@@ -24,22 +25,25 @@ class ColumnFactory
 {
     /** @var  ColumnTypePool */
     protected $columnTypePool;
+    /** @var TwigEngine */
+    protected $templating;
 
     /**
      * @param ColumnTypePool $columnTypePool
      */
-    function __construct(ColumnTypePool $columnTypePool)
+    function __construct(ColumnTypePool $columnTypePool, TwigEngine $templating)
     {
         $this->columnTypePool = $columnTypePool;
+        $this->templating = $templating;
     }
 
     /**
-     * @param string $name
+     * @param string $property
      * @param $type
      * @param array $options
      * @return Column
      */
-    public function get($name, $type, array $options = [])
+    public function get($property, $type, array $options = [])
     {
         if (is_string($type)) {
             $type = $this->columnTypePool->getType($type);
@@ -56,6 +60,6 @@ class ColumnFactory
             }
         }
 
-        return new Column($name, $type, $options);
+        return new Column($property, $type, $options, $this->templating);
     }
 }
