@@ -181,13 +181,14 @@ Return to your view list data
 
 Set up your view for example:
 
+
     <div class="row">
         <div class="col-md-12">
-            {% for action in listView.actions if actions.type == 'global' %}
+            {% for action in listView.actions %}
                 {% if loop.first %}
                     <div class="btn-group pull-right" role="group">
                 {% endif %}
-                <a href="{{ path('home') }}" class="btn btn-default" role="button">
+                <a href="{{ path(action.path) }}" class="btn btn-default" role="button">
                     {% if action.icon is not null %}
                         <i class="fa {{ action.icon }}"></i>
                     {% endif %}
@@ -218,25 +219,7 @@ Set up your view for example:
                 {% for entity in data %}
                     <tr class='list-view-item'>
                         {% for column in listView.columns %}
-                            <td>{{ column.data(entity) }}</td>
-                        {% endfor %}
-                        {% for action in listView.actions if actions.type == 'row' %}
-                            {% if loop.first %}
-                                <td>
-                            {% endif %}
-                            <a href="{{ path(action.path, {'id' : entity.id}) }}"
-                               class="btn btn-default"
-                               role="button">
-                                {% if action.icon is not null %}
-                                    <i class="fa {{ action.icon }}"></i>
-                                {% endif %}
-                                {% if action.name is not null %}
-                                    {{ action.name }}
-                                {% endif %}
-                            </a>
-                            {% if loop.last %}
-                                </td>
-                            {% endif %}
+                            <td>{{ column.data(entity)|raw }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
@@ -253,7 +236,7 @@ Set up your view for example:
     </div>
     <div class="row">
         <div class="col-md-12 pull-right">
-            {{ 'PAGINATOR SOON' }}
+            {{ 'PAGINATOR' }}
         </div>
     </div>
 
