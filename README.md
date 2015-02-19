@@ -167,6 +167,8 @@ Create your provider class:
                     return $queryBuilder;
                 })
                 ->addAction('app.product_controller.list', 'Product List', 'fa-list');
+
+                return $listView;
         }
 
     }

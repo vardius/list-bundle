@@ -88,8 +88,8 @@ class ListView
             ->setMaxResults($this->limit);
 
         $column = $event->getColumn();
-        if ($event->getColumn() !== null) {
-            $queryBuilder->orderBy('d.' . $column, strtoupper($event->getSort()));
+        if ($column !== null) {
+            $queryBuilder->orderBy($data->getClassName().'.' . $column, strtoupper($event->getSort()));
         }
 
         /** @var ListViewFilter $filter */
@@ -100,11 +100,11 @@ class ListView
 
             $form->handleRequest($event->getRequest());
 
-            $this->filterForms[] = $form;
-
             $filterEvent = new FilterEvent($routeName, $queryBuilder, $form);
             $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
             $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
+
+            $this->filterForms[] = $form->createView();
         }
 
         $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
@@ -115,7 +115,7 @@ class ListView
     /**
      * @return array
      */
-    public function getFilterForm()
+    public function getFilterForms()
     {
         return $this->filterForms;
     }

@@ -43,7 +43,7 @@ class ColumnTypePool
      */
     public function addType(ColumnTypeInterface $type)
     {
-        $this->types->set($type->getTypeName(), $type);
+        $this->types->set($type->getName(), $type);
     }
 
     /**

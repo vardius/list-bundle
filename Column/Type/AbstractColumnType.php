@@ -30,7 +30,7 @@ abstract class AbstractColumnType implements ColumnTypeInterface
     /** @var  string */
     protected $templating;
 
-    protected $templatePath = 'VardiusListBundle:Column\\Type:';
+    protected $templatePath = 'VardiusListBundle:Column\\type:';
 
     /**
      * {@inheritdoc}
@@ -114,6 +114,6 @@ abstract class AbstractColumnType implements ColumnTypeInterface
      */
     public function getView()
     {
-        return $this->getTemplatePath() . $this->getName();
+        return $this->getTemplatePath() . $this->getName() . '.html.twig';
     }
 }
