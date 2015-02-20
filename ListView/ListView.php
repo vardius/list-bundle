@@ -37,11 +37,12 @@ class ListView
     protected $dispatcher;
     /** @var FactoryEvent */
     protected $factoryEvent;
+    /** @var ArrayCollection */
     protected $filters;
     /** @var int */
-    protected $limit = 10;
+    protected $limit;
     /** @var string */
-    protected $title = 'List';
+    protected $title;
     /** @var  ArrayCollection */
     protected $columns;
     /** @var  ArrayCollection */
@@ -49,12 +50,16 @@ class ListView
 
     /**
      * @param FactoryEvent $event
+     * @param int $limit
+     * @param string $title
      * @param EventDispatcherInterface $eventDispatcher
      */
-    function __construct(FactoryEvent $event, EventDispatcherInterface $eventDispatcher)
+    function __construct(FactoryEvent $event, $limit, $title, EventDispatcherInterface $eventDispatcher)
     {
         $this->factoryEvent = $event;
         $this->dispatcher = $eventDispatcher;
+        $this->limit = $limit;
+        $this->title = $title;
         $this->columns = new ArrayCollection();
         $this->rowActions = new ArrayCollection();
         $this->filters = new ArrayCollection();

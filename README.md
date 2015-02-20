@@ -47,6 +47,14 @@ Enable the bundle in the kernel:
         );
     }
 
+Add to config.yml:
+
+    vardius_list:
+        title: List //default 'List'
+        limit: 10   //default 10
+
+You can also provide your custom value for list by setting them in provider class
+
 ### 3. Create your entity class
 
     /**

@@ -42,18 +42,18 @@ class Paginator
         $this->page = $page;
         $this->limit = $limit;
 
+        $aliases = $queryBuilder->getRootAliases();
+        $alias = array_values($aliases)[0];
+
         $cloneQueryBuilder = clone $queryBuilder;
         $from = $cloneQueryBuilder->getDQLPart('from');
         $cloneQueryBuilder->resetDQLParts();
 
-        $aliases = $cloneQueryBuilder->getRootAliases();
-        $alias = array_values($aliases)[0];
-
-        $this->total = $cloneQueryBuilder
+        $newQueryBuilder = $cloneQueryBuilder
             ->select('count(' . $alias . '.id)')
-            ->add('from', $from[0])
-            ->getQuery()
-            ->getSingleScalarResult();
+            ->add('from', $from[0]);
+
+        $this->total = $newQueryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**

@@ -25,10 +25,15 @@
         <!--PAGINATOR-->
         <parameter key="vardius_list.paginator.class">Vardius\Bundle\ListBundle\Paginator\Paginator</parameter>
         <parameter key="vardius_list.paginator.factory.class">Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory</parameter>
+        <!--BUNDLE PARAMETERS-->
+        <parameter key="vardius_list.title">List</parameter>
+        <parameter key="vardius_list.limit">10</parameter>
     </parameters>
 
     <services>
         <service id="vardius_list.list_view.factory" class="%vardius_list.list_view.factory.class%">
+            <argument>%vardius_list.limit%</argument>
+            <argument>%vardius_list.title%</argument>
             <argument type="service" id="form.factory"/>
             <argument type="service" id="vardius_list.column.factory"/>
             <argument type="service" id="vardius_list.action.factory"/>

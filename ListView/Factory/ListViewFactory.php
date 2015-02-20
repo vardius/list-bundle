@@ -27,6 +27,10 @@ use Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory;
  */
 class ListViewFactory
 {
+    /** @var int */
+    protected $limit;
+    /** @var string */
+    protected $title;
     /** @var FormFactory */
     protected $formFactory;
     /** @var  EventDispatcherInterface */
@@ -41,6 +45,8 @@ class ListViewFactory
     protected $paginatorFactory;
 
     /**
+     * @param int $limit
+     * @param string $title
      * @param FormFactory $formFactory
      * @param ColumnFactory $columnFactory
      * @param ActionFactory $actionFactory
@@ -48,7 +54,7 @@ class ListViewFactory
      * @param PaginatorFactory $paginatorFactory
      * @param EventDispatcherInterface $eventDispatcher
      */
-    function __construct(FormFactory $formFactory, ColumnFactory $columnFactory, ActionFactory $actionFactory, ListViewFilterFactory $filterFactory, PaginatorFactory $paginatorFactory, EventDispatcherInterface $eventDispatcher)
+    function __construct($limit, $title, FormFactory $formFactory, ColumnFactory $columnFactory, ActionFactory $actionFactory, ListViewFilterFactory $filterFactory, PaginatorFactory $paginatorFactory, EventDispatcherInterface $eventDispatcher)
     {
         $this->formFactory = $formFactory;
         $this->columnFactory = $columnFactory;
@@ -64,7 +70,7 @@ class ListViewFactory
     public function get()
     {
         $event = new FactoryEvent($this->formFactory, $this->columnFactory, $this->actionFactory, $this->filterFactory, $this->paginatorFactory);
-        $listView = new ListView($event, $this->dispatcher);
+        $listView = new ListView($event, $this->limit, $this->title, $this->dispatcher);
 
         return $listView;
     }
