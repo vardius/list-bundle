@@ -22,6 +22,9 @@
         <!--ACTION-->
         <parameter key="vardius_list.action.class">Vardius\Bundle\ListBundle\Action\Action</parameter>
         <parameter key="vardius_list.action.factory.class">Vardius\Bundle\ListBundle\Action\Factory\ActionFactory</parameter>
+        <!--PAGINATOR-->
+        <parameter key="vardius_list.paginator.class">Vardius\Bundle\ListBundle\Paginator\Paginator</parameter>
+        <parameter key="vardius_list.paginator.factory.class">Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory</parameter>
     </parameters>
 
     <services>
@@ -30,11 +33,16 @@
             <argument type="service" id="vardius_list.column.factory"/>
             <argument type="service" id="vardius_list.action.factory"/>
             <argument type="service" id="vardius_list.filter.factory"/>
+            <argument type="service" id="vardius_list.paginator.factory"/>
             <argument type="service" id="event_dispatcher" />
         </service>
 
         <service id="vardius_list.column.factory" class="%vardius_list.column.factory.class%">
             <argument type="service" id="vardius_list.column_type_pool"/>
+            <argument type="service" id="templating"/>
+        </service>
+
+        <service id="vardius_list.paginator.factory" class="%vardius_list.paginator.factory.class%">
             <argument type="service" id="templating"/>
         </service>
 

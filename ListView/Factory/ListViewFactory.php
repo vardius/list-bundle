@@ -18,6 +18,7 @@ use Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory;
 use Vardius\Bundle\ListBundle\Event\FactoryEvent;
 use Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory;
 use Vardius\Bundle\ListBundle\ListView\ListView;
+use Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory;
 
 /**
  * ListViewFactory
@@ -36,20 +37,24 @@ class ListViewFactory
     protected $actionFactory;
     /** @var  ListViewFilterFactory */
     protected $filterFactory;
+    /** @var  PaginatorFactory */
+    protected $paginatorFactory;
 
     /**
      * @param FormFactory $formFactory
      * @param ColumnFactory $columnFactory
      * @param ActionFactory $actionFactory
      * @param ListViewFilterFactory $filterFactory
+     * @param PaginatorFactory $paginatorFactory
      * @param EventDispatcherInterface $eventDispatcher
      */
-    function __construct(FormFactory $formFactory, ColumnFactory $columnFactory, ActionFactory $actionFactory, ListViewFilterFactory $filterFactory, EventDispatcherInterface $eventDispatcher)
+    function __construct(FormFactory $formFactory, ColumnFactory $columnFactory, ActionFactory $actionFactory, ListViewFilterFactory $filterFactory, PaginatorFactory $paginatorFactory, EventDispatcherInterface $eventDispatcher)
     {
         $this->formFactory = $formFactory;
         $this->columnFactory = $columnFactory;
         $this->actionFactory = $actionFactory;
         $this->filterFactory = $filterFactory;
+        $this->paginatorFactory = $paginatorFactory;
         $this->dispatcher = $eventDispatcher;
     }
 
@@ -58,7 +63,7 @@ class ListViewFactory
      */
     public function get()
     {
-        $event = new FactoryEvent($this->formFactory, $this->columnFactory, $this->actionFactory, $this->filterFactory);
+        $event = new FactoryEvent($this->formFactory, $this->columnFactory, $this->actionFactory, $this->filterFactory, $this->paginatorFactory);
         $listView = new ListView($event, $this->dispatcher);
 
         return $listView;

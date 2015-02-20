@@ -134,6 +134,7 @@ Create your provider class:
             $listView = $this->listViewFactory->get();
 
             $listView
+                ->setTitle('Page title') //set page title
                 ->setLimit(10) // set the entries per page
                 ->addColumn('name', 'property') // add column
                 ->addColumn('checkbox', 'option')
@@ -177,89 +178,72 @@ Create your provider class:
 ### 6. Create view for your list
 Return to your view list data
 
+    $data = $listView->getData(new ListDataEvent($repository, $event->getRequest()));
     $params = [
-        'data' => $listView->getData(new ListDataEvent($repository, $event->getRequest())),
-        'listView' => $listView,
+        'data' => $data['results'],
+        'filterForms' => $data['filterForms'],
+        'paginator' => $data['paginator'],
+        'columns' => $listView->getColumns(),
+        'actions' => $listView->getActions(),
+        'title' => $listView->getTitle(),
     ];
 
 Set up your view for example:
 
-    <div class="row">
-        <div class="col-md-12">
-            {% for action in listView.actions %}
-                {% if loop.first %}
-                    <div class="btn-group pull-right" role="group">
-                {% endif %}
-                <a href="{{ path(action.path) }}" class="btn btn-default" role="button">
-                    {% if action.icon is not null %}
-                        <i class="fa {{ action.icon }}"></i>
+    {% set hasFilters = (filterForms is not empty) %}
+        <div class="row">
+            <div class="col-md-{{ hasFilters ? '8' : '12' }}">
+                {% for action in actions %}
+                    {% if loop.first %}
+                        <div class="btn-group pull-right" role="group">
                     {% endif %}
-                    {% if action.name is not null %}
-                        {{ action.name }}
+                    <a href="{{ path(action.path, action.parameters) }}" class="btn btn-default" role="button">
+                        {% if action.icon is not null %}
+                            <i class="fa {{ action.icon }}"></i>
+                        {% endif %}
+                        {% if action.name is not null %}
+                            {{ action.name }}
+                        {% endif %}
+                    </a>
+                    {% if loop.last %}
+                        </div>
                     {% endif %}
-                </a>
-                {% if loo.last %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-    {% set hasFilters = (listView.filterForms is not empty) %}
-    <div class="row">
-        <div class="col-md-{{ hasFilters ? '8' : '12' }}">
-            <table class="table table-striped table-hover table-condensed">
-                <thead>
-                <tr>
-                    {% for column in listView.columns %}
-                        <td>{{ column.property|upper }}</td>
-                    {% endfor %}
-                    {% if listView.rowActions is not empty %}
-                        <td></td>
-                    {% endif %}
-                </thead>
-                <tbody>
-                {% for entity in data %}
-                    <tr class='list-view-item'>
-                        {% for column in listView.columns %}
-                            <td>{{ column.getData(entity)|raw }}</td>
-                        {% endfor %}
-                    </tr>
                 {% endfor %}
-                </tbody>
-            </table>
-            <div class="row">
-                <div class="col-md-12">
-                    {% set currentPage = listView.currentPage %}
-                    {% set previousPage = (currentPage > 1 ? (currentPage - 1) : 1) %}
-                    {% set lastPage = listView.lastPage %}
-                    {% set nextPage = (currentPage < lastPage ? lastPage + 1 : lastPage) %}
-                    <div class="paginator pull-right">
-                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': previousPage}) ) }}">
-                            <i class="fa fa-caret-square-o-left"></i>
-                        </a>
-                        {% if previousPage <  currentPage %}
-                            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': previousPage}) ) }}">{{ previousPage }}</a>
-                        {% endif %}
-                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': currentPage}) ) }}">{{ currentPage }}</a>
-                        {% if nextPage >  currentPage %}
-                            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': nextPage}) ) }}">{{ nextPage }}</a>
-                        {% endif %}
-                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': nextPage}) ) }}"
-                           class="last {% if lastPage == currentPage %} current{% endif %}">
-                            <i class="fa fa-caret-square-o-right"></i>
-                        </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-{{ hasFilters ? '8' : '12' }}">
+                <table class="table table-striped table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        {% for column in columns %}
+                            <td>{{ column.label|raw }}</td>
+                        {% endfor %}
+                    </thead>
+                    <tbody>
+                    {% for entity in data %}
+                        <tr class='list-view-item'>
+                            {% for column in .columns %}
+                                <td>{{ column.getData(entity)|raw }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ paginator|raw }}
                     </div>
                 </div>
             </div>
+            {% if hasFilters %}
+                <div class="col-md-4">
+                    {% for form in filterForms %}
+                        {{ form(form) }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
-        {% if hasFilters %}
-            <div class="col-md-4">
-                {% for form in listView.filterForms %}
-                    {{ form(form) }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
 
 For icons include styles in your view:
 

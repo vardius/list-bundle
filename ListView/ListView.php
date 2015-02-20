@@ -40,17 +40,12 @@ class ListView
     protected $filters;
     /** @var int */
     protected $limit = 10;
+    /** @var string */
+    protected $title = 'List';
     /** @var  ArrayCollection */
     protected $columns;
     /** @var  ArrayCollection */
     protected $actions;
-
-    /** @var array */
-    protected $filterForms = [];
-    /** @var int */
-    protected $currentPage = 1;
-    /** @var int */
-    protected $lastPage = 1;
 
     /**
      * @param FactoryEvent $event
@@ -72,48 +67,23 @@ class ListView
      */
     public function getData(ListDataEvent $event)
     {
-
-        $offset = ($event->getPage() * $this->limit) - $this->limit + 1;
-
-        $this->currentPage = $event->getPage();
-
         $data = $event->getData();
-        $total = 0;
         if ($data instanceof EntityRepository) {
             $queryBuilder = $data->createQueryBuilder($data->getClassName());
-
-            $total = $data
-                ->createQueryBuilder('i')
-                ->select('count(i.id)')
-                ->getQuery()
-                ->getSingleScalarResult();
-
         } elseif ($data instanceof QueryBuilder) {
             $queryBuilder = $data;
-
-            $cloneQueryBuilder = clone $queryBuilder;
-            $from = $cloneQueryBuilder->getDQLPart('from');
-            $cloneQueryBuilder->resetDQLParts();
-
-            $aliases = $cloneQueryBuilder->getRootAliases();
-            $alias = array_values($aliases)[0];
-
-            $cloneQueryBuilder
-                ->select('count(' . $alias . '.id)')
-                ->add('from', $from[0])
-                ->getQuery()
-                ->getSingleScalarResult();
-
         } else {
             throw new \InvalidArgumentException('Expected argument of type "EntityRepository or QueryBuilder", ' . get_class($data) . ' given');
         }
 
-        $this->lastPage = ceil($total/$this->limit);
+        $currentPage = $event->getPage();
+        $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
+        $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
 
         $routeName = $event->getRouteName();
-
         $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
+        $offset = ($currentPage * $this->limit) - $this->limit + 1;
         $queryBuilder
             ->setFirstResult($offset)
             ->setMaxResults($this->limit);
@@ -123,6 +93,7 @@ class ListView
             $queryBuilder->orderBy($data->getClassName() . '.' . $column, strtoupper($event->getSort()));
         }
 
+        $filterForms = [];
         /** @var ListViewFilter $filter */
         foreach ($this->filters as $filter) {
 
@@ -135,36 +106,16 @@ class ListView
             $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
             $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
 
-            $this->filterForms[] = $form->createView();
+            $filterForms[] = $form->createView();
         }
 
         $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * @return array
-     */
-    public function getFilterForms()
-    {
-        return $this->filterForms;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCurrentPage()
-    {
-        return $this->currentPage;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLastPage()
-    {
-        return $this->lastPage;
+        return [
+            'results' => $queryBuilder->getQuery()->getResult(),
+            'filterForms' => $filterForms,
+            'paginator' => $paginator->render(),
+        ];
     }
 
     /**
@@ -184,6 +135,22 @@ class ListView
         $this->limit = $limit;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 
     /**

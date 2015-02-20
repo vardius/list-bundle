@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormFactory;
 use Vardius\Bundle\ListBundle\Action\Factory\ActionFactory;
 use Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory;
 use Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory;
+use Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory;
 
 /**
  * FactoryEvent
@@ -31,6 +32,8 @@ class FactoryEvent
     protected $actionFactory;
     /** @var  ListViewFilterFactory */
     protected $filterFactory;
+    /** @var  PaginatorFactory */
+    protected $paginatorFactory;
 
     /**
      * @param FormFactory $formFactory
@@ -38,12 +41,13 @@ class FactoryEvent
      * @param ActionFactory $actionFactory
      * @param ListViewFilterFactory $filterFactory
      */
-    function __construct(FormFactory $formFactory, ColumnFactory $columnFactory, ActionFactory $actionFactory, ListViewFilterFactory $filterFactory)
+    function __construct(FormFactory $formFactory, ColumnFactory $columnFactory, ActionFactory $actionFactory, ListViewFilterFactory $filterFactory, PaginatorFactory $paginatorFactory)
     {
         $this->formFactory = $formFactory;
         $this->columnFactory = $columnFactory;
         $this->actionFactory = $actionFactory;
         $this->filterFactory = $filterFactory;
+        $this->paginatorFactory = $paginatorFactory;
     }
 
     /**
@@ -108,5 +112,21 @@ class FactoryEvent
     public function setFilterFactory($filterFactory)
     {
         $this->filterFactory = $filterFactory;
+    }
+
+    /**
+     * @return PaginatorFactory
+     */
+    public function getPaginatorFactory()
+    {
+        return $this->paginatorFactory;
+    }
+
+    /**
+     * @param PaginatorFactory $paginatorFactory
+     */
+    public function setPaginatorFactory($paginatorFactory)
+    {
+        $this->paginatorFactory = $paginatorFactory;
     }
 }

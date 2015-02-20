@@ -26,10 +26,9 @@ abstract class AbstractColumnType implements ColumnTypeInterface
     ];
     /** @var  string */
     protected $property;
-
-    /** @var  string */
+    /** @var TwigEngine  */
     protected $templating;
-
+    /** @var string  */
     protected $templatePath = 'VardiusListBundle:Column\\type:';
 
     /**
