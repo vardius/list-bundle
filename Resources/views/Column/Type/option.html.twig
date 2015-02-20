@@ -1,4 +1,4 @@
-{% if option is null %}
+{% if entity is not defined or entity is null %}
     <input type="checkbox"
            class="list-option-{{ option.property }}"
            name="{{ option.property }}"

@@ -36,4 +36,14 @@ class OptionColumnType extends AbstractColumnType
     {
         return 'option';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return $this->templating->render($this->getView(), [
+            'option' => $this,
+        ]);
+    }
 }

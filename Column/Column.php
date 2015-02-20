@@ -37,7 +37,7 @@ class Column
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getProperty()
     {
@@ -45,8 +45,7 @@ class Column
     }
 
     /**
-     * @param $entity
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getData($entity)
     {
@@ -54,7 +53,7 @@ class Column
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getOptions()
     {
@@ -67,6 +66,14 @@ class Column
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return $this->type->getLabel();
     }
 
 }

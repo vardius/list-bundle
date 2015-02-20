@@ -85,12 +85,14 @@ abstract class AbstractColumnType implements ColumnTypeInterface
      */
     public function getLabel()
     {
+        $label = $this->getProperty();
+
         if (array_key_exists('label', $this->options)) {
 
-            return $this->options['label'];
+            $label = $this->options['label'];
         }
 
-        return $this->getProperty();
+        return strtoupper($label);
     }
 
     /**

@@ -136,6 +136,7 @@ Create your provider class:
             $listView
                 ->setLimit(10) // set the entries per page
                 ->addColumn('name', 'property') // add column
+                ->addColumn('checkbox', 'option')
                 ->addColumn('custom', 'callable', [
                     'callback' => function(Product $product){
                           return 'custom value';

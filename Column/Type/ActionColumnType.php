@@ -42,8 +42,9 @@ class ActionColumnType extends AbstractColumnType
                 $name = array_key_exists('name', $action) ? $action['name'] : null;
                 $icon = array_key_exists('icon', $action) ? $action['icon'] : null;
                 $parameters = array_key_exists('parameters', $action) ? $action['parameters'] : [];
+                $parameters['id'] = $entity->getId();
 
-                $items = $this->actionFactory->get($path, $name, $icon, $parameters);
+                $items[] = $this->actionFactory->get($path, $name, $icon, $parameters);
             }
         }
 
@@ -59,7 +60,7 @@ class ActionColumnType extends AbstractColumnType
     {
         $options = parent::getOptions();
 
-        return array_merge($options, ['callback']);
+        return array_merge($options, ['actions']);
     }
 
     /**

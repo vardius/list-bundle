@@ -271,7 +271,7 @@ class ListView
     public function addAction($path, $name = null, $icon = null, $parameters = [])
     {
         $actionFactory = $this->factoryEvent->getActionFactory();
-        $action = $this->$actionFactory->get($path, $name, $icon, $parameters);
+        $action = $actionFactory->get($path, $name, $icon, $parameters);
         $this->actions->add($action);
 
         return $this;
