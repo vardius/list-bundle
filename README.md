@@ -156,7 +156,7 @@ Create your provider class:
                     $queryBuilder = $event->getQueryBuilder();
 
                     $aliases = $queryBuilder->getRootAliases();
-                    $alias = Arrays::getFirstElement($aliases);
+                    $alias = array_values($aliases)[0];
 
                     $name = $formData['name'];
 
@@ -182,7 +182,6 @@ Return to your view list data
     ];
 
 Set up your view for example:
-
 
     <div class="row">
         <div class="col-md-12">
@@ -211,7 +210,7 @@ Set up your view for example:
                 <thead>
                 <tr>
                     {% for column in listView.columns %}
-                        <td>{{ column.name|upper }}</td>
+                        <td>{{ column.property|upper }}</td>
                     {% endfor %}
                     {% if listView.rowActions is not empty %}
                         <td></td>
@@ -221,12 +220,36 @@ Set up your view for example:
                 {% for entity in data %}
                     <tr class='list-view-item'>
                         {% for column in listView.columns %}
-                            <td>{{ column.data(entity)|raw }}</td>
+                            <td>{{ column.getData(entity)|raw }}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+            <div class="row">
+                <div class="col-md-12">
+                    {% set currentPage = listView.currentPage %}
+                    {% set previousPage = (currentPage > 1 ? (currentPage - 1) : 1) %}
+                    {% set lastPage = listView.lastPage %}
+                    {% set nextPage = (currentPage < lastPage ? lastPage + 1 : lastPage) %}
+                    <div class="paginator pull-right">
+                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': previousPage}) ) }}">
+                            <i class="fa fa-caret-square-o-left"></i>
+                        </a>
+                        {% if previousPage <  currentPage %}
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': previousPage}) ) }}">{{ previousPage }}</a>
+                        {% endif %}
+                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': currentPage}) ) }}">{{ currentPage }}</a>
+                        {% if nextPage >  currentPage %}
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': nextPage}) ) }}">{{ nextPage }}</a>
+                        {% endif %}
+                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': nextPage}) ) }}"
+                           class="last {% if lastPage == currentPage %} current{% endif %}">
+                            <i class="fa fa-caret-square-o-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
         {% if hasFilters %}
             <div class="col-md-4">
@@ -235,11 +258,6 @@ Set up your view for example:
                 {% endfor %}
             </div>
         {% endif %}
-    </div>
-    <div class="row">
-        <div class="col-md-12 pull-right">
-            {{ 'PAGINATOR' }}
-        </div>
     </div>
 
 For icons include styles in your view:

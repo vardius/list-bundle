@@ -45,11 +45,12 @@ class Column
     }
 
     /**
+     * @param $entity
      * @return mixed
      */
-    public function getData()
+    public function getData($entity)
     {
-        return $this->getType()->getData();
+        return $this->getType()->getData($entity);
     }
 
     /**

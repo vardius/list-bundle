@@ -26,7 +26,7 @@ class PropertyColumnType extends AbstractColumnType
         $property = $this->getProperty();
 
         if ($entity !== null) {
-            $property = $entity->get{ucfirst($this->getProperty())}();
+            $property = $entity->{'get' . ucfirst($this->getProperty())}();
         }
 
         return $this->templating->render($this->getView(), [

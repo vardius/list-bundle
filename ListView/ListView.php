@@ -38,14 +38,19 @@ class ListView
     /** @var FactoryEvent */
     protected $factoryEvent;
     protected $filters;
-    /** @var array */
-    protected $filterForms = [];
     /** @var int */
     protected $limit = 10;
     /** @var  ArrayCollection */
     protected $columns;
     /** @var  ArrayCollection */
     protected $actions;
+
+    /** @var array */
+    protected $filterForms = [];
+    /** @var int */
+    protected $currentPage = 1;
+    /** @var int */
+    protected $lastPage = 1;
 
     /**
      * @param FactoryEvent $event
@@ -70,14 +75,40 @@ class ListView
 
         $offset = ($event->getPage() * $this->limit) - $this->limit + 1;
 
+        $this->currentPage = $event->getPage();
+
         $data = $event->getData();
+        $total = 0;
         if ($data instanceof EntityRepository) {
             $queryBuilder = $data->createQueryBuilder($data->getClassName());
+
+            $total = $data
+                ->createQueryBuilder('i')
+                ->select('count(i.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
+
         } elseif ($data instanceof QueryBuilder) {
             $queryBuilder = $data;
+
+            $cloneQueryBuilder = clone $queryBuilder;
+            $from = $cloneQueryBuilder->getDQLPart('from');
+            $cloneQueryBuilder->resetDQLParts();
+
+            $aliases = $cloneQueryBuilder->getRootAliases();
+            $alias = array_values($aliases)[0];
+
+            $cloneQueryBuilder
+                ->select('count(' . $alias . '.id)')
+                ->add('from', $from[0])
+                ->getQuery()
+                ->getSingleScalarResult();
+
         } else {
             throw new \InvalidArgumentException('Expected argument of type "EntityRepository or QueryBuilder", ' . get_class($data) . ' given');
         }
+
+        $this->lastPage = ceil($total/$this->limit);
 
         $routeName = $event->getRouteName();
 
@@ -89,7 +120,7 @@ class ListView
 
         $column = $event->getColumn();
         if ($column !== null) {
-            $queryBuilder->orderBy($data->getClassName().'.' . $column, strtoupper($event->getSort()));
+            $queryBuilder->orderBy($data->getClassName() . '.' . $column, strtoupper($event->getSort()));
         }
 
         /** @var ListViewFilter $filter */
@@ -118,6 +149,22 @@ class ListView
     public function getFilterForms()
     {
         return $this->filterForms;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentPage()
+    {
+        return $this->currentPage;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastPage()
+    {
+        return $this->lastPage;
     }
 
     /**
