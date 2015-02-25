@@ -26,7 +26,7 @@ Installation
 3. Create your entity class
 4. Create ListViewProvider class
 5. Configure your ListViewProvider class
-6. Create view for your list or use [VardiusCrudBundle](https://github.com/Vardius/crud-bundle)
+6. Create view for your list or use [Vardius Crud Bundle](https://github.com/Vardius/crud-bundle)
 
 ### 1. Download using composer
 Install the package through composer:
