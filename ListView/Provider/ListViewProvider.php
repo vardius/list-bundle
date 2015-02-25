@@ -11,7 +11,6 @@
 namespace Vardius\Bundle\ListBundle\ListView\Provider;
 
 
-use Symfony\Component\Form\AbstractType;
 use Vardius\Bundle\ListBundle\ListView\Factory\ListViewFactory;
 
 /**

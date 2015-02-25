@@ -56,6 +56,8 @@ class ListViewFactory
      */
     function __construct($limit, $title, FormFactory $formFactory, ColumnFactory $columnFactory, ActionFactory $actionFactory, ListViewFilterFactory $filterFactory, PaginatorFactory $paginatorFactory, EventDispatcherInterface $eventDispatcher)
     {
+        $this->limit = $limit;
+        $this->title = $title;
         $this->formFactory = $formFactory;
         $this->columnFactory = $columnFactory;
         $this->actionFactory = $actionFactory;
