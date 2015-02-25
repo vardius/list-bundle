@@ -1,12 +1,11 @@
 {
     "name": "vardius/list-bundle",
-    "title": "List Bundle",
     "description": "Provides lists builder",
     "keywords": [
-        "list", "list view", "list builder"
+        "list", "list view", "list builder", "symfony2", "bundle", "symfony"
     ],
     "license": "MIT",
-    "homepage": "http://rafallorenz.com",
+    "homepage": "https://github.com/Vardius/list-bundle",
     "authors": [
         {
             "name": "Rafał Lorenz",
