@@ -3,7 +3,7 @@ Vardius - List Bundle
 
 List Bundle provides list view build
 
-This is currently a work in progress.
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/faea1bb4-c6ee-4be3-ab78-12e0eb19c11e/big.png)](https://insight.sensiolabs.com/projects/faea1bb4-c6ee-4be3-ab78-12e0eb19c11e)
 
 ABOUT
 ==================================================
