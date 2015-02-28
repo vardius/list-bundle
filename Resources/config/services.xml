@@ -25,9 +25,6 @@
         <!--PAGINATOR-->
         <parameter key="vardius_list.paginator.class">Vardius\Bundle\ListBundle\Paginator\Paginator</parameter>
         <parameter key="vardius_list.paginator.factory.class">Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory</parameter>
-        <!--BUNDLE PARAMETERS-->
-        <parameter key="vardius_list.title">List</parameter>
-        <parameter key="vardius_list.limit">10</parameter>
     </parameters>
 
     <services>
