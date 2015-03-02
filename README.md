@@ -31,11 +31,14 @@ Installation
 ### 1. Download using composer
 Install the package through composer:
 
+``` bash
     php composer.phar require vardius/list-bundle:*
+```
 
 ### 2. Enable the VardiusListBundle
 Enable the bundle in the kernel:
 
+``` php
     <?php
     // app/AppKernel.php
 
@@ -46,17 +49,21 @@ Enable the bundle in the kernel:
             new Vardius\Bundle\ListBundle\VardiusListBundle(),
         );
     }
+```
 
 Add to config.yml:
 
+``` yaml
     vardius_list:
         title: List //default 'List'
         limit: 10   //default 10
+```
 
 You can also provide your custom value for list by setting them in provider class
 
 ### 3. Create your entity class
 
+``` php
     /**
      * Product
      *
@@ -84,10 +91,12 @@ You can also provide your custom value for list by setting them in provider clas
 
         // setters and getters...
     }
+```
 
 ### 4. Create ListViewProvider class
 Entity class
 
+``` php
     <?php
 
     namespace App\DemoBundle\ListView;
@@ -111,10 +120,13 @@ Entity class
         }
 
     }
+```
 
 Service:
 
-        <service id="app.product.list_view" class="Lorenz\MainBundle\ListView\ProductProvider" parent="vardius_list.list_view.provider"/>
+``` xml
+    <service id="app.product.list_view" class="Lorenz\MainBundle\ListView\ProductProvider" parent="vardius_list.list_view.provider"/>
+```
 
 ### 5. Configure your ListViewProvider class
 You can configure your list in the provider class, you can specify the limit of entries per page,
@@ -122,12 +134,15 @@ add columns of types (option, property, callable), add actions (global for page 
 
 Declare your filter form as a service:
 
-        <service id="app.form.type.product_filter" class="AppBundle\Form\Type\Filter\ProductFilterType">
-            <tag name="form.type" alias="product_filter"/>
-        </service>
+``` xml
+    <service id="app.form.type.product_filter" class="AppBundle\Form\Type\Filter\ProductFilterType">
+        <tag name="form.type" alias="product_filter"/>
+    </service>
+```
 
 Create your provider class:
 
+``` php
     use Vardius\Bundle\ListBundle\Action\Action;
 
     class ProductProvider extends ListViewProvider
@@ -182,10 +197,12 @@ Create your provider class:
         }
 
     }
+```
 
 ### 6. Create view for your list
 Return to your view list data
 
+``` php
     $data = $listView->getData(new ListDataEvent($repository, $event->getRequest()));
     $params = [
         'data' => $data['results'],
@@ -195,9 +212,11 @@ Return to your view list data
         'actions' => $listView->getActions(),
         'title' => $listView->getTitle(),
     ];
+```
 
 Set up your view for example:
 
+``` twig
     {% set hasFilters = (filterForms is not empty) %}
         <div class="row">
             <div class="col-md-{{ hasFilters ? '8' : '12' }}">
@@ -252,11 +271,14 @@ Set up your view for example:
                 </div>
             {% endif %}
         </div>
+```
 
 For icons include styles in your view:
 
+``` html
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+```
 
 or get latest from
 
