@@ -186,7 +186,7 @@ Create your provider class:
                     $name = $formData['name'];
 
                     $queryBuilder
-                        ->andWhere($alias.'.name = :name'))
+                        ->andWhere($alias.'.name = :name')
                         ->setParameter('name', $name);
 
                     return $queryBuilder;
@@ -291,3 +291,7 @@ RELEASE NOTES
 **0.1.0**
 
 - First public release of list-bundle
+
+**0.2.0**
+
+- Major bug fix and updates
