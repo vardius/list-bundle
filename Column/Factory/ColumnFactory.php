@@ -60,6 +60,6 @@ class ColumnFactory
             }
         }
 
-        return new Column($property, $type, $options, $this->templating);
+        return new Column($property, clone $type, $options, $this->templating);
     }
 }
