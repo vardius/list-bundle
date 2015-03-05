@@ -88,7 +88,7 @@ class ListView
         $routeName = $event->getRouteName();
         $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
-        $offset = ($currentPage * $this->limit) - $this->limit + 1;
+        $offset = ($currentPage * $this->limit) - $this->limit;
         $queryBuilder
             ->setFirstResult($offset)
             ->setMaxResults($this->limit);
