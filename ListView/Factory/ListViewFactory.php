@@ -10,15 +10,9 @@
 
 namespace Vardius\Bundle\ListBundle\ListView\Factory;
 
-
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormFactory;
-use Vardius\Bundle\ListBundle\Action\Factory\ActionFactory;
-use Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory;
-use Vardius\Bundle\ListBundle\Event\FactoryEvent;
-use Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory;
 use Vardius\Bundle\ListBundle\ListView\ListView;
-use Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory;
 
 /**
  * ListViewFactory
@@ -31,39 +25,22 @@ class ListViewFactory
     protected $limit;
     /** @var string */
     protected $title;
-    /** @var FormFactory */
-    protected $formFactory;
     /** @var  EventDispatcherInterface */
     protected $dispatcher;
-    /** @var  ColumnFactory */
-    protected $columnFactory;
-    /** @var  ActionFactory */
-    protected $actionFactory;
-    /** @var  ListViewFilterFactory */
-    protected $filterFactory;
-    /** @var  PaginatorFactory */
-    protected $paginatorFactory;
+    /** @var ContainerInterface */
+    protected $container;
 
     /**
-     * @param int $limit
-     * @param string $title
-     * @param FormFactory $formFactory
-     * @param ColumnFactory $columnFactory
-     * @param ActionFactory $actionFactory
-     * @param ListViewFilterFactory $filterFactory
-     * @param PaginatorFactory $paginatorFactory
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param $limit
+     * @param $title
+     * @param ContainerInterface $container
      */
-    function __construct($limit, $title, FormFactory $formFactory, ColumnFactory $columnFactory, ActionFactory $actionFactory, ListViewFilterFactory $filterFactory, PaginatorFactory $paginatorFactory, EventDispatcherInterface $eventDispatcher)
+    function __construct($limit, $title, ContainerInterface $container)
     {
         $this->limit = $limit;
         $this->title = $title;
-        $this->formFactory = $formFactory;
-        $this->columnFactory = $columnFactory;
-        $this->actionFactory = $actionFactory;
-        $this->filterFactory = $filterFactory;
-        $this->paginatorFactory = $paginatorFactory;
-        $this->dispatcher = $eventDispatcher;
+        $this->container = $container;
+        $this->dispatcher = $this->container->get('event_dispatcher');
     }
 
     /**
@@ -71,8 +48,7 @@ class ListViewFactory
      */
     public function get()
     {
-        $event = new FactoryEvent($this->formFactory, $this->columnFactory, $this->actionFactory, $this->filterFactory, $this->paginatorFactory);
-        $listView = new ListView($event, $this->limit, $this->title, $this->dispatcher);
+        $listView = new ListView($this->container, $this->limit, $this->title, $this->dispatcher);
 
         return $listView;
     }

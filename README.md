@@ -26,7 +26,7 @@ Installation
 3. Create your entity class
 4. Create ListViewProvider class
 5. Configure your ListViewProvider class
-6. Create view for your list or use [Vardius Crud Bundle](https://github.com/Vardius/crud-bundle)
+6. Edit list view template
 
 ### 1. Download using composer
 Install the package through composer:
@@ -193,84 +193,37 @@ Create your provider class:
                 })
                 ->addAction('app.product_controller.list', 'Product List', 'fa-list');
 
-                return $listView;
+            return $listView;
         }
 
     }
 ```
 
-### 6. Create view for your list
-Return to your view list data
+### 6. Edit list view template
 
 ``` php
-    $data = $listView->getData(new ListDataEvent($repository, $event->getRequest()));
-    $params = [
-        'data' => $data['results'],
-        'filterForms' => $data['filterForms'],
-        'paginator' => $data['paginator'],
-        'columns' => $listView->getColumns(),
-        'actions' => $listView->getActions(),
-        'title' => $listView->getTitle(),
-    ];
-```
+    use Vardius\Bundle\ListBundle\Action\Action;
 
-Set up your view for example:
+    class ProductProvider extends ListViewProvider
+    {
+        /**
+         * Provides list view
+         *
+         * @return ListView
+         */
+        public function buildListView()
+        {
+            $listView = $this->listViewFactory->get();
 
-``` twig
-    {% set hasFilters = (filterForms is not empty) %}
-        <div class="row">
-            <div class="col-md-{{ hasFilters ? '8' : '12' }}">
-                {% for action in actions %}
-                    {% if loop.first %}
-                        <div class="btn-group pull-right" role="group">
-                    {% endif %}
-                    <a href="{{ path(action.path, action.parameters) }}" class="btn btn-default" role="button">
-                        {% if action.icon is not null %}
-                            <i class="fa {{ action.icon }}"></i>
-                        {% endif %}
-                        {% if action.name is not null %}
-                            {{ action.name }}
-                        {% endif %}
-                    </a>
-                    {% if loop.last %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-{{ hasFilters ? '8' : '12' }}">
-                <table class="table table-striped table-hover table-condensed">
-                    <thead>
-                    <tr>
-                        {% for column in columns %}
-                            <td>{{ column.label|raw }}</td>
-                        {% endfor %}
-                    </thead>
-                    <tbody>
-                    {% for entity in data %}
-                        <tr class='list-view-item'>
-                            {% for column in .columns %}
-                                <td>{{ column.getData(entity)|raw }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <div class="row">
-                    <div class="col-md-12">
-                        {{ paginator|raw }}
-                    </div>
-                </div>
-            </div>
-            {% if hasFilters %}
-                <div class="col-md-4">
-                    {% for form in filterForms %}
-                        {{ form(form) }}
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
+            $listView
+                ->setView('VardiusListBundle:List:list') //set custom list view template
+                
+            ...
+
+            return $listView;
+        }
+
+    }
 ```
 
 For icons include styles in your view:

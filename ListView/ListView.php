@@ -10,10 +10,10 @@
 
 namespace Vardius\Bundle\ListBundle\ListView;
 
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\ResolvedFormTypeInterface;
@@ -25,6 +25,7 @@ use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvents;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
+use Vardius\Bundle\ListBundle\Response\ResponseHandlerInterface;
 
 /**
  * ListView
@@ -47,21 +48,33 @@ class ListView
     protected $columns;
     /** @var  ArrayCollection */
     protected $actions;
+    /** @var  string */
+    protected $view;
+    /** @var  ResponseHandlerInterface */
+    protected $responseHandler;
 
     /**
-     * @param FactoryEvent $event
+     * @param ContainerInterface $container
      * @param int $limit
      * @param string $title
      * @param EventDispatcherInterface $eventDispatcher
      */
-    function __construct(FactoryEvent $event, $limit, $title, EventDispatcherInterface $eventDispatcher)
+    function __construct(ContainerInterface $container, $limit, $title, EventDispatcherInterface $eventDispatcher)
     {
-        $this->factoryEvent = $event;
-        $this->dispatcher = $eventDispatcher;
+        $formFactory = $container->get('form.factory');
+        $columnFactory = $container->get('vardius_list.column.factory');
+        $actionFactory = $container->get('vardius_list.action.factory');
+        $filterFactory = $container->get('vardius_list.filter.factory');
+        $paginatorFactory = $container->get('vardius_list.paginator.factory');
+
+        $event = new FactoryEvent($formFactory, $columnFactory, $actionFactory, $filterFactory, $paginatorFactory);
+
         $this->limit = $limit;
         $this->title = $title;
+        $this->factoryEvent = $event;
+        $this->dispatcher = $eventDispatcher;
+        $this->responseHandler = $container->get('vardius_list.response_handler');
         $this->columns = new ArrayCollection();
-        $this->rowActions = new ArrayCollection();
         $this->filters = new ArrayCollection();
         $this->actions = new ArrayCollection();
     }
@@ -121,6 +134,25 @@ class ListView
             'filterForms' => $filterForms,
             'paginator' => $paginator->render(),
         ];
+    }
+
+    /**
+     * @param ListDataEvent $event
+     * @return string
+     */
+    public function renderView(ListDataEvent $event)
+    {
+        $data = $this->getData($event);
+        $params = [
+            'data' => $data['results'],
+            'filterForms' => $data['filterForms'],
+            'paginator' => $data['paginator'],
+            'columns' => $this->getColumns(),
+            'actions' => $this->getActions(),
+            'title' => $this->getTitle(),
+        ];
+
+        return $this->responseHandler->renderView($this->getView(), $params);
     }
 
     /**
@@ -260,4 +292,19 @@ class ListView
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getView()
+    {
+        return $this->view;
+    }
+
+    /**
+     * @param string $view
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
+    }
 }

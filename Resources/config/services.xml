@@ -25,18 +25,19 @@
         <!--PAGINATOR-->
         <parameter key="vardius_list.paginator.class">Vardius\Bundle\ListBundle\Paginator\Paginator</parameter>
         <parameter key="vardius_list.paginator.factory.class">Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory</parameter>
+        <!--RESPONSE HANDLER-->
+        <parameter key="vardius_list.response_handler.class">Vardius\Bundle\ListBundle\Response\ResponseHandler</parameter>
     </parameters>
 
     <services>
+        <service id="vardius_list.response_handler" class="%vardius_list.response_handler.class%">
+            <argument type="service" id="templating"/>
+        </service>
+
         <service id="vardius_list.list_view.factory" class="%vardius_list.list_view.factory.class%">
             <argument>%vardius_list.limit%</argument>
             <argument>%vardius_list.title%</argument>
-            <argument type="service" id="form.factory"/>
-            <argument type="service" id="vardius_list.column.factory"/>
-            <argument type="service" id="vardius_list.action.factory"/>
-            <argument type="service" id="vardius_list.filter.factory"/>
-            <argument type="service" id="vardius_list.paginator.factory"/>
-            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="service_container"/>
         </service>
 
         <service id="vardius_list.column.factory" class="%vardius_list.column.factory.class%">
