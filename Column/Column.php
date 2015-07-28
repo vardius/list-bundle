@@ -11,14 +11,14 @@
 namespace Vardius\Bundle\ListBundle\Column;
 
 use Symfony\Bridge\Twig\TwigEngine;
-use Vardius\Bundle\ListBundle\Column\Type\AbstractColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
 
 /**
  * Column
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class Column
+class Column implements ColumnInterface
 {
     /** @var  AbstractColumnType */
     protected $type;
@@ -61,7 +61,7 @@ class Column
     }
 
     /**
-     * @return AbstractColumnType
+     * {@inheritdoc}
      */
     public function getType()
     {
@@ -74,6 +74,14 @@ class Column
     public function getLabel()
     {
         return $this->type->getLabel();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSort()
+    {
+        return $this->type->getSort();
     }
 
 }

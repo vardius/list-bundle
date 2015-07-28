@@ -10,11 +10,10 @@
 
 namespace Vardius\Bundle\ListBundle\Column\Factory;
 
-
 use Symfony\Bridge\Twig\TwigEngine;
 use Vardius\Bundle\ListBundle\Column\Column;
-use Vardius\Bundle\ListBundle\Column\Type\AbstractColumnType;
-use Vardius\Bundle\ListBundle\Column\Type\ColumnTypePool;
+use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnTypePool;
 
 /**
  * ColumnFactory

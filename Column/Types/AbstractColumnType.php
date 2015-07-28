@@ -8,8 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Vardius\Bundle\ListBundle\Column\Type;
-
+namespace Vardius\Bundle\ListBundle\Column\Types;
 
 use Symfony\Bridge\Twig\TwigEngine;
 
@@ -23,12 +22,13 @@ abstract class AbstractColumnType implements ColumnTypeInterface
     /** @var array */
     protected $options = [
         'label',
+        'sort'
     ];
     /** @var  string */
     protected $property;
-    /** @var TwigEngine  */
+    /** @var TwigEngine */
     protected $templating;
-    /** @var string  */
+    /** @var string */
     protected $templatePath = 'VardiusListBundle:Column\\Type:';
 
     /**
@@ -92,6 +92,21 @@ abstract class AbstractColumnType implements ColumnTypeInterface
         }
 
         return strtoupper($label);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSort()
+    {
+        $sort = false;
+        if (array_key_exists('sort', $this->options)) {
+
+            $sort = $this->options['sort'];
+            $sort = is_bool($sort) ? $sort : false;
+        }
+
+        return $sort;
     }
 
     /**

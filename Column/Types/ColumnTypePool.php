@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Vardius\Bundle\ListBundle\Column\Type;
-use Doctrine\Common\Collections\ArrayCollection;
+namespace Vardius\Bundle\ListBundle\Column\Types;
 
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * ColumnTypePool

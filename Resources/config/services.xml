@@ -14,11 +14,11 @@
         <!--COLUMN-->
         <parameter key="vardius_list.column.class">Vardius\Bundle\ListBundle\Column\Column</parameter>
         <parameter key="vardius_list.column.factory.class">Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory</parameter>
-        <parameter key="vardius_list.column_type_pool.class">Vardius\Bundle\ListBundle\Column\Type\ColumnTypePool</parameter>
-        <parameter key="vardius_list.column_type.property.class">Vardius\Bundle\ListBundle\Column\Type\PropertyColumnType</parameter>
-        <parameter key="vardius_list.column_type.option.class">Vardius\Bundle\ListBundle\Column\Type\OptionColumnType</parameter>
-        <parameter key="vardius_list.column_type.callable.class">Vardius\Bundle\ListBundle\Column\Type\CallableColumnType</parameter>
-        <parameter key="vardius_list.column_type.action.class">Vardius\Bundle\ListBundle\Column\Type\ActionColumnType</parameter>
+        <parameter key="vardius_list.column_type_pool.class">Vardius\Bundle\ListBundle\Column\Types\ColumnTypePool</parameter>
+        <parameter key="vardius_list.column_type.property.class">Vardius\Bundle\ListBundle\Column\Types\Type\PropertyColumnType</parameter>
+        <parameter key="vardius_list.column_type.option.class">Vardius\Bundle\ListBundle\Column\Types\Type\OptionColumnType</parameter>
+        <parameter key="vardius_list.column_type.callable.class">Vardius\Bundle\ListBundle\Column\Types\Type\CallableColumnType</parameter>
+        <parameter key="vardius_list.column_type.action.class">Vardius\Bundle\ListBundle\Column\Types\Type\ActionColumnType</parameter>
         <!--ACTION-->
         <parameter key="vardius_list.action.class">Vardius\Bundle\ListBundle\Action\Action</parameter>
         <parameter key="vardius_list.action.factory.class">Vardius\Bundle\ListBundle\Action\Factory\ActionFactory</parameter>

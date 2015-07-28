@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Vardius\Bundle\ListBundle\Column\Type;
+namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
 use Vardius\Bundle\ListBundle\Action\Factory\ActionFactory;
-
+use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
 
 /**
  * ActionColumnType

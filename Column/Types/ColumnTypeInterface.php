@@ -8,8 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Vardius\Bundle\ListBundle\Column\Type;
-
+namespace Vardius\Bundle\ListBundle\Column\Types;
 
 use Symfony\Bridge\Twig\TwigEngine;
 
@@ -76,6 +75,13 @@ interface ColumnTypeInterface
      * @return string
      */
     public function getLabel();
+
+    /**
+     * Get column sorting options, true if enable
+     *
+     * @return boolean
+     */
+    public function getSort();
 
     /**
      * Returns column type name

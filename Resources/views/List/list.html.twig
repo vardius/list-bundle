@@ -25,7 +25,16 @@
             <thead>
             <tr>
                 {% for column in columns %}
-                    <td>{{ column.label|raw|trans }}</td>
+                    <td>
+                        {% if column.sort %}
+                            {% set sort = app.request.attributes.get('sort') == 'desc' ? 'asc' : 'desc' %}
+                            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'sort': sort, 'column': column.property}) ) }}">
+                                {{ column.label|raw|trans }} <i class="fa fa-sort-{{ sort == 'desc' ? 'asc' : 'desc' }}"></i>
+                            </a>
+                        {% else %}
+                            {{ column.label|raw|trans }}
+                        {% endif %}
+                    </td>
                 {% endfor %}
             </thead>
             <tbody>
