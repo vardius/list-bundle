@@ -26,11 +26,11 @@
         <parameter key="vardius_list.paginator.class">Vardius\Bundle\ListBundle\Paginator\Paginator</parameter>
         <parameter key="vardius_list.paginator.factory.class">Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory</parameter>
         <!--RESPONSE HANDLER-->
-        <parameter key="vardius_list.response_handler.class">Vardius\Bundle\ListBundle\Response\ResponseHandler</parameter>
+        <parameter key="vardius_list.view.renderer.class">Vardius\Bundle\ListBundle\View\Renderer</parameter>
     </parameters>
 
     <services>
-        <service id="vardius_list.response_handler" class="%vardius_list.response_handler.class%">
+        <service id="vardius_list.view.renderer" class="%vardius_list.view.renderer.class%">
             <argument type="service" id="templating"/>
         </service>
 

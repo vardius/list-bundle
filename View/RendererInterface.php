@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Vardius\Bundle\ListBundle\Response;
+namespace Vardius\Bundle\ListBundle\View;
 
 /**
- * ResponseHandlerInterface
+ * RendererInterface
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-interface ResponseHandlerInterface
+interface RendererInterface
 {
     /**
      * @param $view

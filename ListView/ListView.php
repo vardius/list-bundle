@@ -25,7 +25,7 @@ use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvents;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
-use Vardius\Bundle\ListBundle\Response\ResponseHandlerInterface;
+use Vardius\Bundle\ListBundle\View\RendererInterface;
 
 /**
  * ListView
@@ -50,8 +50,8 @@ class ListView
     protected $actions;
     /** @var  string */
     protected $view;
-    /** @var  ResponseHandlerInterface */
-    protected $responseHandler;
+    /** @var  RendererInterface */
+    protected $renderer;
 
     /**
      * @param ContainerInterface $container
@@ -73,7 +73,7 @@ class ListView
         $this->title = $title;
         $this->factoryEvent = $event;
         $this->dispatcher = $eventDispatcher;
-        $this->responseHandler = $container->get('vardius_list.response_handler');
+        $this->renderer = $container->get('vardius_list.view.renderer');
         $this->columns = new ArrayCollection();
         $this->filters = new ArrayCollection();
         $this->actions = new ArrayCollection();
@@ -152,7 +152,7 @@ class ListView
             'title' => $this->getTitle(),
         ];
 
-        return $this->responseHandler->renderView($this->getView(), $params);
+        return $this->renderer->renderView($this->getView(), $params);
     }
 
     /**

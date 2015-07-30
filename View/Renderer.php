@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Vardius\Bundle\ListBundle\Response;
+namespace Vardius\Bundle\ListBundle\View;
 
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
- * ResponseHandler
+ * Renderer
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class ResponseHandler implements ResponseHandlerInterface
+class Renderer implements RendererInterface
 {
     protected static $TEMPLATE_DIR = 'VardiusListBundle:List:';
 

@@ -251,3 +251,8 @@ RELEASE NOTES
 **0.2.0**
 
 - Major bug fix and updates
+
+**0.3.0**
+
+- List view added
+- Column sort option added
