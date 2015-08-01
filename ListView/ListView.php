@@ -81,9 +81,10 @@ class ListView
 
     /**
      * @param ListDataEvent $event
+     * @param boolean $onlyResults
      * @return array
      */
-    public function getData(ListDataEvent $event)
+    public function getData(ListDataEvent $event, $onlyResults = false)
     {
         $data = $event->getData();
         if ($data instanceof EntityRepository) {
@@ -95,54 +96,75 @@ class ListView
         }
 
         $currentPage = $event->getPage();
-        $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
-        $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
-
+        $request = $event->getRequest();
         $routeName = $event->getRouteName();
+        $column = $event->getColumn();
+        $filterForms = [];
+        $paginator = null;
+
         $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
-        $offset = ($currentPage * $this->limit) - $this->limit;
-        $queryBuilder
-            ->setFirstResult($offset)
-            ->setMaxResults($this->limit);
-
-        $column = $event->getColumn();
         if ($column !== null) {
             $queryBuilder->orderBy($data->getClassName() . '.' . $column, strtoupper($event->getSort()));
         }
 
-        $filterForms = [];
-        /** @var ListViewFilter $filter */
-        foreach ($this->filters as $filter) {
+        if ($onlyResults) {
+            $ids = $request->get('ids', []);
+            if (!empty($ids)) {
+                $queryBuilder
+                    ->andWhere($data->getClassName() . '.id IN (:ids)')
+                    ->setParameter('ids', $ids);
+            }
+        } else {
+            $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
+            $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
 
-            $formFactory = $this->factoryEvent->getFormFactory();
-            $form = $formFactory->create($filter->getFormType(), []);
+            $offset = ($currentPage * $this->limit) - $this->limit;
+            $queryBuilder
+                ->setFirstResult($offset)
+                ->setMaxResults($this->limit);
 
-            $form->handleRequest($event->getRequest());
+            /** @var ListViewFilter $filter */
+            foreach ($this->filters as $filter) {
+                $formFactory = $this->factoryEvent->getFormFactory();
+                $form = $formFactory->create($filter->getFormType(), []);
 
-            $filterEvent = new FilterEvent($routeName, $queryBuilder, $form);
-            $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
-            $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
+                $form->handleRequest($request);
 
-            $filterForms[] = $form->createView();
+                $filterEvent = new FilterEvent($routeName, $queryBuilder, $form);
+                $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
+                $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
+
+                $filterForms[] = $form->createView();
+            }
         }
 
         $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
-        return [
-            'results' => $queryBuilder->getQuery()->getResult(),
-            'filterForms' => $filterForms,
-            'paginator' => $paginator->render(),
-        ];
+        $data = ['results' => $queryBuilder->getQuery()->getResult()];
+        if ($onlyResults) {
+
+            return $data;
+        } else {
+
+            return array_merge($data, [
+                'filterForms' => $filterForms,
+                'paginator' => $paginator,
+            ]);
+        }
     }
 
     /**
+     * Render list data
+     * The ui parameter tells us if user interface is enable (buttons, links etc.)
+     *
      * @param ListDataEvent $event
+     * @param $ui
      * @return string
      */
-    public function renderView(ListDataEvent $event)
+    public function render(ListDataEvent $event, $ui = true)
     {
-        $data = $this->getData($event);
+        $data = $this->getData($event, !$ui);
         $params = [
             'data' => $data['results'],
             'filterForms' => $data['filterForms'],
@@ -150,6 +172,7 @@ class ListView
             'columns' => $this->getColumns(),
             'actions' => $this->getActions(),
             'title' => $this->getTitle(),
+            'ui' => $ui
         ];
 
         return $this->renderer->renderView($this->getView(), $params);

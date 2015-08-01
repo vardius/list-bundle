@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
  */
 class Renderer implements RendererInterface
 {
-    protected static $TEMPLATE_DIR = 'VardiusListBundle:List:';
+    CONST TEMPLATE_DIR = 'VardiusListBundle:List:';
 
     /** @var TwigEngine */
     protected $templating;
@@ -54,14 +54,14 @@ class Renderer implements RendererInterface
         }
 
         if ($template === null) {
-            $templateDir = static::$TEMPLATE_DIR . $this->getTemplateName() . $this->templateEngine;
+            $templateDir = self::TEMPLATE_DIR . $this->getTemplateName() . $this->templateEngine;
             if ($this->templating->exists($templateDir)) {
                 $template = $templateDir;
             }
         }
 
         if ($template === null) {
-            throw new ResourceNotFoundException('Vardius\Bundle\ListBundle\Response: Wrong template path');
+            throw new ResourceNotFoundException('Vardius\Bundle\ListBundle\View\Renderer: Wrong template path');
         }
 
         return $this->templating->render($template, $params);
