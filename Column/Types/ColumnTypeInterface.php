@@ -110,4 +110,11 @@ interface ColumnTypeInterface
      * @return string
      */
     public function getView();
+
+    /**
+     * Tells if column belongs to user interface
+     *
+     * @return bool
+     */
+    public function isUi();
 }

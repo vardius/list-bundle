@@ -132,4 +132,13 @@ abstract class AbstractColumnType implements ColumnTypeInterface
     {
         return $this->getTemplatePath() . $this->getName() . '.html.twig';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUi()
+    {
+        return false;
+    }
+
 }

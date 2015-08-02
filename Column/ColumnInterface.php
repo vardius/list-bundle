@@ -50,4 +50,11 @@ interface ColumnInterface
      */
     public function getSort();
 
+    /**
+     * Tells if column belongs to user interface
+     *
+     * @return bool
+     */
+    public function isUi();
+
 }

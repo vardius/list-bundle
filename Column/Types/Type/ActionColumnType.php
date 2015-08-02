@@ -70,4 +70,13 @@ class ActionColumnType extends AbstractColumnType
     {
         return 'action';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUi()
+    {
+        return true;
+    }
+
 }

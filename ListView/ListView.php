@@ -82,9 +82,10 @@ class ListView
     /**
      * @param ListDataEvent $event
      * @param boolean $onlyResults
-     * @return array
+     * @param boolean $returnQueryBuilder
+     * @return array|QueryBuilder
      */
-    public function getData(ListDataEvent $event, $onlyResults = false)
+    public function getData(ListDataEvent $event, $onlyResults = false, $returnQueryBuilder = false)
     {
         $data = $event->getData();
         if ($data instanceof EntityRepository) {
@@ -141,17 +142,23 @@ class ListView
 
         $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
-        $data = ['results' => $queryBuilder->getQuery()->getResult()];
-        if ($onlyResults) {
+        if ($returnQueryBuilder) {
 
-            return $data;
+            return $queryBuilder;
         } else {
+            $data = ['results' => $queryBuilder->getQuery()->getResult()];
+            if ($onlyResults) {
 
-            return array_merge($data, [
-                'filterForms' => $filterForms,
-                'paginator' => $paginator,
-            ]);
+                return $data;
+            } else {
+
+                return array_merge($data, [
+                    'filterForms' => $filterForms,
+                    'paginator' => $paginator,
+                ]);
+            }
         }
+
     }
 
     /**
@@ -165,15 +172,11 @@ class ListView
     public function render(ListDataEvent $event, $ui = true)
     {
         $data = $this->getData($event, !$ui);
-        $params = [
-            'data' => $data['results'],
-            'filterForms' => $data['filterForms'],
-            'paginator' => $data['paginator'],
+        $params = array_merge($data, [
             'columns' => $this->getColumns(),
             'actions' => $this->getActions(),
-            'title' => $this->getTitle(),
             'ui' => $ui
-        ];
+        ]);
 
         return $this->renderer->renderView($this->getView(), $params);
     }

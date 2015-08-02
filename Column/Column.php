@@ -12,6 +12,7 @@ namespace Vardius\Bundle\ListBundle\Column;
 
 use Symfony\Bridge\Twig\TwigEngine;
 use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\Type\ActionColumnType;
 
 /**
  * Column
@@ -82,6 +83,14 @@ class Column implements ColumnInterface
     public function getSort()
     {
         return $this->type->getSort();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUi()
+    {
+        return $this->type->isUi();
     }
 
 }
