@@ -12,7 +12,6 @@ namespace Vardius\Bundle\ListBundle\Column;
 
 use Symfony\Bridge\Twig\TwigEngine;
 use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
-use Vardius\Bundle\ListBundle\Column\Types\Type\ActionColumnType;
 
 /**
  * Column
