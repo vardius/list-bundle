@@ -24,8 +24,8 @@
                 </a>
             </li>
         {% endif %}
-        <li class="page-number active disabled">
-            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': currentPage}) ) }}">
+        <li class="page-number active">
+            <a href="#">
                 {{ currentPage }}
             </a>
         </li>
