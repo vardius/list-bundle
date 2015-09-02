@@ -37,7 +37,7 @@ class CallableColumnType extends AbstractColumnType
         return $this->templating->render($this->getView(), [
             'property' => $callback,
             'isDate' => ($callback instanceof \DateTime),
-            'isImage' => boolval($this->options['callback']),
+            'isImage' => boolval(@$this->options['image']),
         ]);
     }
 

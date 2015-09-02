@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Paginator;
 
-
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Twig\TwigEngine;
 
@@ -108,7 +107,7 @@ class Paginator
      */
     public function getNextPage()
     {
-        return ($this->page < $this->getLastPage() ? $this->getLastPage() + 1 : $this->getLastPage());
+        return ($this->page < $this->getLastPage() ? $this->page + 1 : $this->page);
     }
 
     /**
