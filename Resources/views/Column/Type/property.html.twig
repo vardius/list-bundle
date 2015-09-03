@@ -1,7 +1,19 @@
+{% if action is defined and action is not NULL %}
+    <a href="{{ path(action.path, action.parameters) }}">
+{% endif %}
+
 {% if isDate %}
-    {{ property|date("m/d/Y") }}
+    {% if format is defined %}
+        {{ property|date(format) }}
+    {% else %}
+        {{ property|date("m/d/Y") }}
+    {% endif %}
 {% elseif isImage is defined and isImage %}
     <img src="{{ property }}"/>
 {% else %}
     {{ property }}
+{% endif %}
+
+{% if action is defined and action is not NULL %}
+    </a>
 {% endif %}
