@@ -44,6 +44,8 @@ class ListView
     protected $limit;
     /** @var string */
     protected $title;
+    /** @var boolean */
+    protected $paginator;
     /** @var  ArrayCollection */
     protected $columns;
     /** @var  ArrayCollection */
@@ -59,7 +61,7 @@ class ListView
      * @param string $title
      * @param EventDispatcherInterface $eventDispatcher
      */
-    function __construct(ContainerInterface $container, $limit, $title, EventDispatcherInterface $eventDispatcher)
+    function __construct(ContainerInterface $container, $limit, $title, $paginator, EventDispatcherInterface $eventDispatcher)
     {
         $formFactory = $container->get('form.factory');
         $columnFactory = $container->get('vardius_list.column.factory');
@@ -71,6 +73,7 @@ class ListView
 
         $this->limit = $limit;
         $this->title = $title;
+        $this->paginator = $paginator;
         $this->factoryEvent = $event;
         $this->dispatcher = $eventDispatcher;
         $this->renderer = $container->get('vardius_list.view.renderer');
@@ -117,13 +120,17 @@ class ListView
                     ->setParameter('ids', $ids);
             }
         } else {
-            $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
-            $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
+            if ($this->paginator) {
+                $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
+                $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
 
-            $offset = ($currentPage * $this->limit) - $this->limit;
-            $queryBuilder
-                ->setFirstResult($offset)
-                ->setMaxResults($this->limit);
+                $offset = ($currentPage * $this->limit) - $this->limit;
+                $queryBuilder
+                    ->setFirstResult($offset)
+                    ->setMaxResults($this->limit);
+            } else {
+                $paginator = null;
+            }
 
             /** @var ListViewFilter $filter */
             foreach ($this->filters as $filter) {

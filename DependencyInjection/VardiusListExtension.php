@@ -36,6 +36,7 @@ class VardiusListExtension extends Extension
 
         $container->setParameter('vardius_list.title', $config['title']);
         $container->setParameter('vardius_list.limit', $config['limit']);
+        $container->setParameter('vardius_list.paginator', $config['paginator']);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');

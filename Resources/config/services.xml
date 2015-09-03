@@ -37,6 +37,7 @@
         <service id="vardius_list.list_view.factory" class="%vardius_list.list_view.factory.class%">
             <argument>%vardius_list.limit%</argument>
             <argument>%vardius_list.title%</argument>
+            <argument>%vardius_list.paginator%</argument>
             <argument type="service" id="service_container"/>
         </service>
 
