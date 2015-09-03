@@ -10,6 +10,8 @@
         {% endif %}
     {% elseif isImage is defined and isImage %}
         <img src="{{ property }}"/>
+    {% elseif raw is defined and raw %}
+        {{ property|raw }}
     {% else %}
         {{ property }}
     {% endif %}
