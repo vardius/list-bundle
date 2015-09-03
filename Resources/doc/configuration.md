@@ -110,10 +110,8 @@ Create your provider class:
                     'sort' => true, //enable colum sorting
                     'label' => 'My Label', //custom column label
                     'url' => [ //column as link
-                        [
-                            'path' => 'app.product_controller.show',
-                            'parameters' => [], //entity id will be added automatically no need to put it here
-                        ],
+                        'path' => 'app.product_controller.show',
+                        'parameters' => [], //entity id will be added automatically no need to put it here
                     ],
                 ])
                 ->addColumn('date', 'property', [ // add column
