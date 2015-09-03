@@ -108,8 +108,17 @@ Create your provider class:
                 ->setLimit(10) // set the entries per page
                 ->addColumn('name', 'property', [ // add column
                     'sort' => true, //enable colum sorting
-                    'label' => 'My Label' //custom column label
-                ]) 
+                    'label' => 'My Label', //custom column label
+                    'url' => [ //column as link
+                        'path' => 'app.product_controller.show',
+                        'parameters' => [], //entity id will be added automatically no need to put it here
+                    ],
+                ])
+                ->addColumn('date', 'property', [ // add column
+                    'sort' => true, //enable colum sorting
+                    'label' => 'My Label', //custom column label
+                    'date_format' => 'm/d/Y' //date format
+                ])
                 ->addColumn('checkbox', 'option')
                 ->addColumn('custom', 'callable', [
                     'callback' => function(Product $product){
@@ -122,6 +131,7 @@ Create your provider class:
                             'path' => 'app.product_controller.edit',
                             'name' => 'edit',
                             'icon' => 'fa-edit',
+                            'parameters' => [],
                         ],
                     ],
                 ])

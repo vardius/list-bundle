@@ -67,7 +67,7 @@
             {% endfor %}
             </tbody>
         </table>
-        {% if paginator is defined and ui %}
+        {% if paginator is defined and paginator is not NULL and ui %}
             <div class="row">
                 <div class="col-md-12">
                     {{ paginator.render|raw }}

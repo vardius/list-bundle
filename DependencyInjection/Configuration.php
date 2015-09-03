@@ -37,6 +37,9 @@ class Configuration implements ConfigurationInterface
         // more information on that topic.
         $rootNode
             ->children()
+                ->booleanNode('paginator')
+                    ->defaultTrue()
+                ->end()
                 ->integerNode('limit')
                     ->min(1)
                     ->defaultValue(10)

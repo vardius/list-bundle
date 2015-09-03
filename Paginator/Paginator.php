@@ -46,7 +46,6 @@ class Paginator
 
         $cloneQueryBuilder = clone $queryBuilder;
         $from = $cloneQueryBuilder->getDQLPart('from');
-        $cloneQueryBuilder->resetDQLParts();
 
         $newQueryBuilder = $cloneQueryBuilder
             ->select('count(' . $alias . '.id)')
