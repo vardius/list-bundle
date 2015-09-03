@@ -20,13 +20,6 @@ use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
  */
 class PropertyColumnType extends AbstractColumnType
 {
-    protected $actionFactory;
-
-    function __construct(ActionFactory $actionFactory)
-    {
-        $this->actionFactory = $actionFactory;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -44,7 +37,10 @@ class PropertyColumnType extends AbstractColumnType
             $parameters = array_key_exists('parameters', $url) ? $url['parameters'] : [];
             $parameters['id'] = $entity->getId();
 
-            $action = $this->actionFactory->get($path, null, null, $parameters);
+            $action = [
+                'path' => $path,
+                'parameters' => $parameters,
+            ];
         }
 
         return $this->templating->render($this->getView(), [

@@ -63,8 +63,6 @@
 
         <!--COLUM TYPES-->
         <service id="vardius_list.column_type.property" class="%vardius_list.column_type.property.class%">
-            <argument type="service" id="vardius_list.action.factory"/>
-
             <tag name="vardius_list.column_type" />
         </service>
 
