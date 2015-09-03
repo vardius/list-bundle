@@ -3,7 +3,7 @@
     {% endif %}
 
     {% if isDate %}
-        {% if format is defined %}
+        {% if format is defined and format is not null %}
             {{ property|date(format) }}
         {% else %}
             {{ property|date("m/d/Y") }}
