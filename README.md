@@ -24,7 +24,7 @@ HOW TO USE
 
 RELEASE NOTES
 ==================================================
-See [notes](https://github.com/Vardius/list-bundle/blob/master/Resources/doc/notes.md) file.
+See [notes](Resources/doc/notes.md) file.
 
 License
 -------
