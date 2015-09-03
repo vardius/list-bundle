@@ -25,28 +25,31 @@ class PropertyColumnType extends AbstractColumnType
      */
     public function getData($entity = null)
     {
-        $property = $this->getProperty();
         $action = null;
+        $format = array_key_exists('date_format', $this->options) ? $this->options['date_format'] : null;
+
+        $property = $this->getProperty();
 
         if ($entity !== null) {
             $property = $entity->{'get' . ucfirst($this->getProperty())}();
 
-            $url = $this->options['url'];
+            $url = array_key_exists('url', $this->options) ? $this->options['url'] : [];
+            if (!empty($url)) {
+                $path = array_key_exists('path', $url) ? $url['path'] : null;
+                $parameters = array_key_exists('parameters', $url) ? $url['parameters'] : [];
+                $parameters['id'] = $entity->getId();
 
-            $path = array_key_exists('path', $url) ? $url['path'] : null;
-            $parameters = array_key_exists('parameters', $url) ? $url['parameters'] : [];
-            $parameters['id'] = $entity->getId();
-
-            $action = [
-                'path' => $path,
-                'parameters' => $parameters,
-            ];
+                $action = [
+                    'path' => $path,
+                    'parameters' => $parameters,
+                ];
+            }
         }
 
         return $this->templating->render($this->getView(), [
             'property' => $property,
             'isDate' => ($property instanceof \DateTime),
-            'format' => $this->options['date_format'],
+            'format' => $format,
             'action' => $action,
         ]);
     }
