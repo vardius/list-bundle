@@ -6,7 +6,8 @@ Configuration
 1. Create your entity class
 2. Create ListViewProvider class
 3. Configure your ListViewProvider class
-4. Edit list view template
+4. Available options for column types
+5. Edit list view template
 
 ### 1. Create your entity class
 
@@ -114,17 +115,28 @@ Create your provider class:
                         'parameters' => [], //entity id will be added automatically no need to put it here
                     ],
                 ])
-                ->addColumn('date', 'property', [ // add column
-                    'sort' => true, //enable colum sorting
-                    'label' => 'My Label', //custom column label
-                    'date_format' => 'm/d/Y' //date format
-                ])
-                ->addColumn('checkbox', 'option')
                 ->addColumn('custom', 'callable', [
                     'callback' => function(Product $product){
                           return 'custom value';
-                      },
+                    },
                 ])
+                ->addColumn('date', 'date', [
+                    'date_format' => 'm/d/Y' //date format
+                    'callback' => function(Product $product){ //you can provide callback will override property value
+                          return 'custom value';
+                    },
+                ])
+                ->addColumn('image', 'image', [
+                    'callback' => function(Product $product){ //you can provide callback will override property value
+                          return 'custom value';
+                    },
+                ])
+                ->addColumn('details', 'raw', [
+                    'callback' => function(Product $product){ //you can provide callback will override property value
+                          return 'custom html string';
+                    },
+                ])
+                ->addColumn('checkbox', 'option')
                 ->addColumn('', 'action', [
                     'actions' => [
                         [
@@ -159,7 +171,17 @@ Create your provider class:
     }
 ```
 
-### 4. Edit list view template
+### 4. Available options for column types
+
+Property column: `label, sort, url`
+Callable column: `label, sort, url, callback`
+Date column: `label, sort, url, callback, date_format`
+Raw column: `label, sort, url, callback`
+Image column: `label, sort, url, callback`
+Action column: `label, actions`
+Option column: `label`
+
+### 5. Edit list view template
 
 ``` php
     use Vardius\Bundle\ListBundle\Action\Action;

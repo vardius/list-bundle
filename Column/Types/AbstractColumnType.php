@@ -22,7 +22,8 @@ abstract class AbstractColumnType implements ColumnTypeInterface
     /** @var array */
     protected $options = [
         'label',
-        'sort'
+        'sort',
+        'url'
     ];
     /** @var  string */
     protected $property;
@@ -107,6 +108,29 @@ abstract class AbstractColumnType implements ColumnTypeInterface
         }
 
         return $sort;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAction()
+    {
+        $action = null;
+        if (array_key_exists('url', $this->options)) {
+
+            $url = $this->options['url'];
+            if (!empty($url)) {
+                $path = array_key_exists('path', $url) ? $url['path'] : null;
+                $parameters = array_key_exists('parameters', $url) ? $url['parameters'] : [];
+
+                $action = [
+                    'path' => $path,
+                    'parameters' => $parameters,
+                ];
+            }
+        }
+
+        return $action;
     }
 
     /**

@@ -60,6 +60,12 @@ class ActionColumnType extends AbstractColumnType
     {
         $options = parent::getOptions();
 
+        $key = array_search('url', $options);
+        unset($options[$key]);
+
+        $key = array_search('sort', $options);
+        unset($options[$key]);
+
         return array_merge($options, ['actions']);
     }
 
