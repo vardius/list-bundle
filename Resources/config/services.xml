@@ -18,6 +18,9 @@
         <parameter key="vardius_list.column_type.property.class">Vardius\Bundle\ListBundle\Column\Types\Type\PropertyColumnType</parameter>
         <parameter key="vardius_list.column_type.option.class">Vardius\Bundle\ListBundle\Column\Types\Type\OptionColumnType</parameter>
         <parameter key="vardius_list.column_type.callable.class">Vardius\Bundle\ListBundle\Column\Types\Type\CallableColumnType</parameter>
+        <parameter key="vardius_list.column_type.date.class">Vardius\Bundle\ListBundle\Column\Types\Type\DateColumnType</parameter>
+        <parameter key="vardius_list.column_type.image.class">Vardius\Bundle\ListBundle\Column\Types\Type\ImageColumnType</parameter>
+        <parameter key="vardius_list.column_type.raw.class">Vardius\Bundle\ListBundle\Column\Types\Type\RawColumnType</parameter>
         <parameter key="vardius_list.column_type.action.class">Vardius\Bundle\ListBundle\Column\Types\Type\ActionColumnType</parameter>
         <!--ACTION-->
         <parameter key="vardius_list.action.class">Vardius\Bundle\ListBundle\Action\Action</parameter>
@@ -71,6 +74,18 @@
         </service>
 
         <service id="vardius_list.column_type.callable" class="%vardius_list.column_type.callable.class%">
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.date" class="%vardius_list.column_type.date.class%">
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.image" class="%vardius_list.column_type.image.class%">
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.raw" class="%vardius_list.column_type.raw.class%">
             <tag name="vardius_list.column_type" />
         </service>
 
