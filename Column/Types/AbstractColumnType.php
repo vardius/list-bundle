@@ -92,7 +92,7 @@ abstract class AbstractColumnType implements ColumnTypeInterface
             $label = $this->options['label'];
         }
 
-        return strtoupper($label);
+        return $label;
     }
 
     /**
