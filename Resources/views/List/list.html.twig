@@ -1,7 +1,7 @@
 {% set hasFilters = (filterForms is defined and filterForms is not empty and ui) %}
 {% if ui %}
     <div class="row">
-        <div class="list-navigation col-xs-12 col-sm-6 col-md-12">
+        <div class="list-navigation col-xs-12 col-sm-12 col-md-12">
             {% if paginator is defined and paginator is not NULL and ui %}
                 {{ paginator.render|raw }}
             {% endif %}
@@ -29,7 +29,7 @@
 {% endif %}
 <div class="row">
     {% if hasFilters %}
-        <div class="list-filters col-xs-12 col-sm-6 col-md-4 pull-right">
+        <div class="list-filters col-xs-12 col-md-4 pull-right">
             {% for form in filterForms %}
                 {{ form(form) }}
             {% endfor %}
