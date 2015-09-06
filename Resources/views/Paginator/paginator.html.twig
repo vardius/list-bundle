@@ -1,4 +1,4 @@
-<div class="pull-right pagination">
+<div class="pull-left pagination">
     <ul class="pagination">
         <li class="page-first{% if 1 >=  (currentPage-1) %} disabled{% endif %}">
             <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': 1}) ) }}">

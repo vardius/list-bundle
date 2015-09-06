@@ -1,7 +1,13 @@
 {% set hasFilters = (filterForms is defined and filterForms is not empty and ui) %}
 {% if ui %}
     <div class="row">
-        <div class="col-md-{{ hasFilters ? '8' : '12' }}">
+        <div class="list-navigation col-xs-12 col-sm-6 col-md-{{ hasFilters ? '8' : '12' }}">
+            {% if paginator is defined and paginator is not NULL and ui %}
+                {{ paginator.render|raw }}
+            {% endif %}
+            <button type="button" class="btn btn-default pull-right list-toggle" style="margin-left: 5px;">
+                <i class="fa fa-bars"></i>
+            </button>
             {% for action in actions %}
                 {% if loop.first %}
                     <div class="btn-group pull-right" role="group">
@@ -22,7 +28,14 @@
     </div>
 {% endif %}
 <div class="row">
-    <div class="col-md-{{ hasFilters ? '8' : '12' }}">
+    {% if hasFilters %}
+        <div class="list-filters col-xs-12 col-sm-6 col-md-4 pull-right">
+            {% for form in filterForms %}
+                {{ form(form) }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="list-content col-xs-12 col-sm-6 col-md-{{ hasFilters ? '8' : '12' }}">
         <table class="table table-striped table-hover table-condensed">
             <thead>
             <tr>
@@ -67,19 +80,5 @@
             {% endfor %}
             </tbody>
         </table>
-        {% if paginator is defined and paginator is not NULL and ui %}
-            <div class="row">
-                <div class="col-md-12">
-                    {{ paginator.render|raw }}
-                </div>
-            </div>
-        {% endif %}
     </div>
-    {% if hasFilters %}
-        <div class="col-md-4">
-            {% for form in filterForms %}
-                {{ form(form) }}
-            {% endfor %}
-        </div>
-    {% endif %}
 </div>

@@ -5,6 +5,7 @@ Installation
 ----------------
 1. Download using composer
 2. Enable the VardiusListBundle
+3. Add assets to you layout
 
 ### 1. Download using composer
 Install the package through composer:
@@ -39,3 +40,11 @@ Add to config.yml:
 ```
 
 You can also provide your custom value for list by setting them in provider class
+
+### 1. Add assets to you layout
+Include javascript for list view
+
+``` html
+    <script src="{{ asset('bundles/vardiuslist/js/list.js') }}"></script>
+```
+
