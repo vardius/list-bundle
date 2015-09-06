@@ -36,9 +36,7 @@ class CallableColumnType extends AbstractColumnType
 
         return $this->templating->render($this->getView(), [
             'property' => $callback,
-            'isDate' => ($callback instanceof \DateTime),
-            'isImage' => boolval(@$this->options['image']),
-            'raw' => boolval(@$this->options['raw']),
+            'action' => $this->getAction()
         ]);
     }
 
@@ -49,7 +47,7 @@ class CallableColumnType extends AbstractColumnType
     {
         $options = parent::getOptions();
 
-        return array_merge($options, ['callback', 'image', 'raw']);
+        return array_merge($options, ['callback']);
     }
 
     /**

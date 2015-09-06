@@ -33,6 +33,22 @@ class OptionColumnType extends AbstractColumnType
     /**
      * {@inheritdoc}
      */
+    function getOptions()
+    {
+        $options = parent::getOptions();
+
+        $key = array_search('url', $options);
+        unset($options[$key]);
+
+        $key = array_search('sort', $options);
+        unset($options[$key]);
+
+        return $options;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'option';
