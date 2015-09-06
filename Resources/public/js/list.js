@@ -13,8 +13,5 @@ $(document).ready(function () {
         $('.list-content')
             .toggleClass('col-md-12')
             .toggleClass('col-md-8');
-        $('.list-navigation')
-            .toggleClass('col-md-12')
-            .toggleClass('col-md-8');
     });
 });
