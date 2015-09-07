@@ -31,7 +31,7 @@
 {% endif %}
 <div class="row">
     {% if hasFilters %}
-        <div class="list-filters col-xs-12 col-md-4 pull-right">
+        <div class="list-filters col-xs-12 col-md-4 pull-right" style="display: none;">
             {% for form in filterForms %}
                 {{ form(form) }}
             {% endfor %}
