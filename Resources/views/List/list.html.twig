@@ -2,12 +2,14 @@
 {% if ui %}
     <div class="row">
         <div class="list-navigation col-xs-12 col-sm-12 col-md-12">
-            {% if paginator is defined and paginator is not NULL and ui %}
+            {% if paginator is defined and paginator is not null and ui %}
                 {{ paginator.render|raw }}
             {% endif %}
-            <button type="button" class="btn btn-default pull-right list-toggle" style="margin-left: 5px;">
-                <i class="fa fa-bars"></i>
-            </button>
+            {% if hasFilters %}
+                <button type="button" class="btn btn-default pull-right list-toggle" style="margin-left: 5px;">
+                    <i class="fa fa-bars"></i>
+                </button>
+            {% endif %}
             {% for action in actions %}
                 {% if loop.first %}
                     <div class="btn-group pull-right" role="group">
