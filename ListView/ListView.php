@@ -92,9 +92,12 @@ class ListView
     {
         $data = $event->getData();
         if ($data instanceof EntityRepository) {
-            $queryBuilder = $data->createQueryBuilder($data->getClassName());
+            $alias = $data->getClassName();
+            $queryBuilder = $data->createQueryBuilder($alias);
         } elseif ($data instanceof QueryBuilder) {
             $queryBuilder = $data;
+            $aliases = $queryBuilder->getRootAliases();
+            $alias = array_values($aliases)[0];
         } else {
             throw new \InvalidArgumentException('Expected argument of type "EntityRepository or QueryBuilder", ' . get_class($data) . ' given');
         }
@@ -109,14 +112,14 @@ class ListView
         $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
         if ($column !== null) {
-            $queryBuilder->orderBy($data->getClassName() . '.' . $column, strtoupper($event->getSort()));
+            $queryBuilder->orderBy($alias . '.' . $column, strtoupper($event->getSort()));
         }
 
         if ($onlyResults) {
             $ids = $request->get('ids', []);
             if (!empty($ids)) {
                 $queryBuilder
-                    ->andWhere($data->getClassName() . '.id IN (:ids)')
+                    ->andWhere($alias . '.id IN (:ids)')
                     ->setParameter('ids', $ids);
             }
         } else {
