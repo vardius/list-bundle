@@ -87,6 +87,14 @@ class Column implements ColumnInterface
     /**
      * {@inheritdoc}
      */
+    public function getAttr()
+    {
+        return $this->type->getAttr();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isUi()
     {
         return $this->type->isUi();

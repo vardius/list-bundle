@@ -52,10 +52,10 @@ class ColumnFactory
             throw new \InvalidArgumentException('The $type mast be instance of AbstractColumnType. ' . $type . ' given');
         }
 
-        $typOptions = $type->getOptions();
+        $typeOptions = $type->getOptions();
         foreach ($options as $key => $option) {
-            if (!in_array($key, $typOptions)) {
-                throw new \InvalidArgumentException('The option "' . $key . '" does not exist. Known options are: ", ' . implode(",", $typOptions) . '"');
+            if (!in_array($key, $typeOptions)) {
+                throw new \InvalidArgumentException('The option "' . $key . '" does not exist. Known options are: ", ' . implode(",", $typeOptions) . '"');
             }
         }
 

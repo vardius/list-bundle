@@ -23,7 +23,8 @@ abstract class AbstractColumnType implements ColumnTypeInterface
     protected $options = [
         'label',
         'sort',
-        'url'
+        'url',
+        'attr'
     ];
     /** @var  string */
     protected $property;
@@ -108,6 +109,21 @@ abstract class AbstractColumnType implements ColumnTypeInterface
         }
 
         return $sort;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttr()
+    {
+        $attr = false;
+        if (array_key_exists('attr', $this->options)) {
+
+            $attr = $this->options['attr'];
+            $attr = is_array($attr) ? $attr : [];
+        }
+
+        return $attr;
     }
 
     /**

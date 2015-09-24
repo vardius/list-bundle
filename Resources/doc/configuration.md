@@ -114,6 +114,10 @@ Create your provider class:
                         'path' => 'app.product_controller.show',
                         'parameters' => [], //entity id will be added automatically no need to put it here
                     ],
+                    'attr' => [
+                        'class' => 'custom class',
+                        'styles' => 'font-weight: bold;'
+                    ]
                 ])
                 ->addColumn('custom', 'callable', [
                     'callback' => function(Product $product){
@@ -173,13 +177,13 @@ Create your provider class:
 
 ### 4. Available options for column types
 
-Property column: `label, sort, url`
-Callable column: `label, sort, url, callback`
-Date column: `label, sort, url, callback, date_format`
-Raw column: `label, sort, url, callback`
-Image column: `label, sort, url, callback`
-Action column: `label, actions`
-Option column: `label`
+Property column: `attr, label, sort, url`
+Callable column: `attr, label, sort, url, callback`
+Date column: `attr, label, sort, url, callback, date_format`
+Raw column: `attr, label, sort, url, callback`
+Image column: `attr, label, sort, url, callback`
+Action column: `attr, label, actions`
+Option column: `attr, label`
 
 ### 5. Edit list view template
 

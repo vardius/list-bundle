@@ -70,10 +70,16 @@
             {% for entity in results %}
                 <tr class='list-view-item'>
                     {% for column in columns %}
+                        {% set attrStr = '' %}
+                        {% if column.attr %}
+                            {% for attr, value in column.attr %}
+                                {% set attrStr = attrStr~' '~attr~'='~value~'' %}
+                            {% endfor %}
+                        {% endif %}
                         {% if column.ui and ui %}
-                            <td>{{ column.getData(entity)|raw }}</td>
+                            <td {{ attrStr }}>{{ column.getData(entity)|raw }}</td>
                         {% elseif not column.ui %}
-                            <td>{{ column.getData(entity)|raw }}</td>
+                            <td {{ attrStr }}>{{ column.getData(entity)|raw }}</td>
                         {% endif %}
                     {% endfor %}
                 </tr>

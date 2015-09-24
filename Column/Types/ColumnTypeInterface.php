@@ -84,6 +84,13 @@ interface ColumnTypeInterface
     public function getSort();
 
     /**
+     * Get column attributes
+     *
+     * @return boolean
+     */
+    public function getAttr();
+
+    /**
      * Get column action
      *
      * @return array

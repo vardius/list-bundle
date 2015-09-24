@@ -51,6 +51,11 @@ interface ColumnInterface
     public function getSort();
 
     /**
+     * @return array
+     */
+    public function getAttr();
+
+    /**
      * Tells if column belongs to user interface
      *
      * @return bool
