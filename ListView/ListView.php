@@ -34,26 +34,30 @@ use Vardius\Bundle\ListBundle\View\RendererInterface;
  */
 class ListView
 {
-    /** @var  EventDispatcherInterface */
-    protected $dispatcher;
     /** @var FactoryEvent */
     protected $factoryEvent;
-    /** @var ArrayCollection */
-    protected $filters;
     /** @var int */
     protected $limit;
     /** @var string */
     protected $title;
-    /** @var boolean */
-    protected $paginator;
     /** @var  ArrayCollection */
     protected $columns;
     /** @var  ArrayCollection */
     protected $actions;
+    /** @var ArrayCollection */
+    protected $filters;
     /** @var  string */
     protected $view;
+    /** @var  QueryBuilder|null */
+    protected $queryBuilder = null;
+    /** @var array */
+    protected $order = [];
+    /** @var boolean */
+    protected $paginator;
     /** @var  RendererInterface */
     protected $renderer;
+    /** @var  EventDispatcherInterface */
+    protected $dispatcher;
 
     /**
      * @param ContainerInterface $container
@@ -90,7 +94,7 @@ class ListView
      */
     public function getData(ListDataEvent $event, $onlyResults = false, $returnQueryBuilder = false)
     {
-        $data = $event->getData();
+        $data = $this->queryBuilder !== null ? $this->queryBuilder : $event->getData();
         if ($data instanceof EntityRepository) {
             $alias = $data->getClassName();
             $queryBuilder = $data->createQueryBuilder($alias);
@@ -112,7 +116,15 @@ class ListView
         $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
         if ($column !== null) {
-            $queryBuilder->orderBy($alias . '.' . $column, strtoupper($event->getSort()));
+            $queryBuilder->addOrderBy($alias . '.' . $column, strtoupper($event->getSort()));
+        }
+
+        if (!empty($this->order)) {
+            foreach ($this->order as $sort => $order) {
+                if ($column !== $sort) {
+                    $queryBuilder->addOrderBy($alias . '.' . $sort, strtoupper($order));
+                }
+            }
         }
 
         if ($onlyResults) {
@@ -192,6 +204,25 @@ class ListView
     }
 
     /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getLimit()
@@ -211,50 +242,34 @@ class ListView
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getTitle()
+    public function getOrder()
     {
-        return $this->title;
+        return $this->order;
     }
 
     /**
-     * @param string $title
+     * @param string $column
+     * @param string $order
+     * @return $this
      */
-    public function setTitle($title)
+    public function addOrder($column, $order = 'asc')
     {
-        $this->title = $title;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getFilters()
-    {
-        return $this->filters;
-    }
-
-    /**
-     * @param ResolvedFormTypeInterface|FormTypeInterface|string $formType
-     * @param callable $filters
-     * @return ListView
-     */
-    public function addFilter($formType, $filters)
-    {
-        $filterFactory = $this->factoryEvent->getFilterFactory();
-        $filter = $filterFactory->get($formType, $filters);
-        $this->filters->add($filter);
+        $this->order[$column] = $order;
 
         return $this;
     }
 
     /**
-     * @param ListViewFilter $filter
-     * @return ListView
+     * @param string $column
+     * @return $this
      */
-    public function removeFilter(ListViewFilter $filter)
+    public function removeOrder($column)
     {
-        $this->filters->removeElement($filter);
+        if (array_key_exists($column, $this->order)) {
+            unset($this->order[$column]);
+        }
 
         return $this;
     }
@@ -284,7 +299,7 @@ class ListView
 
     /**
      * @param Column $column
-     * @return ListView
+     * @return $this
      */
     public function removeColumn(Column $column)
     {
@@ -319,11 +334,63 @@ class ListView
 
     /**
      * @param Action $column
-     * @return ListView
+     * @return $this
      */
     public function removeAction(Action $column)
     {
         $this->actions->removeElement($column);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * @param ResolvedFormTypeInterface|FormTypeInterface|string $formType
+     * @param callable $filters
+     * @return $this
+     */
+    public function addFilter($formType, $filters)
+    {
+        $filterFactory = $this->factoryEvent->getFilterFactory();
+        $filter = $filterFactory->get($formType, $filters);
+        $this->filters->add($filter);
+
+        return $this;
+    }
+
+    /**
+     * @param ListViewFilter $filter
+     * @return $this
+     */
+    public function removeFilter(ListViewFilter $filter)
+    {
+        $this->filters->removeElement($filter);
+
+        return $this;
+    }
+
+    /**
+     * @return QueryBuilder|null
+     */
+    public function getQueryBuilder()
+    {
+        return $this->queryBuilder;
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @return $this
+     */
+    public function setQueryBuilder(QueryBuilder $queryBuilder)
+    {
+        $this->queryBuilder = $queryBuilder;
 
         return $this;
     }
@@ -338,9 +405,13 @@ class ListView
 
     /**
      * @param string $view
+     * @return $this
      */
     public function setView($view)
     {
         $this->view = $view;
+
+        return $this;
     }
 }
+
