@@ -86,6 +86,6 @@ class ListDataEvent
      */
     public function getSort()
     {
-        return $this->request->get('sort', 'asc');
+        return $this->request->get('sort', null);
     }
 }

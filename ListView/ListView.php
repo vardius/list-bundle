@@ -110,14 +110,16 @@ class ListView
         $request = $event->getRequest();
         $routeName = $event->getRouteName();
         $column = $event->getColumn();
+        $sort = $event->getSort();
         $filterForms = [];
         $paginator = null;
 
         $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
-        if ($column !== null) {
-            $queryBuilder->addOrderBy($alias . '.' . $column, strtoupper($event->getSort()));
+        if ($column !== null && $sort !== null) {
+            $queryBuilder->addOrderBy($alias . '.' . $column, strtoupper($sort));
         }
+        unset($sort);
 
         if (!empty($this->order)) {
             foreach ($this->order as $sort => $order) {
