@@ -11,14 +11,14 @@
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
 use Vardius\Bundle\ListBundle\Action\Factory\ActionFactory;
-use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 
 /**
  * ActionColumnType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class ActionColumnType extends AbstractColumnType
+class ActionColumnType extends ColumnType
 {
     protected $actionFactory;
 

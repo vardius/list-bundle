@@ -12,7 +12,7 @@ namespace Vardius\Bundle\ListBundle\Column\Factory;
 
 use Symfony\Bridge\Twig\TwigEngine;
 use Vardius\Bundle\ListBundle\Column\Column;
-use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 use Vardius\Bundle\ListBundle\Column\Types\ColumnTypePool;
 
 /**
@@ -48,8 +48,8 @@ class ColumnFactory
             $type = $this->columnTypePool->getType($type);
         }
 
-        if (!$type instanceof AbstractColumnType) {
-            throw new \InvalidArgumentException('The $type mast be instance of AbstractColumnType. ' . $type . ' given');
+        if (!$type instanceof ColumnType) {
+            throw new \InvalidArgumentException('The $type mast be instance of ColumnType. ' . $type . ' given');
         }
 
         $typeOptions = $type->getOptions();

@@ -48,7 +48,7 @@ class ColumnTypePool
 
     /**
      * @param string $id
-     * @return AbstractColumnType
+     * @return ColumnTypeInterface
      */
     public function getType($id)
     {

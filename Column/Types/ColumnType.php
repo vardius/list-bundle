@@ -17,7 +17,7 @@ use Symfony\Bridge\Twig\TwigEngine;
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-abstract class AbstractColumnType implements ColumnTypeInterface
+abstract class ColumnType implements ColumnTypeInterface
 {
     /** @var array */
     protected $options = [

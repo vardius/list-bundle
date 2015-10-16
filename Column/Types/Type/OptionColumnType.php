@@ -10,14 +10,14 @@
 
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
-use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 
 /**
  * OptionColumnType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class OptionColumnType extends AbstractColumnType
+class OptionColumnType extends ColumnType
 {
     /**
      * {@inheritdoc}

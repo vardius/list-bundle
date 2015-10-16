@@ -10,7 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Column;
 
-use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 
 /**
  * ColumnInterface
@@ -36,7 +36,7 @@ interface ColumnInterface
     public function getOptions();
 
     /**
-     * @return AbstractColumnType
+     * @return ColumnType
      */
     public function getType();
 

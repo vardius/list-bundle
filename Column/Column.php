@@ -11,7 +11,7 @@
 namespace Vardius\Bundle\ListBundle\Column;
 
 use Symfony\Bridge\Twig\TwigEngine;
-use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 
 /**
  * Column
@@ -20,15 +20,15 @@ use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
  */
 class Column implements ColumnInterface
 {
-    /** @var  AbstractColumnType */
+    /** @var  ColumnType */
     protected $type;
 
     /**
      * @param string $property
-     * @param AbstractColumnType $type
+     * @param ColumnType $type
      * @param array $options
      */
-    function __construct($property, AbstractColumnType $type, array $options = [], TwigEngine $templating)
+    function __construct($property, ColumnType $type, array $options = [], TwigEngine $templating)
     {
         $this->type = $type;
         $this->type->setOptions($options);

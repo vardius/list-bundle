@@ -10,14 +10,14 @@
 
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
-use Vardius\Bundle\ListBundle\Column\Types\AbstractColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 
 /**
  * PropertyColumnType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class PropertyColumnType extends AbstractColumnType
+class PropertyColumnType extends ColumnType
 {
     /**
      * {@inheritdoc}
