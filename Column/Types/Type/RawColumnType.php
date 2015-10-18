@@ -10,45 +10,48 @@
 
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
+
 /**
  * RawColumnType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class RawColumnType extends CallableColumnType
+class RawColumnType extends ColumnType
 {
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null)
+    public function getData($entity = null, array $options = [])
     {
-        $action = $this->getAction();
-
-        $callback = null;
-        if (array_key_exists('callback', $this->options)) {
-            $callable = $this->options['callback'];
-
-            if (is_callable($callable)) {
-                $callback = call_user_func_array($callable, [$entity]);
-            }
-        }
-
-        if ($entity !== null && $callback === null) {
-            $property = $entity->{'get' . ucfirst($this->getProperty())}();
-
-            if ($action !== null) {
-                $action['parameters']['id'] = $entity->getId();
-            }
-        } elseif ($callback !== null) {
-            $property = $callback;
+        $callable = $options['callback'];
+        if (is_callable($callable)) {
+            $property = call_user_func_array($callable, [$entity]);
         } else {
-            throw new \InvalidArgumentException('Property or callback value have to be provided!');
+            $property = $entity->{'get' . ucfirst($options['property'])}();
         }
 
-        return $this->templating->render($this->getView(), [
+        $action = $options['row_action'];
+        if (is_array($action) && !empty($action) && $entity !== null) {
+            $action['parameters']['id'] = $entity->getId();
+        }
+
+        return [
             'property' => $property,
             'action' => $action
-        ]);
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function configureOptions(OptionsResolver $resolver, $property, $templatePath)
+    {
+        parent::configureOptions($resolver, $property, $templatePath);
+
+        $resolver->setDefault('callback', null);
+        $resolver->setAllowedTypes('callback', ['closure', 'null']);
     }
 
     /**

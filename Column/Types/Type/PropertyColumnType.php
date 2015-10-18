@@ -22,23 +22,22 @@ class PropertyColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null)
+    public function getData($entity = null, array $options = [])
     {
-        $action = $this->getAction();
-        $property = $this->getProperty();
-
+        $property = null;
         if ($entity !== null) {
-            $property = $entity->{'get' . ucfirst($this->getProperty())}();
-
-            if ($action !== null) {
-                $action['parameters']['id'] = $entity->getId();
-            }
+            $property = $entity->{'get' . ucfirst($options['property'])}();
         }
 
-        return $this->templating->render($this->getView(), [
+        $action = $options['row_action'];
+        if (is_array($action) && !empty($action) && $entity !== null) {
+            $action['parameters']['id'] = $entity->getId();
+        }
+
+        return [
             'property' => $property,
             'action' => $action
-        ]);
+        ];
     }
 
     /**

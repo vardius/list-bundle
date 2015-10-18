@@ -1,4 +1,4 @@
-{% if action is defined and action is not null %}
+{% if action is defined and action is not null and action is not empty %}
     <a href="{{ path(action.path, action.parameters) }}">
 {% endif %}
 {{ property|raw }}

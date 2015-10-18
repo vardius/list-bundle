@@ -112,7 +112,7 @@ Create your provider class:
                 ->addColumn('name', 'property', [ // add column
                     'sort' => true, //enable colum sorting
                     'label' => 'My Label', //custom column label
-                    'url' => [ //column as link
+                    'row_action' => [ //column as link
                         'path' => 'app.product_controller.show',
                         'parameters' => [], //entity id will be added automatically no need to put it here
                     ],
@@ -179,11 +179,11 @@ Create your provider class:
 
 ### 4. Available options for column types
 
-Property column: `attr, label, sort, url`
-Callable column: `attr, label, sort, url, callback`
-Date column: `attr, label, sort, url, callback, date_format`
-Raw column: `attr, label, sort, url, callback`
-Image column: `attr, label, sort, url, callback`
+Property column: `attr, label, sort, row_action`
+Callable column: `attr, label, sort, row_action, callback`
+Date column: `attr, label, sort, row_action, callback, date_format`
+Raw column: `attr, label, sort, row_action, callback`
+Image column: `attr, label, sort, row_action, callback`
 Action column: `attr, label, actions`
 Option column: `attr, label`
 

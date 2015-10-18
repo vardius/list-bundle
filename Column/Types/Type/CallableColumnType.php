@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 
 /**
@@ -22,32 +23,35 @@ class CallableColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null)
+    public function getData($entity = null, array $options = [])
     {
         $callback = null;
+        $callable = $options['callback'];
 
-        if (array_key_exists('callback', $this->options)) {
-            $callable = $this->options['callback'];
-
-            if (is_callable($callable)) {
-                $callback = call_user_func_array($callable, [$entity]);
-            }
+        if (is_callable($callable)) {
+            $callback = call_user_func_array($callable, [$entity]);
         }
 
-        return $this->templating->render($this->getView(), [
+        $action = $options['row_action'];
+        if (is_array($action) && !empty($action) && $entity !== null) {
+            $action['parameters']['id'] = $entity->getId();
+        }
+
+        return [
             'property' => $callback,
-            'action' => $this->getAction()
-        ]);
+            'action' => $action
+        ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    function getOptions()
+    public function configureOptions(OptionsResolver $resolver, $property, $templatePath)
     {
-        $options = parent::getOptions();
+        parent::configureOptions($resolver, $property, $templatePath);
 
-        return array_merge($options, ['callback']);
+        $resolver->setAllowedTypes('callback', ['closure', 'null']);
+        $resolver->setRequired('callback');
     }
 
     /**

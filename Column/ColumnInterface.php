@@ -10,8 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Column;
 
-use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
-
 /**
  * ColumnInterface
  *
@@ -20,25 +18,10 @@ use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 interface ColumnInterface
 {
     /**
-     * @return string
-     */
-    public function getProperty();
-
-    /**
      * @param $entity
      * @return mixed
      */
     public function getData($entity);
-
-    /**
-     * @return array
-     */
-    public function getOptions();
-
-    /**
-     * @return ColumnType
-     */
-    public function getType();
 
     /**
      * @return string|null

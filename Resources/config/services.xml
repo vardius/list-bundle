@@ -70,6 +70,8 @@
         </service>
 
         <service id="vardius_list.column_type.option" class="%vardius_list.column_type.option.class%">
+            <argument type="service" id="templating"/>
+
             <tag name="vardius_list.column_type" />
         </service>
 

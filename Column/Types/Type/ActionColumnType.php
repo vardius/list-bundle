@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Action\Factory\ActionFactory;
 use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 
@@ -30,12 +31,11 @@ class ActionColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null)
+    public function getData($entity = null, array $options = [])
     {
         $items = [];
-
-        if (array_key_exists('actions', $this->options)) {
-            $actions = $this->options['actions'];
+        if (array_key_exists('actions', $options)) {
+            $actions = $options['actions'];
 
             foreach ($actions as $action) {
                 $path = array_key_exists('path', $action) ? $action['path'] : null;
@@ -48,25 +48,23 @@ class ActionColumnType extends ColumnType
             }
         }
 
-        return $this->templating->render($this->getView(), [
+        return [
             'actions' => $items,
-        ]);
+        ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    function getOptions()
+    public function configureOptions(OptionsResolver $resolver, $property, $templatePath)
     {
-        $options = parent::getOptions();
+        parent::configureOptions($resolver, $property, $templatePath);
 
-        $key = array_search('url', $options);
-        unset($options[$key]);
-
-        $key = array_search('sort', $options);
-        unset($options[$key]);
-
-        return array_merge($options, ['actions']);
+//        $resolver->remove('url');
+//        $resolver->remove('sort');
+        $resolver->setDefault('ui', true);
+        $resolver->setRequired('actions');
+        $resolver->setAllowedTypes('actions', 'array');
     }
 
     /**
@@ -75,14 +73,6 @@ class ActionColumnType extends ColumnType
     public function getName()
     {
         return 'action';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isUi()
-    {
-        return true;
     }
 
 }

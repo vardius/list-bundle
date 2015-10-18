@@ -49,16 +49,9 @@ class ColumnFactory
         }
 
         if (!$type instanceof ColumnType) {
-            throw new \InvalidArgumentException('The $type mast be instance of ColumnType. ' . $type . ' given');
+            throw new \InvalidArgumentException('The $type mast be instance of ColumnTypeInterface. ' . $type . ' given');
         }
 
-        $typeOptions = $type->getOptions();
-        foreach ($options as $key => $option) {
-            if (!in_array($key, $typeOptions)) {
-                throw new \InvalidArgumentException('The option "' . $key . '" does not exist. Known options are: ", ' . implode(",", $typeOptions) . '"');
-            }
-        }
-
-        return new Column($property, clone $type, $options, $this->templating);
+        return new Column($property, $type, $options, $this->templating);
     }
 }

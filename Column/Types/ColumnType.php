@@ -10,7 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Column\Types;
 
-use Symfony\Bridge\Twig\TwigEngine;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * ColumnType
@@ -19,166 +19,33 @@ use Symfony\Bridge\Twig\TwigEngine;
  */
 abstract class ColumnType implements ColumnTypeInterface
 {
-    /** @var array */
-    protected $options = [
-        'label',
-        'sort',
-        'url',
-        'attr'
-    ];
-    /** @var  string */
-    protected $property;
-    /** @var TwigEngine */
-    protected $templating;
-    /** @var string */
-    protected $templatePath = 'VardiusListBundle:Column\\Type:';
-
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function setTemplateEngine(TwigEngine $templating)
+    public function configureOptions(OptionsResolver $resolver, $property, $templatePath)
     {
-        $this->templating = $templating;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTemplateEngine()
-    {
-        return $this->templating;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProperty()
-    {
-        return $this->property;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setProperty($property)
-    {
-        $this->property = $property;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLabel()
-    {
-        $label = $this->getProperty();
-
-        if (array_key_exists('label', $this->options)) {
-
-            $label = $this->options['label'];
-        }
-
-        return $label;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSort()
-    {
-        $sort = false;
-        if (array_key_exists('sort', $this->options)) {
-
-            $sort = $this->options['sort'];
-            $sort = is_bool($sort) ? $sort : false;
-        }
-
-        return $sort;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttr()
-    {
-        $attr = false;
-        if (array_key_exists('attr', $this->options)) {
-
-            $attr = $this->options['attr'];
-            $attr = is_array($attr) ? $attr : [];
-        }
-
-        return $attr;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAction()
-    {
-        $action = null;
-        if (array_key_exists('url', $this->options)) {
-
-            $url = $this->options['url'];
-            if (!empty($url)) {
-                $path = array_key_exists('path', $url) ? $url['path'] : null;
-                $parameters = array_key_exists('parameters', $url) ? $url['parameters'] : [];
-
-                $action = [
-                    'path' => $path,
-                    'parameters' => $parameters,
-                ];
-            }
-        }
-
-        return $action;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTemplatePath()
-    {
-        return $this->templatePath;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTemplatePath($templatePath)
-    {
-        $this->templatePath = $templatePath;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getView()
-    {
-        return $this->getTemplatePath() . $this->getName() . '.html.twig';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isUi()
-    {
-        return false;
+        $resolver->setDefaults(
+            array(
+                'property' => $property,
+                'label' => $property,
+                'sort' => false,
+                'ui' => false,
+                'attr' => [],
+                'row_action' => [],
+                'view' => $templatePath . $this->getName() . '.html.twig'
+            )
+        );
+        $resolver->setAllowedTypes(
+            array(
+                'label' => 'string',
+                'property' => 'string',
+                'view' => 'string',
+                'sort' => 'bool',
+                'ui' => 'bool',
+                'attr' => 'array',
+                'row_action' => 'array',
+            )
+        );
     }
 
 }

@@ -10,6 +10,8 @@
 
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
+use Symfony\Bridge\Twig\TwigEngine;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 
 /**
@@ -19,31 +21,38 @@ use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
  */
 class OptionColumnType extends ColumnType
 {
+    /** @var TwigEngine */
+    protected $templating;
+
     /**
-     * {@inheritdoc}
+     * @param TwigEngine $templating
      */
-    public function getData($entity = null)
+    function __construct(TwigEngine $templating)
     {
-        return $this->templating->render($this->getView(), [
-            'option' => $this,
-            'entity' => $entity,
-        ]);
+        $this->templating = $templating;
     }
 
     /**
      * {@inheritdoc}
      */
-    function getOptions()
+    public function getData($entity = null, array $options = [])
     {
-        $options = parent::getOptions();
+        return [
+            'option' => $this,
+            'entity' => $entity,
+        ];
+    }
 
-        $key = array_search('url', $options);
-        unset($options[$key]);
+    /**
+     * @inheritDoc
+     */
+    public function configureOptions(OptionsResolver $resolver, $property, $templatePath)
+    {
+        parent::configureOptions($resolver, $property, $templatePath);
 
-        $key = array_search('sort', $options);
-        unset($options[$key]);
-
-        return $options;
+        $resolver->setDefault('label', $this->templating->render($templatePath . $this->getName() . '.html.twig'));
+        $resolver->remove('url');
+        $resolver->remove('sort');
     }
 
     /**
@@ -52,15 +61,5 @@ class OptionColumnType extends ColumnType
     public function getName()
     {
         return 'option';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLabel()
-    {
-        return $this->templating->render($this->getView(), [
-            'option' => $this,
-        ]);
     }
 }

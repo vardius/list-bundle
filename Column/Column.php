@@ -11,6 +11,7 @@
 namespace Vardius\Bundle\ListBundle\Column;
 
 use Symfony\Bridge\Twig\TwigEngine;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 
 /**
@@ -22,6 +23,12 @@ class Column implements ColumnInterface
 {
     /** @var  ColumnType */
     protected $type;
+    /** @var  array */
+    protected $options;
+    /** @var TwigEngine */
+    protected $templating;
+    /** @var string */
+    protected $templatePath = 'VardiusListBundle:Column\\Type:';
 
     /**
      * @param string $property
@@ -31,17 +38,12 @@ class Column implements ColumnInterface
     function __construct($property, ColumnType $type, array $options = [], TwigEngine $templating)
     {
         $this->type = $type;
-        $this->type->setOptions($options);
-        $this->type->setProperty($property);
-        $this->type->setTemplateEngine($templating);
-    }
+        $this->templating = $templating;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getProperty()
-    {
-        return $this->type->getProperty();
+        $resolver = new OptionsResolver();
+        $this->type->configureOptions($resolver, $property, $this->templatePath);
+
+        $this->options = $resolver->resolve($options);
     }
 
     /**
@@ -49,23 +51,11 @@ class Column implements ColumnInterface
      */
     public function getData($entity)
     {
-        return $this->getType()->getData($entity);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getOptions()
-    {
-        return $this->type->getOptions();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return $this->type;
+        return $this->templating->render(
+            $this->options['view'],
+            $this->type->getData($entity, $this->options),
+            $this->options
+        );
     }
 
     /**
@@ -73,7 +63,7 @@ class Column implements ColumnInterface
      */
     public function getLabel()
     {
-        return $this->type->getLabel();
+        return $this->options['label'];
     }
 
     /**
@@ -81,7 +71,15 @@ class Column implements ColumnInterface
      */
     public function getSort()
     {
-        return $this->type->getSort();
+        return $this->options['sort'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProperty()
+    {
+        return $this->options['property'];
     }
 
     /**
@@ -89,15 +87,12 @@ class Column implements ColumnInterface
      */
     public function getAttr()
     {
-        return $this->type->getAttr();
+        return $this->options['attr'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isUi()
     {
-        return $this->type->isUi();
+        return $this->options['ui'];
     }
 
 }
