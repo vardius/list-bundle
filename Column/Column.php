@@ -51,6 +51,9 @@ class Column implements ColumnInterface
         $this->options = self::$resolversByClass[$class]->resolve($options);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function clearOptionsConfig()
     {
         self::$resolversByClass = array();
