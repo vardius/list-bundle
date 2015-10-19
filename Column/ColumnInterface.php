@@ -18,6 +18,11 @@ namespace Vardius\Bundle\ListBundle\Column;
 interface ColumnInterface
 {
     /**
+     * Clear options array
+     */
+    public static function clearOptionsConfig();
+    
+    /**
      * @param $entity
      * @return mixed
      */
