@@ -45,7 +45,7 @@ class Column implements ColumnInterface
         $class = get_class($this->type);
         if (!isset(self::$resolversByClass[$class])) {
             self::$resolversByClass[$class] = new OptionsResolver();
-            $this->type->configureOptions(self::$resolversByClass[$class]);
+            $this->type->configureOptions(self::$resolversByClass[$class], $property, $this->templatePath);
         }
 
         $this->options = self::$resolversByClass[$class]->resolve($options);
