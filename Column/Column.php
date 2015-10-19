@@ -21,6 +21,8 @@ use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
  */
 class Column implements ColumnInterface
 {
+    /** @var array */
+    private static $resolversByClass = array();
     /** @var  ColumnType */
     protected $type;
     /** @var  array */
@@ -40,10 +42,18 @@ class Column implements ColumnInterface
         $this->type = $type;
         $this->templating = $templating;
 
-        $resolver = new OptionsResolver();
-        $this->type->configureOptions($resolver, $property, $this->templatePath);
+        $class = get_class($this->type);
+        if (!isset(self::$resolversByClass[$class])) {
+            self::$resolversByClass[$class] = new OptionsResolver();
+            $this->type->configureOptions(self::$resolversByClass[$class]);
+        }
 
-        $this->options = $resolver->resolve($options);
+        $this->options = self::$resolversByClass[$class]->resolve($options);
+    }
+
+    public static function clearOptionsConfig()
+    {
+        self::$resolversByClass = array();
     }
 
     /**
