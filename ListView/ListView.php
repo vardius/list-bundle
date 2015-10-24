@@ -137,18 +137,6 @@ class ListView
                     ->setParameter('ids', $ids);
             }
         } else {
-            if ($this->paginator) {
-                $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
-                $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
-
-                $offset = ($currentPage * $this->limit) - $this->limit;
-                $queryBuilder
-                    ->setFirstResult($offset)
-                    ->setMaxResults($this->limit);
-            } else {
-                $paginator = null;
-            }
-
             /** @var ListViewFilter $filter */
             foreach ($this->filters as $filter) {
                 $formFactory = $this->factoryEvent->getFormFactory();
@@ -161,6 +149,18 @@ class ListView
                 $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
 
                 $filterForms[] = $form->createView();
+            }
+            
+            if ($this->paginator) {
+                $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
+                $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
+
+                $offset = ($currentPage * $this->limit) - $this->limit;
+                $queryBuilder
+                    ->setFirstResult($offset)
+                    ->setMaxResults($this->limit);
+            } else {
+                $paginator = null;
             }
         }
 
