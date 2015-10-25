@@ -46,7 +46,7 @@
                         <td>
                             {% if column.sort and ui %}
                                 {% set sort = app.request.attributes.get('sort') %}
-                                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all, {'sort': (sort == 'asc' ? 'desc' : 'asc'), 'column': column.property}) ) }}">
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'sort': (sort == 'asc' ? 'desc' : 'asc'), 'column': column.property}) ) }}">
                                     {{ column.label|raw|trans }} <i class="fa fa-sort{{ sort is null ? '' : '-'~sort|lower }}"></i>
                                 </a>
                             {% else %}
@@ -57,7 +57,7 @@
                         <td>
                             {% if column.sort and ui %}
                                 {% set sort = app.request.attributes.get('sort') %}
-                                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all, {'sort': (sort == 'asc' ? 'desc' : 'asc'), 'column': column.property}) ) }}">
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'sort': (sort == 'asc' ? 'desc' : 'asc'), 'column': column.property}) ) }}">
                                     {{ column.label|raw|trans }} <i class="fa fa-sort{{ sort is null ? '' : '-'~sort|lower }}"></i>
                                 </a>
                             {% else %}
