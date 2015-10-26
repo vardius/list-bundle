@@ -114,7 +114,7 @@ class ListView
         $filterForms = [];
         $paginator = null;
 
-        $queryBuilder = $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder))->getQueryBuilder();
+        $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
         if ($column !== null && $sort !== null) {
             $queryBuilder->addOrderBy($alias . '.' . $column, strtoupper($sort));
@@ -145,7 +145,7 @@ class ListView
                 $form->handleRequest($request);
 
                 $filterEvent = new FilterEvent($routeName, $queryBuilder, $form);
-                $form = $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent)->getForm();
+                $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
 
                 $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
 
@@ -165,10 +165,9 @@ class ListView
             }
         }
 
-        $queryBuilder = $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder))->getQueryBuilder();
+        $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
         if ($returnQueryBuilder) {
-
             return $queryBuilder;
         } else {
             $data = ['results' => $queryBuilder->getQuery()->getResult()];

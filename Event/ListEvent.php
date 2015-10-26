@@ -51,14 +51,4 @@ class ListEvent extends Event
     {
         return $this->queryBuilder;
     }
-
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @return ListEvent
-     */
-    public function setQueryBuilder($queryBuilder)
-    {
-        $this->queryBuilder = $queryBuilder;
-        return $this;
-    }
 }
