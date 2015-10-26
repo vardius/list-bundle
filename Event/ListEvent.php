@@ -37,7 +37,7 @@ class ListEvent extends Event
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getRouteName()
     {
@@ -50,5 +50,15 @@ class ListEvent extends Event
     public function getQueryBuilder()
     {
         return $this->queryBuilder;
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @return ListEvent
+     */
+    public function setQueryBuilder($queryBuilder)
+    {
+        $this->queryBuilder = $queryBuilder;
+        return $this;
     }
 }
