@@ -63,6 +63,7 @@ class ListView
      * @param ContainerInterface $container
      * @param int $limit
      * @param string $title
+     * @param boolean $paginator
      * @param EventDispatcherInterface $eventDispatcher
      */
     function __construct(ContainerInterface $container, $limit, $title, $paginator, EventDispatcherInterface $eventDispatcher)
@@ -412,6 +413,25 @@ class ListView
     public function setView($view)
     {
         $this->view = $view;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPagination()
+    {
+        return $this->paginator;
+    }
+
+    /**
+     * @param $pagination
+     * @return $this
+     */
+    public function setPagination($pagination)
+    {
+        $this->paginator = $pagination;
 
         return $this;
     }
