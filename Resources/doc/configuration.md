@@ -126,6 +126,9 @@ Create your provider class:
                           return 'custom value';
                     },
                 ])
+                ->addColumn('custom2', 'callable', [
+                    'callback' => [$object, 'functionName'],
+                ])
                 ->addColumn('date', 'date', [
                     'date_format' => 'm/d/Y' //date format
                     'callback' => function(Product $product){ //you can provide callback will override property value
