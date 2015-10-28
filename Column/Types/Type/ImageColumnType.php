@@ -51,7 +51,7 @@ class ImageColumnType extends ColumnType
         parent::configureOptions($resolver, $property, $templatePath);
 
         $resolver->setDefault('callback', null);
-        $resolver->setAllowedTypes('callback', ['closure', 'null']);
+        $resolver->setAllowedTypes('callback', ['closure', 'null', 'array']);
     }
 
     /**

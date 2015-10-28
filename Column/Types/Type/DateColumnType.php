@@ -54,7 +54,7 @@ class DateColumnType extends ColumnType
         $resolver->setDefault('date_format', null);
         $resolver->setAllowedTypes('date_format', ['string', 'null']);
         $resolver->setDefault('callback', null);
-        $resolver->setAllowedTypes('callback', ['closure', 'null']);
+        $resolver->setAllowedTypes('callback', ['closure', 'null', 'array']);
     }
 
     /**
