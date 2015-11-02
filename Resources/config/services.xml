@@ -5,12 +5,15 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <!--List-->
+        <!--LIST-->
         <parameter key="vardius_list.list_view.class">Vardius\Bundle\ListBundle\ListView\ListView</parameter>
         <parameter key="vardius_list.list_view.factory.class">Vardius\Bundle\ListBundle\ListView\Factory\ListViewFactory</parameter>
         <parameter key="vardius_list.list_view.provider.class">Vardius\Bundle\ListBundle\ListView\Provider\ListViewProvider</parameter>
         <!--FILTER-->
-        <parameter key="vardius_list.filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory</parameter>
+        <parameter key="vardius_list.list_view_filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory</parameter>
+        <parameter key="vardius_list.filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\FilterFactory</parameter>
+        <parameter key="vardius_list.filter_type_pool.class">Vardius\Bundle\ListBundle\Filter\Type\FilterTypePool</parameter>
+        <parameter key="vardius_list.filter.provider.class">Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider</parameter>
         <!--COLUMN-->
         <parameter key="vardius_list.column.class">Vardius\Bundle\ListBundle\Column\Column</parameter>
         <parameter key="vardius_list.column.factory.class">Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory</parameter>
@@ -49,17 +52,31 @@
             <argument type="service" id="templating"/>
         </service>
 
+        <service id="vardius_list.list_view.provider" class="%vardius_list.list_view.provider.class%" abstract="true">
+            <argument type="service" id="vardius_list.list_view.factory"/>
+        </service>
+
         <service id="vardius_list.paginator.factory" class="%vardius_list.paginator.factory.class%">
             <argument type="service" id="templating"/>
         </service>
 
-        <service id="vardius_list.filter.factory" class="%vardius_list.filter.factory.class%"/>
-
         <service id="vardius_list.action.factory" class="%vardius_list.action.factory.class%"/>
 
-        <service id="vardius_list.list_view.provider" class="%vardius_list.list_view.provider.class%" abstract="true">
-            <argument type="service" id="vardius_list.list_view.factory"/>
+        <!--FILTER-->
+        <service id="vardius_list.list_view_filter.factory" class="%vardius_list.list_view_filter.factory.class%">
+            <argument type="service" id="service_container"/>
         </service>
+
+        <service id="vardius_list.filter.factory" class="%vardius_list.filter.factory.class%">
+            <argument type="service" id="vardius_list.filter_type_pool"/>
+        </service>
+
+        <service id="vardius_list.filter.provider" class="%vardius_list.filter.provider.class%" abstract="true">
+            <argument type="service" id="vardius_list.filter.factory"/>
+        </service>
+
+        <!--FILTER POOL-->
+        <service id="vardius_list.filter_type_pool" class="%vardius_list.filter_type_pool.class%" />
 
         <!--COLUMN POOL-->
         <service id="vardius_list.column_type_pool" class="%vardius_list.column_type_pool.class%" />

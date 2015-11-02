@@ -13,6 +13,7 @@ namespace Vardius\Bundle\ListBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Vardius\Bundle\ListBundle\DependencyInjection\Compiler\ColumnTypePass;
+use Vardius\Bundle\ListBundle\DependencyInjection\Compiler\FilterTypePass;
 
 class VardiusListBundle extends Bundle
 {
@@ -21,5 +22,6 @@ class VardiusListBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new ColumnTypePass());
+        $container->addCompilerPass(new FilterTypePass());
     }
 }
