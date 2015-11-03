@@ -19,3 +19,8 @@ RELEASE NOTES
 **0.4.0**
 
 - Column refactor
+
+**0.5.0**
+
+- Filter builder
+- Predefined filter types
