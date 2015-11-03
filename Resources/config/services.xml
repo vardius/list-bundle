@@ -12,8 +12,10 @@
         <!--FILTER-->
         <parameter key="vardius_list.list_view_filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory</parameter>
         <parameter key="vardius_list.filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\FilterFactory</parameter>
-        <parameter key="vardius_list.filter_type_pool.class">Vardius\Bundle\ListBundle\Filter\Type\FilterTypePool</parameter>
+        <parameter key="vardius_list.filter_type_pool.class">Vardius\Bundle\ListBundle\Filter\Types\FilterTypePool</parameter>
         <parameter key="vardius_list.filter.provider.class">Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider</parameter>
+        <parameter key="vardius_list.filter_type.date.class">Vardius\Bundle\ListBundle\Filter\Types\Type\DateType</parameter>
+        <parameter key="vardius_list.filter_type.text.class">Vardius\Bundle\ListBundle\Filter\Types\Type\TextType</parameter>
         <!--COLUMN-->
         <parameter key="vardius_list.column.class">Vardius\Bundle\ListBundle\Column\Column</parameter>
         <parameter key="vardius_list.column.factory.class">Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory</parameter>
@@ -77,6 +79,14 @@
 
         <!--FILTER POOL-->
         <service id="vardius_list.filter_type_pool" class="%vardius_list.filter_type_pool.class%" />
+
+        <!--FILTER TYPES-->
+        <service id="vardius_list.filter_type.date" class="%vardius_list.filter_type.date.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
+        <service id="vardius_list.filter_type.text" class="%vardius_list.filter_type.text.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
 
         <!--COLUMN POOL-->
         <service id="vardius_list.column_type_pool" class="%vardius_list.column_type_pool.class%" />

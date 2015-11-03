@@ -24,6 +24,7 @@ use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvents;
+use Vardius\Bundle\ListBundle\Event\ListFilterEvent;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
 use Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider;
 use Vardius\Bundle\ListBundle\View\RendererInterface;
@@ -154,15 +155,20 @@ class ListView
 
                 $form->handleRequest($request);
 
-                $filterEvent = new FilterEvent($routeName, $queryBuilder, $form);
-                $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
+                $listFilterEvent = new ListFilterEvent($routeName, $queryBuilder, $form, $alias);
+                $this->dispatcher->dispatch(ListEvents::FILTER, $listFilterEvent);
 
                 $formFilter = $filter->getFilter();
                 if (is_callable($formFilter)) {
-                    $queryBuilder = call_user_func_array($formFilter, [$filterEvent]);
+                    $queryBuilder = call_user_func_array($formFilter, [$listFilterEvent]);
                 } else {
                     foreach ($formFilter as $field => $fieldFilter) {
-                        $queryBuilder = $fieldFilter->apply($form[$field]->getData(), $alias, $queryBuilder);
+                        $filterEvent = new FilterEvent($queryBuilder, $alias, $field, $form[$field]->getData());
+                        if (is_callable($fieldFilter)) {
+                            $queryBuilder = call_user_func_array($fieldFilter, [$filterEvent]);
+                        } else {
+                            $queryBuilder = $fieldFilter->apply($filterEvent);
+                        }
                     }
                 }
 

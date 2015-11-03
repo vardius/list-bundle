@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\ListView\Provider;
 
-
 use Vardius\Bundle\ListBundle\ListView\ListView;
 
 /**

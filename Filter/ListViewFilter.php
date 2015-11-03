@@ -74,14 +74,6 @@ class ListViewFilter
      */
     public function setFilter($filter)
     {
-        if (!is_callable($filters) && !$filters instanceof ArrayCollection) {
-            throw new \InvalidArgumentException(
-                'Expected argument of type "callable" or Collection of Vardius\Bundle\ListBundle\Filter\Filter, '.get_class(
-                    $filter
-                ).' given'
-            );
-        }
-
         $this->filter = $filter;
     }
 }

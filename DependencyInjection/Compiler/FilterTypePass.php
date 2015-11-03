@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the tipper package.
+ * This file is part of the vardius/list-bundle package.
  *
  * (c) Rafał Lorenz <vardius@gmail.com>
  *
@@ -11,7 +11,14 @@
 namespace Vardius\Bundle\ListBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * FilterTypePass
+ *
+ * @author Rafał Lorenz <vardius@gmail.com>
+ */
 class FilterTypePass implements CompilerPassInterface
 {
     /**

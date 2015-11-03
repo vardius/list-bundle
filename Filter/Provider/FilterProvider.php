@@ -12,8 +12,13 @@ namespace Vardius\Bundle\ListBundle\Filter\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Vardius\Bundle\ListBundle\Filter\Factory\FilterFactory;
-use Vardius\Bundle\ListBundle\Filter\Type\FilterType;
+use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
 
+/**
+ * FilterProvider
+ *
+ * @author Rafał Lorenz <vardius@gmail.com>
+ */
 abstract class FilterProvider implements FilterProviderInterface
 {
     /** @var ArrayCollection */
@@ -53,7 +58,7 @@ abstract class FilterProvider implements FilterProviderInterface
             $filter = $type;
         }else{
             throw new \InvalidArgumentException(
-                'Expected argument of type "callable", "string" or class Vardius\Bundle\ListBundle\Filter\Type\FilterType, '.get_class(
+                'Expected argument of type "callable", "string" or class Vardius\Bundle\ListBundle\Filter\Types\FilterType, '.get_class(
                     $filter
                 ).' given'
             );

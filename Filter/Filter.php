@@ -12,8 +12,14 @@ namespace Vardius\Bundle\ListBundle\Filter;
 
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vardius\Bundle\ListBundle\Filter\Type\FilterType;
+use Vardius\Bundle\ListBundle\Event\FilterEvent;
+use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
 
+/**
+ * Filter
+ *
+ * @author Rafał Lorenz <vardius@gmail.com>
+ */
 class Filter implements FilterInterface
 {
     /** @var array */
@@ -35,13 +41,9 @@ class Filter implements FilterInterface
     /**
      * @inheritDoc
      */
-    public function apply($value, $alias, QueryBuilder $queryBuilder)
+    public function apply(FilterEvent $event)
     {
-        if (is_callable($this->type)) {
-            return call_user_func_array($this->type, [$value, $alias, $queryBuilder]);
-        }
-
-        return $this->type->apply($value, $alias, $queryBuilder);
+        return $this->type->apply($event, $this->options);
     }
 
     /**

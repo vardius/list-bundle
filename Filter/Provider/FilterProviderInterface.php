@@ -10,6 +10,11 @@
 
 namespace Vardius\Bundle\ListBundle\Filter\Provider;
 
+/**
+ * FilterProviderInterface
+ *
+ * @author Rafał Lorenz <vardius@gmail.com>
+ */
 interface FilterProviderInterface
 {
     /**

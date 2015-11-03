@@ -157,13 +157,11 @@ Create your provider class:
                         ],
                     ],
                 ])
-                ->addFilter('product_filter', function (FilterEvent $event) {
+                ->addFilter('product_filter', function (ListFilterEvent $event) {
 
                     $formData = $event->getData();
                     $queryBuilder = $event->getQueryBuilder();
-
-                    $aliases = $queryBuilder->getRootAliases();
-                    $alias = array_values($aliases)[0];
+                    $alias = $event->getAlias();
 
                     $name = $formData['name'];
 
@@ -204,13 +202,11 @@ There are multiple options to apply filter to your list, first of them you may a
 
             $listView
                 ...
-                ->addFilter('product_filter', function (FilterEvent $event) {
+                ->addFilter('product_filter', function (ListFilterEvent $event) {
 
                     $formData = $event->getData();
                     $queryBuilder = $event->getQueryBuilder();
-
-                    $aliases = $queryBuilder->getRootAliases();
-                    $alias = array_values($aliases)[0];
+                    $alias = $event->getAlias();
 
                     $name = $formData['name'];
 
@@ -248,24 +244,9 @@ You can also create filter provider for the filter form as follow.
     }
 ```
 
-Provider class:
-
-``` php
-class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider
-{
-    /**
-     * @inheritDoc
-     */
-    public function build()
-    {
-        $this->addFilter('dateFrom', new DateType()); //you can pass name of filter or pass it by new ClassType() declaration
-    }
-
-}
-```
-
 Method addFilter accept values: `form field name` and `filter type class`. Filter type class can by passed as new class instance or by name.
 You can also pass `callback` instead of class type.
+Provider class example:
 
 ``` php
 class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider
@@ -275,20 +256,30 @@ class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterPr
      */
     public function build()
     {
-        //arguments: form field value, query builder alias, query builder instance
-        $this->addFilter('dateFrom', function ($value, $alias, QueryBuilder $queryBuilder) {
-           $expression = $queryBuilder->expr();
-   
-           $queryBuilder
-               ->andWhere($expression->gte($alias.'.date', ':dateFrom'))
-               ->setParameter('dateFrom', $value);
-   
-           return $queryBuilder;
-       });
+        $this
+            ->addFilter('dateFrom', new DateType()); //you can pass name of filter or pass it by new ClassType() declaration
+            ->addFilter('dateTo', 'date', [
+                'field' => 'date',
+            ])
+            ->addFilter('dateFrom', function (FilterEvent $event) {
+                $queryBuilder = $event->getQueryBuilder();
+                $expression = $queryBuilder->expr();
+                
+                $queryBuilder
+                    ->andWhere($expression->gte($event->getAlias().'.date', ':date'))
+                    ->setParameter('date', $event->getValue());
+                
+                return $queryBuilder;
+            });
     }
 
 }
 ```
+
+Available filters:
+
+`date` - available options: `['filed' => 'field name', 'condition' => 'gte|gt|lte|lt']`
+`text` - available options: `['filed' => 'field name']`
 
 ### 6. Edit list view template
 

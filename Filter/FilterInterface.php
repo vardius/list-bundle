@@ -11,18 +11,22 @@
 namespace Vardius\Bundle\ListBundle\Filter;
 
 use Doctrine\ORM\QueryBuilder;
+use Vardius\Bundle\ListBundle\Event\FilterEvent;
 
+/**
+ * FilterInterface
+ *
+ * @author Rafał Lorenz <vardius@gmail.com>
+ */
 interface FilterInterface
 {
     /**
      * Filter body, method is invoked when the filter is called from lsit view
      *
-     * @param string $value
-     * @param string $alias
-     * @param QueryBuilder $queryBuilder
+     * @param FilterEvent $event
      * @return QueryBuilder
      */
-    public function apply($value, $alias, QueryBuilder $queryBuilder);
+    public function apply(FilterEvent $event);
 
     /**
      * Clear options array

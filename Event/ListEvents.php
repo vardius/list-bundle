@@ -22,7 +22,7 @@ final class ListEvents
      * The vardius_list.filter event is thrown each time an list is filtered
      *
      * The event listener receives an
-     * Vardius\Bundle\ListBundle\Event\FilterEvent instance.
+     * Vardius\Bundle\ListBundle\Event\ListFilterEvent instance.
      *
      * @var string
      */

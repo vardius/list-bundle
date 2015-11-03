@@ -11,9 +11,14 @@
 namespace Vardius\Bundle\ListBundle\Filter\Factory;
 
 use Vardius\Bundle\ListBundle\Filter\Filter;
-use Vardius\Bundle\ListBundle\Filter\Type\FilterType;
-use Vardius\Bundle\ListBundle\Filter\Type\FilterTypePool;
+use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
+use Vardius\Bundle\ListBundle\Filter\Types\FilterTypePool;
 
+/**
+ * FilterFactory
+ *
+ * @author Rafał Lorenz <vardius@gmail.com>
+ */
 class FilterFactory
 {
     /** @var  FilterTypePool */
@@ -41,7 +46,7 @@ class FilterFactory
 
         if (!$type instanceof FilterType) {
             throw new \InvalidArgumentException(
-                'The type mast be instance of Vardius\Bundle\ListBundle\Filter\Type\FilterType. '.$type.' given'
+                'The type mast be instance of Vardius\Bundle\ListBundle\Filter\Types\FilterType. '.$type.' given'
             );
         }
 
