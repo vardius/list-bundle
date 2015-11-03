@@ -7,7 +7,8 @@ Configuration
 2. Create ListViewProvider class
 3. Configure your ListViewProvider class
 4. Available options for column types
-5. Edit list view template
+5. Creating filter provider
+6. Edit list view template
 
 ### 1. Create your entity class
 
@@ -156,13 +157,11 @@ Create your provider class:
                         ],
                     ],
                 ])
-                ->addFilter('product_filter', function (FilterEvent $event) {
+                ->addFilter('product_filter', function (ListFilterEvent $event) {
 
                     $formData = $event->getData();
                     $queryBuilder = $event->getQueryBuilder();
-
-                    $aliases = $queryBuilder->getRootAliases();
-                    $alias = array_values($aliases)[0];
+                    $alias = $event->getAlias();
 
                     $name = $formData['name'];
 
@@ -190,7 +189,99 @@ Image column: `attr, label, sort, row_action, callback`
 Action column: `attr, label, actions`
 Option column: `attr, label`
 
-### 5. Edit list view template
+### 5. Creating filter provider
+
+There are multiple options to apply filter to your list, first of them you may already know. It was presented before in this documentaction.
+
+``` php
+        ...
+        
+        public function buildListView()
+        {
+            $listView = $this->listViewFactory->get();
+
+            $listView
+                ...
+                ->addFilter('product_filter', function (ListFilterEvent $event) {
+
+                    $formData = $event->getData();
+                    $queryBuilder = $event->getQueryBuilder();
+                    $alias = $event->getAlias();
+
+                    $name = $formData['name'];
+
+                    $queryBuilder
+                        ->andWhere($alias.'.name = :name')
+                        ->setParameter('name', $name);
+
+                    return $queryBuilder;
+                });
+
+            return $listView;
+        }
+        
+        ...
+    }
+```
+
+You can also create filter provider for the filter form as follow.
+
+``` php
+        ...
+       
+        public function buildListView()
+        {
+            $listView = $this->listViewFactory->get();
+
+            $listView
+                ...
+                ->addFilter('event_filter', 'app.product.filter_provider'); //service id of your provider
+
+            return $listView;
+        }
+        
+        ...
+    }
+```
+
+Method addFilter accept values: `form field name` and `filter type class`. Filter type class can by passed as new class instance or by name.
+You can also pass `callback` instead of class type.
+Provider class example:
+
+``` php
+class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider
+{
+    /**
+     * @inheritDoc
+     */
+    public function build()
+    {
+        $this
+            ->addFilter('dateFrom', new DateType()); //you can pass name of filter or pass it by new ClassType() declaration
+            ->addFilter('dateTo', 'date', [
+                'field' => 'date',
+            ])
+            ->addFilter('dateFrom', function (FilterEvent $event) {
+                $queryBuilder = $event->getQueryBuilder();
+                $expression = $queryBuilder->expr();
+                
+                $queryBuilder
+                    ->andWhere($expression->gte($event->getAlias().'.date', ':date'))
+                    ->setParameter('date', $event->getValue());
+                
+                return $queryBuilder;
+            });
+    }
+
+}
+```
+
+Available filters:
+
+`date` - available options: `['filed' => 'field name', 'condition' => 'gte|gt|lte|lt']`
+`text` - available options: `['filed' => 'field name']`
+
+### 6. Edit list view template
 
 ``` php
     use Vardius\Bundle\ListBundle\Action\Action;

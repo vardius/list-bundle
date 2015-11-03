@@ -8,21 +8,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Vardius\Bundle\ListBundle\ListView\Provider;
-
-use Vardius\Bundle\ListBundle\ListView\ListView;
+namespace Vardius\Bundle\ListBundle\Filter\Provider;
 
 /**
- * ListViewProviderInterface
+ * FilterProviderInterface
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-interface ListViewProviderInterface
+interface FilterProviderInterface
 {
     /**
-     * Provides list view
+     * Provides filters for list view
      *
-     * @return ListView
+     * @return ArrayCollection
      */
-    public function buildListView();
+    public function build();
+
 }

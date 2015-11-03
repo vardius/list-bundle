@@ -24,7 +24,9 @@ use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvents;
+use Vardius\Bundle\ListBundle\Event\ListFilterEvent;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
+use Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider;
 use Vardius\Bundle\ListBundle\View\RendererInterface;
 
 /**
@@ -66,12 +68,18 @@ class ListView
      * @param boolean $paginator
      * @param EventDispatcherInterface $eventDispatcher
      */
-    function __construct(ContainerInterface $container, $limit, $title, $paginator, EventDispatcherInterface $eventDispatcher)
+    function __construct(
+        ContainerInterface $container,
+        $limit,
+        $title,
+        $paginator,
+        EventDispatcherInterface $eventDispatcher
+    )
     {
         $formFactory = $container->get('form.factory');
         $columnFactory = $container->get('vardius_list.column.factory');
         $actionFactory = $container->get('vardius_list.action.factory');
-        $filterFactory = $container->get('vardius_list.filter.factory');
+        $filterFactory = $container->get('vardius_list.list_view_filter.factory');
         $paginatorFactory = $container->get('vardius_list.paginator.factory');
 
         $event = new FactoryEvent($formFactory, $columnFactory, $actionFactory, $filterFactory, $paginatorFactory);
@@ -104,7 +112,9 @@ class ListView
             $aliases = $queryBuilder->getRootAliases();
             $alias = array_values($aliases)[0];
         } else {
-            throw new \InvalidArgumentException('Expected argument of type "EntityRepository or QueryBuilder", ' . get_class($data) . ' given');
+            throw new \InvalidArgumentException(
+                'Expected argument of type "EntityRepository or QueryBuilder", '.get_class($data).' given'
+            );
         }
 
         $currentPage = $event->getPage();
@@ -118,14 +128,14 @@ class ListView
         $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
         if ($column !== null && $sort !== null) {
-            $queryBuilder->addOrderBy($alias . '.' . $column, strtoupper($sort));
+            $queryBuilder->addOrderBy($alias.'.'.$column, strtoupper($sort));
         }
         unset($sort);
 
         if (!empty($this->order)) {
             foreach ($this->order as $sort => $order) {
                 if ($column !== $sort) {
-                    $queryBuilder->addOrderBy($alias . '.' . $sort, strtoupper($order));
+                    $queryBuilder->addOrderBy($alias.'.'.$sort, strtoupper($order));
                 }
             }
         }
@@ -134,7 +144,7 @@ class ListView
             $ids = $request->get('ids', []);
             if (!empty($ids)) {
                 $queryBuilder
-                    ->andWhere($alias . '.id IN (:ids)')
+                    ->andWhere($alias.'.id IN (:ids)')
                     ->setParameter('ids', $ids);
             }
         } else {
@@ -145,14 +155,26 @@ class ListView
 
                 $form->handleRequest($request);
 
-                $filterEvent = new FilterEvent($routeName, $queryBuilder, $form);
-                $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
+                $listFilterEvent = new ListFilterEvent($routeName, $queryBuilder, $form, $alias);
+                $this->dispatcher->dispatch(ListEvents::FILTER, $listFilterEvent);
 
-                $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
+                $formFilter = $filter->getFilter();
+                if (is_callable($formFilter)) {
+                    $queryBuilder = call_user_func_array($formFilter, [$listFilterEvent]);
+                } else {
+                    foreach ($formFilter as $field => $fieldFilter) {
+                        $filterEvent = new FilterEvent($queryBuilder, $alias, $field, $form[$field]->getData());
+                        if (is_callable($fieldFilter)) {
+                            $queryBuilder = call_user_func_array($fieldFilter, [$filterEvent]);
+                        } else {
+                            $queryBuilder = $fieldFilter->apply($filterEvent);
+                        }
+                    }
+                }
 
                 $filterForms[] = $form->createView();
             }
-            
+
             if ($this->paginator) {
                 $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
                 $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
@@ -177,10 +199,13 @@ class ListView
                 return $data;
             } else {
 
-                return array_merge($data, [
-                    'filterForms' => $filterForms,
-                    'paginator' => $paginator,
-                ]);
+                return array_merge(
+                    $data,
+                    [
+                        'filterForms' => $filterForms,
+                        'paginator' => $paginator,
+                    ]
+                );
             }
         }
 
@@ -197,11 +222,14 @@ class ListView
     public function render(ListDataEvent $event, $ui = true)
     {
         $data = $this->getData($event, !$ui);
-        $params = array_merge($data, [
-            'columns' => $this->getColumns(),
-            'actions' => $this->getActions(),
-            'ui' => $ui
-        ]);
+        $params = array_merge(
+            $data,
+            [
+                'columns' => $this->getColumns(),
+                'actions' => $this->getActions(),
+                'ui' => $ui,
+            ]
+        );
 
         return $this->renderer->renderView($this->getView(), $params);
     }
@@ -356,13 +384,13 @@ class ListView
 
     /**
      * @param ResolvedFormTypeInterface|FormTypeInterface|string $formType
-     * @param callable $filters
+     * @param callable|string $filter
      * @return $this
      */
-    public function addFilter($formType, $filters)
+    public function addFilter($formType, $filter)
     {
         $filterFactory = $this->factoryEvent->getFilterFactory();
-        $filter = $filterFactory->get($formType, $filters);
+        $filter = $filterFactory->get($formType, $filter);
         $this->filters->add($filter);
 
         return $this;
