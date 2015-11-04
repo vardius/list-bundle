@@ -24,9 +24,10 @@ interface ColumnInterface
     
     /**
      * @param $entity
+     * @param string $responseType
      * @return mixed
      */
-    public function getData($entity);
+    public function getData($entity, $responseType = 'html');
 
     /**
      * @return string|null
