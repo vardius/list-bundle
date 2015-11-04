@@ -140,13 +140,11 @@ class ListView
             }
         }
 
-        if ($onlyResults) {
-            $ids = $request->get('ids', []);
-            if (!empty($ids)) {
-                $queryBuilder
-                    ->andWhere($alias.'.id IN (:ids)')
-                    ->setParameter('ids', $ids);
-            }
+        $ids = $request->get('ids', []);
+        if (!empty($ids)) {
+            $queryBuilder
+                ->andWhere($alias.'.id IN (:ids)')
+                ->setParameter('ids', $ids);
         } else {
             /** @var ListViewFilter $filter */
             foreach ($this->filters as $filter) {
