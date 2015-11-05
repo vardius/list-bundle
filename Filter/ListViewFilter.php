@@ -10,9 +10,10 @@
 
 namespace Vardius\Bundle\ListBundle\Filter;
 
-
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\ResolvedFormTypeInterface;
+use Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider;
 
 /**
  * ListViewFilter
@@ -23,21 +24,25 @@ class ListViewFilter
 {
     /** @var ResolvedFormTypeInterface|FormTypeInterface|string */
     protected $formType;
-    /** @var  callable */
-    protected $filters;
+    /** @var  callable|ArrayCollection */
+    protected $filter;
 
     /**
      * @param ResolvedFormTypeInterface|FormTypeInterface|string $formType
-     * @param callable $filters
+     * @param callable|ArrayCollection $filter
      */
-    function __construct($formType, $filters)
+    function __construct($formType, $filter)
     {
-        if (!is_callable($filters)) {
-            throw new \InvalidArgumentException('Expected argument of type "callable", ' . get_class($filters) . ' given');
+        if (!is_callable($filter) && !$filter instanceof ArrayCollection) {
+            throw new \InvalidArgumentException(
+                'Expected argument of type "callable" or Collection of Vardius\Bundle\ListBundle\Filter\Filter, '.get_class(
+                    $filter
+                ).' given'
+            );
         }
 
         $this->formType = $formType;
-        $this->filters = $filters;
+        $this->filter = $filter;
     }
 
     /**
@@ -57,22 +62,18 @@ class ListViewFilter
     }
 
     /**
-     * @return callable
+     * @return callable|ArrayCollection
      */
-    public function getFilters()
+    public function getFilter()
     {
-        return $this->filters;
+        return $this->filter;
     }
 
     /**
-     * @param callable $filters
+     * @param callable|ArrayCollection $filter
      */
-    public function setFilters($filters)
+    public function setFilter($filter)
     {
-        if (!is_callable($filters)) {
-            throw new \InvalidArgumentException('Expected argument of type "callable", ' . get_class($filters) . ' given');
-        }
-
-        $this->filters = $filters;
+        $this->filter = $filter;
     }
 }

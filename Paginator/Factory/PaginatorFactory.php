@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Paginator\Factory;
 
-
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Twig\TwigEngine;
 use Vardius\Bundle\ListBundle\Paginator\Paginator;

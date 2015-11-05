@@ -10,45 +10,69 @@
 
 namespace Vardius\Bundle\ListBundle\Event;
 
-
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Form\FormInterface;
 
 /**
  * FilterEvent
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class FilterEvent extends ListEvent
+class FilterEvent
 {
-    /** @var FormInterface */
-    protected $form;
+    /** @var QueryBuilder */
+    protected $queryBuilder;
+    /** @var string */
+    protected $alias;
+    /** @var string */
+    protected $field;
+    /** @var string */
+    protected $value;
 
     /**
-     * @param $routeName
+     * FilterEvent constructor.
      * @param QueryBuilder $queryBuilder
-     * @param FormInterface $form
+     * @param string $alias
+     * @param string $field
+     * @param string $value
      */
-    function __construct($routeName, QueryBuilder $queryBuilder, FormInterface $form)
+    public function __construct(QueryBuilder $queryBuilder, $alias, $field, $value)
     {
-        parent::__construct($routeName, $queryBuilder);
-
-        $this->form = $form;
+        $this->queryBuilder = $queryBuilder;
+        $this->alias = $alias;
+        $this->field = $field;
+        $this->value = $value;
     }
 
     /**
-     * @return FormInterface
+     * @return QueryBuilder
      */
-    public function getForm()
+    public function getQueryBuilder()
     {
-        return $this->form;
+        return $this->queryBuilder;
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getData()
+    public function getAlias()
     {
-        return $this->form->getData();
+        return $this->alias;
     }
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+
 }
