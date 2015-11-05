@@ -63,6 +63,7 @@ class ListView
      * @param ContainerInterface $container
      * @param int $limit
      * @param string $title
+     * @param boolean $paginator
      * @param EventDispatcherInterface $eventDispatcher
      */
     function __construct(ContainerInterface $container, $limit, $title, $paginator, EventDispatcherInterface $eventDispatcher)
@@ -137,6 +138,21 @@ class ListView
                     ->setParameter('ids', $ids);
             }
         } else {
+            /** @var ListViewFilter $filter */
+            foreach ($this->filters as $filter) {
+                $formFactory = $this->factoryEvent->getFormFactory();
+                $form = $formFactory->create($filter->getFormType(), []);
+
+                $form->handleRequest($request);
+
+                $filterEvent = new FilterEvent($routeName, $queryBuilder, $form);
+                $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
+
+                $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
+
+                $filterForms[] = $form->createView();
+            }
+            
             if ($this->paginator) {
                 $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
                 $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
@@ -148,26 +164,11 @@ class ListView
             } else {
                 $paginator = null;
             }
-
-            /** @var ListViewFilter $filter */
-            foreach ($this->filters as $filter) {
-                $formFactory = $this->factoryEvent->getFormFactory();
-                $form = $formFactory->create($filter->getFormType(), []);
-
-                $form->handleRequest($request);
-
-                $filterEvent = new FilterEvent($routeName, $queryBuilder, $form);
-                $this->dispatcher->dispatch(ListEvents::FILTER, $filterEvent);
-                $queryBuilder = call_user_func_array($filter->getFilters(), [$filterEvent]);
-
-                $filterForms[] = $form->createView();
-            }
         }
 
         $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
 
         if ($returnQueryBuilder) {
-
             return $queryBuilder;
         } else {
             $data = ['results' => $queryBuilder->getQuery()->getResult()];
@@ -412,6 +413,25 @@ class ListView
     public function setView($view)
     {
         $this->view = $view;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPagination()
+    {
+        return $this->paginator;
+    }
+
+    /**
+     * @param $pagination
+     * @return $this
+     */
+    public function setPagination($pagination)
+    {
+        $this->paginator = $pagination;
 
         return $this;
     }

@@ -15,3 +15,7 @@ RELEASE NOTES
 
 - List view added
 - Column sort option added
+
+**0.4.0**
+
+- Column refactor
