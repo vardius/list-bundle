@@ -25,6 +25,7 @@ use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvents;
 use Vardius\Bundle\ListBundle\Event\ListFilterEvent;
+use Vardius\Bundle\ListBundle\Event\ListResultEvent;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
 use Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider;
 use Vardius\Bundle\ListBundle\View\RendererInterface;
