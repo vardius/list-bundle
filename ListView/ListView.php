@@ -125,7 +125,7 @@ class ListView
         $filterForms = [];
         $paginator = null;
 
-        $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
+        $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder, $request));
 
         if ($column !== null && $sort !== null) {
             $queryBuilder->addOrderBy($alias.'.'.$column, strtoupper($sort));
@@ -153,7 +153,7 @@ class ListView
 
                 $form->handleRequest($request);
 
-                $listFilterEvent = new ListFilterEvent($routeName, $queryBuilder, $form, $alias);
+                $listFilterEvent = new ListFilterEvent($routeName, $queryBuilder, $request, $form, $alias);
                 $this->dispatcher->dispatch(ListEvents::FILTER, $listFilterEvent);
 
                 $formFilter = $filter->getFilter();
@@ -186,12 +186,15 @@ class ListView
             }
         }
 
-        $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder));
+        $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder, $request));
 
         if ($returnQueryBuilder) {
             return $queryBuilder;
         } else {
-            $data = ['results' => $queryBuilder->getQuery()->getResult()];
+            $resultsEvent = new ListResultEvent($routeName, $queryBuilder, $request, $queryBuilder->getQuery()->getResult());
+            $results = $this->dispatcher->dispatch(ListEvents::RESULTS, $resultsEvent)->getResults();
+
+            $data = ['results' => $results];
             if ($onlyResults) {
 
                 return $data;
