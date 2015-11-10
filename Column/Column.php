@@ -64,11 +64,16 @@ class Column implements ColumnInterface
      */
     public function getData($entity)
     {
-        return $this->templating->render(
-            $this->options['view'],
-            $this->type->getData($entity, $this->options),
-            $this->options
-        );
+        $data = $this->type->getData($entity, $this->options);
+        if ($responseType === 'html') {
+            return $this->templating->render(
+                $this->options['view'],
+                $data,
+                $this->options
+            );
+        }
+
+        return array_key_exists('property', $data) ? $data['property'] : null;
     }
 
     /**
