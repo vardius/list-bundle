@@ -12,6 +12,7 @@ namespace Vardius\Bundle\ListBundle\Event;
 
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * ListFilterEvent
