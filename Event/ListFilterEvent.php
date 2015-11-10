@@ -28,12 +28,13 @@ class ListFilterEvent extends ListEvent
     /**
      * @param string $routeName
      * @param QueryBuilder $queryBuilder
+     * @param Request $request
      * @param FormInterface $form
      * @param string $alias
      */
-    function __construct($routeName, QueryBuilder $queryBuilder, FormInterface $form, $alias)
+    function __construct($routeName, QueryBuilder $queryBuilder, Request $request, FormInterface $form, $alias)
     {
-        parent::__construct($routeName, $queryBuilder);
+        parent::__construct($routeName, $queryBuilder, $request);
 
         $this->form = $form;
         $this->alias = $alias;
