@@ -13,6 +13,7 @@ namespace Vardius\Bundle\ListBundle\Event;
 
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * ListEvent
@@ -25,15 +26,19 @@ class ListEvent extends Event
     protected $routeName;
     /** @var QueryBuilder */
     protected $queryBuilder;
+    /** @var  Request */
+    protected $request;
 
     /**
      * @param $routeName
      * @param QueryBuilder $queryBuilder
+     * @param Request $request
      */
-    function __construct($routeName, QueryBuilder $queryBuilder)
+    function __construct($routeName, QueryBuilder $queryBuilder, Request $request)
     {
         $this->routeName = $routeName;
         $this->queryBuilder = $queryBuilder;
+        $this->request = $request;
     }
 
     /**
@@ -50,5 +55,13 @@ class ListEvent extends Event
     public function getQueryBuilder()
     {
         return $this->queryBuilder;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 }

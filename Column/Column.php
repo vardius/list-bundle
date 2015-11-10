@@ -62,7 +62,7 @@ class Column implements ColumnInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($entity)
+    public function getData($entity, $responseType = 'html')
     {
         $data = $this->type->getData($entity, $this->options);
         if ($responseType === 'html') {
