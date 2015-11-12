@@ -10,10 +10,10 @@
 
 namespace Vardius\Bundle\ListBundle\Filter\Factory;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
-use Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider;
 use Vardius\Bundle\ListBundle\ListView\ListView;
 
 /**
@@ -24,15 +24,15 @@ use Vardius\Bundle\ListBundle\ListView\ListView;
 class ListViewFilterFactory
 {
     /** @var  ContainerInterface */
-    protected $continer;
+    protected $container;
 
     /**
      * ListViewFilterFactory constructor.
-     * @param ContainerInterface $continer
+     * @param ContainerInterface $container
      */
-    public function __construct( $continer)
+    public function __construct( $container)
     {
-        $this->continer = $continer;
+        $this->container = $container;
     }
 
     /**
@@ -43,7 +43,7 @@ class ListViewFilterFactory
     public function get($formType, $filter)
     {
         if(is_string($filter)){
-            $filterProvider = $this->continer->get($filter);
+            $filterProvider = $this->container->get($filter);
             $filterProvider->build();
             $filter = $filterProvider->getFilters();
         }

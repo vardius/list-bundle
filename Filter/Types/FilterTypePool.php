@@ -41,7 +41,7 @@ class FilterTypePool
     /**
      * @param FilterType $type
      */
-    public function addType(Action $type)
+    public function addType(FilterType $type)
     {
         $this->types->set($type->getName(), $type);
     }
