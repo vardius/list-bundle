@@ -47,4 +47,14 @@ final class ListEvents
      * @var string
      */
     const POST_QUERY_BUILDER = 'vardius_list.post_query_builder';
+
+    /**
+     * The vardius_list.results event is thrown after getting results from query builder
+     *
+     * The event listener receives an
+     * Vardius\Bundle\ListBundle\Event\ListResultEvent instance.
+     *
+     * @var string
+     */
+    const RESULTS = 'vardius_list.results';
 }
