@@ -41,7 +41,7 @@ class FilterFactory
     public function get($type, array $options = [])
     {
         if (is_string($type)) {
-            $type = $this->pool->getFilter($type);
+            $type = $this->pool->getType($type);
         }
 
         if (!$type instanceof FilterType) {

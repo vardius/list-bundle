@@ -10,6 +10,8 @@
 
 namespace Vardius\Bundle\ListBundle\Filter\Provider;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * FilterProviderInterface
  *

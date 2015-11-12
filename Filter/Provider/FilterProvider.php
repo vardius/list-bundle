@@ -28,7 +28,7 @@ abstract class FilterProvider implements FilterProviderInterface
 
     /**
      * ActionsProvider constructor.
-     * @param ActionFactory $actionFactory
+     * @param FilterFactory $factory
      */
     public function __construct(FilterFactory $factory)
     {
@@ -59,7 +59,7 @@ abstract class FilterProvider implements FilterProviderInterface
         }else{
             throw new \InvalidArgumentException(
                 'Expected argument of type "callable", "string" or class Vardius\Bundle\ListBundle\Filter\Types\FilterType, '.get_class(
-                    $filter
+                    $type
                 ).' given'
             );
         }
