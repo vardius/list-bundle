@@ -114,7 +114,7 @@ class ListView
             $alias = array_values($aliases)[0];
         } else {
             throw new \InvalidArgumentException(
-                'Expected argument of type "EntityRepository or QueryBuilder", '.get_class($data).' given'
+                'Expected argument of type "EntityRepository or QueryBuilder", ' . get_class($data) . ' given'
             );
         }
 
@@ -129,14 +129,14 @@ class ListView
         $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder, $request));
 
         if ($column !== null && $sort !== null) {
-            $queryBuilder->addOrderBy($alias.'.'.$column, strtoupper($sort));
+            $queryBuilder->addOrderBy($alias . '.' . $column, strtoupper($sort));
         }
         unset($sort);
 
         if (!empty($this->order)) {
             foreach ($this->order as $sort => $order) {
                 if ($column !== $sort) {
-                    $queryBuilder->addOrderBy($alias.'.'.$sort, strtoupper($order));
+                    $queryBuilder->addOrderBy($alias . '.' . $sort, strtoupper($order));
                 }
             }
         }
@@ -144,13 +144,13 @@ class ListView
         $ids = $request->get('ids', []);
         if (!empty($ids)) {
             $queryBuilder
-                ->andWhere($alias.'.id IN (:ids)')
+                ->andWhere($alias . '.id IN (:ids)')
                 ->setParameter('ids', $ids);
         } else {
             /** @var ListViewFilter $filter */
             foreach ($this->filters as $filter) {
                 $formFactory = $this->factoryEvent->getFormFactory();
-                $form = $formFactory->create($filter->getFormType(), []);
+                $form = $formFactory->create($filter->getFormType());
 
                 $form->handleRequest($request);
 
@@ -195,19 +195,16 @@ class ListView
             $resultsEvent = new ListResultEvent($routeName, $queryBuilder, $request, $queryBuilder->getQuery()->getResult());
             $results = $this->dispatcher->dispatch(ListEvents::RESULTS, $resultsEvent)->getResults();
 
-            $data = ['results' => $results];
             if ($onlyResults) {
 
-                return $data;
+                return $results;
             } else {
 
-                return array_merge(
-                    $data,
-                    [
-                        'filterForms' => $filterForms,
-                        'paginator' => $paginator,
-                    ]
-                );
+                return [
+                    'results' => $results,
+                    'filterForms' => $filterForms,
+                    'paginator' => $paginator,
+                ];
             }
         }
 

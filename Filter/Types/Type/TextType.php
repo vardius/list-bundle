@@ -26,14 +26,18 @@ class TextType extends FilterType
      */
     public function apply(FilterEvent $event, array $options)
     {
-        $field = empty($options['field']) ? $event->getField() : $options['field'];
-
         $queryBuilder = $event->getQueryBuilder();
-        $expression = $queryBuilder->expr();
+        $value = $event->getValue();
 
-        $queryBuilder
-            ->andWhere($expression->like($event->getAlias().'.'.$field, ':vardiusText'))
-            ->setParameter('vardiusText', $event->getValue());
+        if ($value) {
+            $field = empty($options['field']) ? $event->getField() : $options['field'];
+
+            $expression = $queryBuilder->expr();
+
+            $queryBuilder
+                ->andWhere($expression->like($event->getAlias() . '.' . $field, ':vardius_text'))
+                ->setParameter('vardius_text', $value);
+        }
 
         return $queryBuilder;
     }

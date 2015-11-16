@@ -39,14 +39,19 @@ class DateType extends FilterType
      */
     public function apply(FilterEvent $event, array $options)
     {
-        $field = empty($options['field']) ? $event->getField() : $options['field'];
-
         $queryBuilder = $event->getQueryBuilder();
-        $expression = $queryBuilder->expr();
+        $value = $event->getValue();
 
-        $queryBuilder
-            ->andWhere($expression->{$options['condition']}($event->getAlias().'.'.$field, ':vardiusDate'))
-            ->setParameter('vardiusDate', $event->getValue());
+        if ($value) {
+            $field = empty($options['field']) ? $event->getField() : $options['field'];
+
+            $expression = $queryBuilder->expr();
+
+            $queryBuilder
+                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_date'))
+                ->setParameter('vardius_date', $value);
+
+        }
 
         return $queryBuilder;
     }
