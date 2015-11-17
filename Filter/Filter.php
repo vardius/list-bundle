@@ -24,8 +24,6 @@ class Filter implements FilterInterface
 {
     /** @var array */
     protected $options;
-    /** @var array */
-    private static $resolversByClass = array();
     /** @var  FilterType */
     protected $type;
 
@@ -51,13 +49,9 @@ class Filter implements FilterInterface
      */
     public function setOptions(array $options = [])
     {
-        $class = get_class($this);
-        if (!isset(self::$resolversByClass[$class])) {
-            self::$resolversByClass[$class] = new OptionsResolver();
-            $this->type->configureOptions(self::$resolversByClass[$class]);
-        }
-
-        $this->options = self::$resolversByClass[$class]->resolve($options);
+        $resolver = new OptionsResolver();
+        $this->type->configureOptions($resolver);
+        $this->options = $resolver->resolve($options);
     }
 
     /**
@@ -66,14 +60,6 @@ class Filter implements FilterInterface
     public function getOptions()
     {
         return $this->options;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function clearOptionsConfig()
-    {
-        self::$resolversByClass = array();
     }
 
     /**

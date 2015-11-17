@@ -314,7 +314,7 @@ class ListView
 
     /**
      * @param string $name
-     * @param $type
+     * @param string $type
      * @param array $options
      * @return $this
      */

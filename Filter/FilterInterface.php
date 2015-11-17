@@ -29,11 +29,6 @@ interface FilterInterface
     public function apply(FilterEvent $event);
 
     /**
-     * Clear options array
-     */
-    public static function clearOptionsConfig();
-
-    /**
      * Returns configuration array
      *
      * @return array

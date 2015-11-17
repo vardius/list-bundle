@@ -49,7 +49,7 @@ class ColumnFactory
         }
 
         if (!$type instanceof ColumnType) {
-            throw new \InvalidArgumentException('The $type mast be instance of ColumnTypeInterface. ' . $type . ' given');
+            throw new \InvalidArgumentException('The $type mast be instance of ColumnTypeInterface. ' . get_class($type) . ' given');
         }
 
         return new Column($property, $type, $options, $this->templating);
