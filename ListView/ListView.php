@@ -175,6 +175,8 @@ class ListView
             }
 
             if ($this->paginator) {
+                $this->dispatcher->dispatch(ListEvents::PRE_PAGINATOR, new ListEvent($routeName, $queryBuilder, $request));
+
                 $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
                 $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
 

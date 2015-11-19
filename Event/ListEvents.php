@@ -29,6 +29,16 @@ final class ListEvents
     const FILTER = 'vardius_list.filter';
 
     /**
+     * The vardius_list.pre_pagination event is thrown each time before creating paginator if pagination is enable
+     *
+     * The event listener receives an
+     * Vardius\Bundle\ListBundle\Event\ListEvent instance.
+     *
+     * @var string
+     */
+    const PRE_PAGINATOR = 'vardius_list.pre_paginator';
+
+    /**
      * The vardius_list.pre_query_builder event is thrown each time when query builder is created
      *
      * The event listener receives an
