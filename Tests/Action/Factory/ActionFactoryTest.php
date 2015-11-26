@@ -1,6 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
+ * This file is part of the vardius/list-bundle package.
+ *
+ * (c) Rafał Lorenz <vardius@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  * User: Szymon Kunowski <szymon.kunowski@gmail.com>
  * Date: 23.11.15
  * Time: 11:02
