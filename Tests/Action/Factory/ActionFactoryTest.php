@@ -6,17 +6,18 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * User: Szymon Kunowski <szymon.kunowski@gmail.com>
- * Date: 23.11.15
- * Time: 11:02
  */
 
 namespace Vardius\Bundle\ListBundle\Tests\Action\Factory;
 
 use PHPUnit_Framework_TestCase;
 use Vardius\Bundle\ListBundle\Action\Factory\ActionFactory;
-use Vardius\Bundle\ListBundle\Action\Action;
 
+/**
+ * CalculatorTest
+ *
+ * @author Szymon Kunowski <szymon.kunowski@gmail.com>
+ */
 class CalculatorTest extends PHPUnit_Framework_TestCase
 {
     public function testGetProperValues()
