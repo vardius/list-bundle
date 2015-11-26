@@ -18,6 +18,11 @@
         "symfony/symfony": ">=2.6",
         "symfony/options-resolver": ">=2.7"
     },
+    "require-dev": {
+        "symfony/yaml": "~2.3",
+        "symfony/validator": "~2.3",
+        "phpunit/phpunit": "5.0.*"
+    },
     "target-dir": "Vardius/Bundle/ListBundle",
     "autoload": {
         "psr-0": { "Vardius\\Bundle\\ListBundle": "" }
