@@ -24,13 +24,13 @@ class Filter implements FilterInterface
 {
     /** @var array */
     protected $options;
-    /** @var  FilterType */
+    /** @var  FilterType|callable */
     protected $type;
 
     /**
      * @inheritDoc
      */
-    public function __construct(FilterType $type, array $options = [])
+    public function __construct($type, array $options = [])
     {
         $this->type = $type;
         $this->setOptions($options);
@@ -41,6 +41,10 @@ class Filter implements FilterInterface
      */
     public function apply(FilterEvent $event)
     {
+        if (is_callable($this->type)) {
+            return call_user_func_array($this->type, [$event]);
+        }
+
         return $this->type->apply($event, $this->options);
     }
 
