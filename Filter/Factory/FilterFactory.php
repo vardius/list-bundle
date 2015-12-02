@@ -46,7 +46,7 @@ class FilterFactory
 
         if (!$type instanceof FilterType) {
             throw new \InvalidArgumentException(
-                'The type mast be instance of Vardius\Bundle\ListBundle\Filter\Types\FilterType. '.$type.' given'
+                'The type mast be instance of Vardius\Bundle\ListBundle\Filter\Types\FilterType. ' . get_class($type) . ' given'
             );
         }
 
