@@ -278,8 +278,10 @@ class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterPr
 
 Available filters:
 
-`date` - available options: `['filed' => 'field name', 'condition' => 'gte|gt|lte|lt']`
+`date` - available options: `['filed' => 'field name', 'condition' => 'eq|neq|lt|lte|gt|gte']`
 `text` - available options: `['filed' => 'field name']`
+`numeric` - available options: `['filed' => 'field name', 'condition' => 'eq|neq|lt|lte|gt|gte']`
+`entity` - available options: `['filed' => 'field name', 'property' => 'property name', 'joinType' => 'join|leftJoin|innerJoin']`
 
 ### 6. Edit list view template
 

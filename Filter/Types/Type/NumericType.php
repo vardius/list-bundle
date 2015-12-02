@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the vardius/list-bundle package.
+ * This file is part of the tipper package.
  *
  * (c) Rafał Lorenz <vardius@gmail.com>
  *
@@ -16,11 +16,11 @@ use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
 
 /**
- * DateType
+ * NumericType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class DateType extends FilterType
+class NumericType extends FilterType
 {
     /**
      * @inheritDoc
@@ -29,7 +29,7 @@ class DateType extends FilterType
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefault('condition', 'gte');
+        $resolver->setDefault('condition', 'eq');
         $resolver->addAllowedTypes('condition', 'string');
         $resolver->addAllowedValues(['condition' => ['eq', 'neq', 'lt', 'lte', 'gt', 'gte']]);
     }
@@ -48,9 +48,8 @@ class DateType extends FilterType
             $expression = $queryBuilder->expr();
 
             $queryBuilder
-                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_date'))
-                ->setParameter('vardius_date', $value);
-
+                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_numeric'))
+                ->setParameter('vardius_numeric', $value);
         }
 
         return $queryBuilder;
@@ -61,7 +60,7 @@ class DateType extends FilterType
      */
     public function getName()
     {
-        return 'date';
+        return 'numeric';
     }
 
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the vardius/list-bundle package.
+ * This file is part of the tipper package.
  *
  * (c) Rafał Lorenz <vardius@gmail.com>
  *
@@ -16,11 +16,11 @@ use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
 
 /**
- * DateType
+ * EntityType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class DateType extends FilterType
+class EntityType extends FilterType
 {
     /**
      * @inheritDoc
@@ -29,9 +29,11 @@ class DateType extends FilterType
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefault('condition', 'gte');
-        $resolver->addAllowedTypes('condition', 'string');
-        $resolver->addAllowedValues(['condition' => ['eq', 'neq', 'lt', 'lte', 'gt', 'gte']]);
+        $resolver->setDefault('property', 'id');
+        $resolver->setDefault('joinType', 'innerJoin');
+        $resolver->addAllowedTypes('property', 'string');
+        $resolver->addAllowedTypes('joinType', 'string');
+        $resolver->addAllowedValues(['joinType' => ['leftJoin', 'innerJoin', 'join']]);
     }
 
     /**
@@ -45,12 +47,10 @@ class DateType extends FilterType
         if ($value) {
             $field = empty($options['field']) ? $event->getField() : $options['field'];
 
-            $expression = $queryBuilder->expr();
-
             $queryBuilder
-                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_date'))
-                ->setParameter('vardius_date', $value);
-
+                ->{$options['joinType']}($event->getAlias() . '.' . $field, $field)
+                ->andWhere($field . '.' . $options['property'] . ' = :vardius_entity')
+                ->setParameter('vardius_entity', $value);
         }
 
         return $queryBuilder;
@@ -61,7 +61,7 @@ class DateType extends FilterType
      */
     public function getName()
     {
-        return 'date';
+        return 'entity';
     }
 
 }
