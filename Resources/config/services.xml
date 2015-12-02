@@ -16,6 +16,8 @@
         <parameter key="vardius_list.filter.provider.class">Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider</parameter>
         <parameter key="vardius_list.filter_type.date.class">Vardius\Bundle\ListBundle\Filter\Types\Type\DateType</parameter>
         <parameter key="vardius_list.filter_type.text.class">Vardius\Bundle\ListBundle\Filter\Types\Type\TextType</parameter>
+        <parameter key="vardius_list.filter_type.numeric.class">Vardius\Bundle\ListBundle\Filter\Types\Type\NumericType</parameter>
+        <parameter key="vardius_list.filter_type.entity.class">Vardius\Bundle\ListBundle\Filter\Types\Type\EntityType</parameter>
         <!--COLUMN-->
         <parameter key="vardius_list.column.class">Vardius\Bundle\ListBundle\Column\Column</parameter>
         <parameter key="vardius_list.column.factory.class">Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory</parameter>
@@ -85,6 +87,12 @@
             <tag name="vardius_list.filter_type" />
         </service>
         <service id="vardius_list.filter_type.text" class="%vardius_list.filter_type.text.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
+        <service id="vardius_list.filter_type.numeric" class="%vardius_list.filter_type.numeric.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
+        <service id="vardius_list.filter_type.entity" class="%vardius_list.filter_type.entity.class%">
             <tag name="vardius_list.filter_type" />
         </service>
 
