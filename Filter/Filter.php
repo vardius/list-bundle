@@ -33,7 +33,9 @@ class Filter implements FilterInterface
     public function __construct($type, array $options = [])
     {
         $this->type = $type;
-        $this->setOptions($options);
+        if ($this->type instanceof FilterType) {
+            $this->setOptions($options);
+        }
     }
 
     /**
