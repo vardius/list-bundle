@@ -112,9 +112,15 @@ Create your provider class:
 ### Available options for column types
 
 Property column: `attr, label, sort, row_action`
+
 Callable column: `attr, label, sort, row_action, callback`
+
 Date column: `attr, label, sort, row_action, callback, date_format`
+
 Raw column: `attr, label, sort, row_action, callback`
+
 Image column: `attr, label, sort, row_action, callback`
+
 Action column: `attr, label, actions`
+
 Option column: `attr, label`
