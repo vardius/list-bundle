@@ -51,14 +51,15 @@ class Paginator
 
         $cloneQueryBuilder->resetDQLParts();
 
+        //SQL Walkers error
+        //http://doctrine-orm.readthedocs.org/projects/doctrine-orm/en/latest/cookbook/dql-custom-walkers.html
+
         $newQueryBuilder = $cloneQueryBuilder
             ->select('count(' . $alias . '.id)')
             ->add('from', $from[0]);
 
         try {
             $this->total = $newQueryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NonUniqueResultException $e) {
-            $this->total = 0;
         } catch (NoResultException $e) {
             $this->total = 0;
         }
