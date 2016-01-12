@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Paginator;
 
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Twig\TwigEngine;
@@ -48,7 +47,6 @@ class Paginator
 
         $cloneQueryBuilder = clone $queryBuilder;
         $from = $cloneQueryBuilder->getDQLPart('from');
-        $parameters = $cloneQueryBuilder->getParameters();
 
         $cloneQueryBuilder->resetDQLParts();
 
@@ -58,7 +56,7 @@ class Paginator
         $newQueryBuilder = $cloneQueryBuilder
             ->select('count(' . $alias . '.id)')
             ->add('from', $from[0])
-            ->setParameters($parameters);
+            ->setParameters([]);
 
         try {
             $this->total = $newQueryBuilder->getQuery()->getSingleScalarResult();

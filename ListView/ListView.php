@@ -180,7 +180,7 @@ class ListView
                 $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
                 $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
 
-                $offset = ($currentPage * $this->limit) - $this->limit;
+                $offset = $this->limit * ($currentPage - 1);
                 $queryBuilder
                     ->setFirstResult($offset)
                     ->setMaxResults($this->limit);
