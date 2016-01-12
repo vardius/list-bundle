@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Paginator;
 
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Twig\TwigEngine;
 
@@ -51,7 +52,11 @@ class Paginator
             ->select('count(' . $alias . '.id)')
             ->add('from', $from[0]);
 
-        $this->total = $newQueryBuilder->getQuery()->getSingleScalarResult();
+        try {
+            $this->total = $newQueryBuilder->getQuery()->getSingleScalarResult();
+        } catch (NoResultException $e) {
+            $this->total = 0;
+        }
     }
 
     /**
