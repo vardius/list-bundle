@@ -48,6 +48,7 @@ class Paginator
 
         $cloneQueryBuilder = clone $queryBuilder;
         $from = $cloneQueryBuilder->getDQLPart('from');
+        $parameters = $cloneQueryBuilder->getParameters();
 
         $cloneQueryBuilder->resetDQLParts();
 
@@ -56,7 +57,8 @@ class Paginator
 
         $newQueryBuilder = $cloneQueryBuilder
             ->select('count(' . $alias . '.id)')
-            ->add('from', $from[0]);
+            ->add('from', $from[0])
+            ->setParameters($parameters);
 
         try {
             $this->total = $newQueryBuilder->getQuery()->getSingleScalarResult();
