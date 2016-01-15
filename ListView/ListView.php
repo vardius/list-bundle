@@ -19,6 +19,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Vardius\Bundle\ListBundle\Action\Action;
 use Vardius\Bundle\ListBundle\Column\Column;
+use Vardius\Bundle\ListBundle\Column\ColumnInterface;
 use Vardius\Bundle\ListBundle\Event\FactoryEvent;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Event\ListDataEvent;
@@ -43,7 +44,7 @@ class ListView
     protected $limit;
     /** @var string */
     protected $title;
-    /** @var  ArrayCollection */
+    /** @var  ArrayCollection|ColumnInterface[] */
     protected $columns;
     /** @var  ArrayCollection */
     protected $actions;
@@ -307,7 +308,7 @@ class ListView
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|ColumnInterface[]
      */
     public function getColumns()
     {

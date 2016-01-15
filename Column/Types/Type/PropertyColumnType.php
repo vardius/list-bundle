@@ -30,7 +30,7 @@ class PropertyColumnType extends ColumnType
         }
 
         $action = $options['row_action'];
-        if (is_array($action) && !empty($action) && $entity !== null) {
+        if (is_array($action) && !empty($action) && $entity !== null && method_exists($entity, 'getId')) {
             $action['parameters']['id'] = $entity->getId();
         }
 
