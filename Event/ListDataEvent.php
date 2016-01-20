@@ -88,4 +88,12 @@ class ListDataEvent
     {
         return $this->request->get('sort', null);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLimit()
+    {
+        return $this->request->get('limit', null);
+    }
 }

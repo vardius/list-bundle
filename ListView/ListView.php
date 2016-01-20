@@ -119,11 +119,13 @@ class ListView
             );
         }
 
-        $currentPage = $event->getPage();
         $request = $event->getRequest();
         $routeName = $event->getRouteName();
-        $column = $event->getColumn();
+        $currentPage = $event->getPage();
         $sort = $event->getSort();
+        $limit = $event->getLimit();
+        $limit = $limit ?: $this->getLimit();
+        $column = $event->getColumn();
         $filterForms = [];
         $paginator = null;
 
@@ -179,12 +181,12 @@ class ListView
                 $this->dispatcher->dispatch(ListEvents::PRE_PAGINATOR, new ListEvent($routeName, $queryBuilder, $request));
 
                 $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
-                $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $this->getLimit());
+                $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $limit);
 
-                $offset = $this->limit * ($currentPage - 1);
+                $offset = $limit * ($currentPage - 1);
                 $queryBuilder
                     ->setFirstResult($offset)
-                    ->setMaxResults($this->limit);
+                    ->setMaxResults($limit);
             } else {
                 $paginator = null;
             }
