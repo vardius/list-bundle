@@ -26,7 +26,12 @@ class PropertyColumnType extends ColumnType
     {
         $property = null;
         if ($entity !== null) {
-            $property = $entity->{'get' . ucfirst($options['property'])}();
+            $method = ucfirst($options['property']);
+            if (method_exists($entity, 'get' . $method)) {
+                $property = $entity->{'get' . $method}();
+            } elseif (method_exists($entity, 'is' . $method)) {
+                $property = $entity->{'is' . $method}();
+            }
         }
 
         $action = $options['row_action'];

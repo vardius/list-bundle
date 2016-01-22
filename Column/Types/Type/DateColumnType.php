@@ -25,11 +25,17 @@ class DateColumnType extends ColumnType
      */
     public function getData($entity = null, array $options = [])
     {
+        $property = null;
         $callable = $options['callback'];
         if (is_callable($callable)) {
             $property = call_user_func_array($callable, [$entity]);
         } else {
-            $property = $entity->{'get' . ucfirst($options['property'])}();
+            $method = ucfirst($options['property']);
+            if (method_exists($entity, 'get' . $method)) {
+                $property = $entity->{'get' . $method}();
+            } elseif (method_exists($entity, 'is' . $method)) {
+                $property = $entity->{'is' . $method}();
+            }
         }
 
         $action = $options['row_action'];
