@@ -56,11 +56,11 @@ abstract class FilterProvider implements FilterProviderInterface
             $filter = $this->factory->get($type, $options);
         } elseif (is_callable($type)) {
             $filter = $type;
-        }else{
+        } else {
             throw new \InvalidArgumentException(
-                'Expected argument of type "callable", "string" or class Vardius\Bundle\ListBundle\Filter\Types\FilterType, '.get_class(
+                'Expected argument of type "callable", "string" or class Vardius\Bundle\ListBundle\Filter\Types\FilterType, ' . get_class(
                     $type
-                ).' given'
+                ) . ' given'
             );
         }
 

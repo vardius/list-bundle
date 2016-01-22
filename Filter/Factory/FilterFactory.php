@@ -40,11 +40,9 @@ class FilterFactory
      */
     public function get($type, array $options = [])
     {
-        if (!is_callable($type) && is_string($type)) {
+        if (is_string($type)) {
             $type = $this->pool->getType($type);
-        }
-
-        if (!is_callable($type) && !$type instanceof FilterType) {
+        } elseif (!is_callable($type) && !$type instanceof FilterType) {
             throw new \InvalidArgumentException(
                 'The type mast be instance of Vardius\Bundle\ListBundle\Filter\Types\FilterType or callback. ' . get_class($type) . ' given'
             );
