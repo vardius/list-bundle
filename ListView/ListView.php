@@ -161,12 +161,12 @@ class ListView
                 $this->dispatcher->dispatch(ListEvents::FILTER, $listFilterEvent);
 
                 $formFilter = $filter->getFilter();
-                if (!is_string($formFilter) && is_callable($formFilter)) {
+                if (is_callable($formFilter)) {
                     $queryBuilder = call_user_func_array($formFilter, [$listFilterEvent]);
-                } elseif (is_object($formFilter) || is_array($formFilter)) {
+                } else {
                     foreach ($formFilter as $field => $fieldFilter) {
                         $filterEvent = new FilterEvent($queryBuilder, $alias, $field, $form[$field]->getData());
-                        if (!is_string($fieldFilter) && is_callable($fieldFilter)) {
+                        if (is_callable($fieldFilter)) {
                             $queryBuilder = call_user_func_array($fieldFilter, [$filterEvent]);
                         } else {
                             $queryBuilder = $fieldFilter->apply($filterEvent);

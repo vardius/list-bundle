@@ -43,7 +43,7 @@ class Filter implements FilterInterface
      */
     public function apply(FilterEvent $event)
     {
-        if (!is_string($this->type) && is_callable($this->type)) {
+        if (is_callable($this->type)) {
             return call_user_func_array($this->type, [$event]);
         }
 
