@@ -32,7 +32,7 @@ class PropertyType extends FilterType
             $field = empty($options['field']) ? $event->getField() : $options['field'];
 
             $queryBuilder
-                ->andWhere($event->getAlias() . '.' . $field, ' = :vardius_property_' . $field)
+                ->andWhere($event->getAlias() . '.' . $field . ' = :vardius_property_' . $field)
                 ->setParameter('vardius_property_' . $field, $value);
 
         }
