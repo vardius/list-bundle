@@ -48,8 +48,8 @@ class NumericType extends FilterType
             $expression = $queryBuilder->expr();
 
             $queryBuilder
-                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_numeric'))
-                ->setParameter('vardius_numeric', $value);
+                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_numeric_' . $field))
+                ->setParameter('vardius_numeric_' . $field, $value);
         }
 
         return $queryBuilder;

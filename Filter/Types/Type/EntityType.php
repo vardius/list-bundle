@@ -49,8 +49,8 @@ class EntityType extends FilterType
 
             $queryBuilder
                 ->{$options['joinType']}($event->getAlias() . '.' . $field, $field)
-                ->andWhere($field . '.' . $options['property'] . ' = :vardius_entity')
-                ->setParameter('vardius_entity', $value);
+                ->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $field)
+                ->setParameter('vardius_entity_' . $field, $value);
         }
 
         return $queryBuilder;

@@ -35,8 +35,8 @@ class TextType extends FilterType
             $expression = $queryBuilder->expr();
 
             $queryBuilder
-                ->andWhere($expression->like($event->getAlias() . '.' . $field, ':vardius_text'))
-                ->setParameter('vardius_text', $value);
+                ->andWhere($expression->like($event->getAlias() . '.' . $field, ':vardius_text_' . $field))
+                ->setParameter('vardius_text_' . $field, $value);
         }
 
         return $queryBuilder;

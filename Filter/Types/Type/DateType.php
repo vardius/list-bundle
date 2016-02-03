@@ -48,8 +48,8 @@ class DateType extends FilterType
             $expression = $queryBuilder->expr();
 
             $queryBuilder
-                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_date'))
-                ->setParameter('vardius_date', $value);
+                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_date_' . $field))
+                ->setParameter('vardius_date_' . $field, $value);
 
         }
 
