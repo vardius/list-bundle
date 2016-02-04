@@ -5,7 +5,8 @@ Configuration
 ----------------
 1. [Create your entity](#create-your-entity)
 2. [Create ListViewProvider](#create-listviewprovider)
-3. [Include scripts](#include-scripts)
+3. [Usage](#usage)
+4. [Include scripts](#include-scripts)
 
 ### Create your entity
 
@@ -72,6 +73,52 @@ Service:
 
 ``` xml
     <service id="app.product.list_view" class="Lorenz\MainBundle\ListView\ProductProvider" parent="vardius_list.list_view.provider"/>
+```
+
+### Usage
+
+In your action you can use list as follows:
+
+``` php
+<?php
+
+namespace AppBundle\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * @Route("/example")
+ */
+class OverlaysController extends Controller
+{
+    /**
+     * @Route("/list", name="example_list")
+     * @Template()
+     */
+    public function listAction(Request $request)
+    {
+        $entityManager = $this->get('doctrine.orm.entity_manager');
+        $repository = $entityManager->getRepository('AppBundle:Product');
+        $listView = $this->get('app.product.list_view');
+        $listDataEvent = new ListDataEvent($repository, $request);
+        
+        return [
+            'list' => $listView->render($listDataEvent),
+            'title' => $listView->getTitle(),
+        ]
+    }
+```
+
+In your views just display list using `|raw` filter
+
+``` html
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<h1>{{ title }}</h1>
+{{ list|raw }}
 ```
 
 ### Include scripts
