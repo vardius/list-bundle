@@ -32,7 +32,7 @@ Enable the bundle in the kernel:
 
 Add to config.yml:
 
-``` yaml
+``` yml
     vardius_list:
         title: List //default 'List'
         limit: 10   //default 10
