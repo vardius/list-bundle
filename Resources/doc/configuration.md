@@ -69,7 +69,13 @@ Entity class
 ```
 
 Service:
-
+#### YML
+``` yml
+    services:
+        app.product.list_view:
+            class: Lorenz\MainBundle\ListView\ProductProvider
+```
+#### XML
 ``` xml
     <service id="app.product.list_view" class="Lorenz\MainBundle\ListView\ProductProvider" parent="vardius_list.list_view.provider"/>
 ```
