@@ -12,7 +12,16 @@ You can configure your list in the provider class, you can specify the limit of 
 add columns of types (option, property, callable), add actions (global for page or row) and add filters to your list
 
 Declare your filter form as a service:
+###### YML
+``` yml
+services:
+    app.form.type.product_filter:
+        class: AppBundle\Form\Type\Filter\ProductFilterType
+        tags:
+            - { name: form.type, alias: product_filter }
+```
 
+###### XML
 ``` xml
     <service id="app.form.type.product_filter" class="AppBundle\Form\Type\Filter\ProductFilterType">
         <tag name="form.type" alias="product_filter"/>
