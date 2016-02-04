@@ -24,7 +24,7 @@ Custom template
             $listView
                 ->setView('VardiusListBundle:List:list') //set custom list view template
                 
-            ...
+            /* More Code*/
 
             return $listView;
         }

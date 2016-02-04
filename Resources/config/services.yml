@@ -1,0 +1,110 @@
+parameters:
+    vardius_list.list_view.class: Vardius\Bundle\ListBundle\ListView\ListView
+    vardius_list.list_view.factory.class: Vardius\Bundle\ListBundle\ListView\Factory\ListViewFactory
+    vardius_list.list_view.provider.class: Vardius\Bundle\ListBundle\ListView\Provider\ListViewProvider
+    vardius_list.list_view_filter.factory.class: Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory
+    vardius_list.filter.factory.class: Vardius\Bundle\ListBundle\Filter\Factory\FilterFactory
+    vardius_list.filter_type_pool.class: Vardius\Bundle\ListBundle\Filter\Types\FilterTypePool
+    vardius_list.filter.provider.class: Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider
+    vardius_list.filter_type.date.class: Vardius\Bundle\ListBundle\Filter\Types\Type\DateType
+    vardius_list.filter_type.text.class: Vardius\Bundle\ListBundle\Filter\Types\Type\TextType
+    vardius_list.filter_type.numeric.class: Vardius\Bundle\ListBundle\Filter\Types\Type\NumericType
+    vardius_list.filter_type.entity.class: Vardius\Bundle\ListBundle\Filter\Types\Type\EntityType
+    vardius_list.filter_type.property.class: Vardius\Bundle\ListBundle\Filter\Types\Type\PropertyType
+    vardius_list.column.class: Vardius\Bundle\ListBundle\Column\Column
+    vardius_list.column.factory.class: Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory
+    vardius_list.column_type_pool.class: Vardius\Bundle\ListBundle\Column\Types\ColumnTypePool
+    vardius_list.column_type.property.class: Vardius\Bundle\ListBundle\Column\Types\Type\PropertyColumnType
+    vardius_list.column_type.option.class: Vardius\Bundle\ListBundle\Column\Types\Type\OptionColumnType
+    vardius_list.column_type.callable.class: Vardius\Bundle\ListBundle\Column\Types\Type\CallableColumnType
+    vardius_list.column_type.date.class: Vardius\Bundle\ListBundle\Column\Types\Type\DateColumnType
+    vardius_list.column_type.image.class: Vardius\Bundle\ListBundle\Column\Types\Type\ImageColumnType
+    vardius_list.column_type.raw.class: Vardius\Bundle\ListBundle\Column\Types\Type\RawColumnType
+    vardius_list.column_type.action.class: Vardius\Bundle\ListBundle\Column\Types\Type\ActionColumnType
+    vardius_list.action.class: Vardius\Bundle\ListBundle\Action\Action
+    vardius_list.action.factory.class: Vardius\Bundle\ListBundle\Action\Factory\ActionFactory
+    vardius_list.paginator.class: Vardius\Bundle\ListBundle\Paginator\Paginator
+    vardius_list.paginator.factory.class: Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory
+    vardius_list.view.renderer.class: Vardius\Bundle\ListBundle\View\Renderer
+
+services:
+    vardius_list.view.renderer:
+        class: %vardius_list.view.renderer.class%
+        arguments: ['@templating']
+    vardius_list.list_view.factory:
+        class: %vardius_list.list_view.factory.class%
+        arguments: ['%vardius_list.limit%', '%vardius_list.title%', '%vardius_list.paginator%', '@service_container']
+    vardius_list.column.factory:
+        class: %vardius_list.column.factory.class%
+        arguments: ['@vardius_list.column_type_pool', '@templating']
+    vardius_list.list_view.provider:
+        class: %vardius_list.list_view.provider.class%
+        arguments: ['@vardius_list.list_view.factory']
+    vardius_list.paginator.factory:
+        class: %vardius_list.paginator.factory.class%
+        arguments: ['@templating']
+    vardius_list.action.factory:
+        class: %vardius_list.action.factory.class%
+    vardius_list.list_view_filter.factory:
+        class: %vardius_list.list_view_filter.factory.class%
+        arguments: ['@service_container']
+    vardius_list.filter.factory:
+        class: %vardius_list.filter.factory.class%
+        arguments: ['@vardius_list.filter_type_pool']
+    vardius_list.filter.provider:
+        class: %vardius_list.filter.provider.class%
+        arguments: ['@vardius_list.filter.factory']
+    vardius_list.filter_type_pool:
+        class: %vardius_list.filter_type_pool.class%
+    vardius_list.filter_type.date:
+        class: %vardius_list.filter_type.date.class%
+        tags:
+            - { name: vardius_list.filter_type }
+    vardius_list.filter_type.text:
+        class: %vardius_list.filter_type.text.class%
+        tags:
+            - { name: vardius_list.filter_type }
+    vardius_list.filter_type.numeric:
+        class: %vardius_list.filter_type.numeric.class%
+        tags:
+            - { name: vardius_list.filter_type }
+    vardius_list.filter_type.entity:
+        class: %vardius_list.filter_type.entity.class%
+        tags:
+            - { name: vardius_list.filter_type }
+    vardius_list.filter_type.property:
+        class: %vardius_list.filter_type.property.class%
+        tags:
+            - { name: vardius_list.filter_type }
+    vardius_list.column_type_pool:
+        class: %vardius_list.column_type_pool.class%
+    vardius_list.column_type.property:
+        class: %vardius_list.column_type.property.class%
+        tags:
+            - { name: vardius_list.column_type }
+    vardius_list.column_type.option:
+        class: %vardius_list.column_type.option.class%
+        tags:
+            - { name: vardius_list.column_type }
+        arguments: ['@templating']
+    vardius_list.column_type.callable:
+        class: %vardius_list.column_type.callable.class%
+        tags:
+            - { name: vardius_list.column_type }
+    vardius_list.column_type.date:
+        class: %vardius_list.column_type.date.class%
+        tags:
+            - { name: vardius_list.column_type }
+    vardius_list.column_type.image:
+        class: %vardius_list.column_type.image.class%
+        tags:
+            - { name: vardius_list.column_type }
+    vardius_list.column_type.raw:
+        class: %vardius_list.column_type.raw.class%
+        tags:
+            - { name: vardius_list.column_type }
+    vardius_list.column_type.action:
+        class: %vardius_list.column_type.action.class%
+        tags:
+            - { name: vardius_list.column_type }
+        arguments: ['@vardius_list.action.factory']
