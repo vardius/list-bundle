@@ -24,3 +24,7 @@ RELEASE NOTES
 
 - Filter builder
 - Predefined filter types
+
+**0.6.0**
+
+- Major fixes for filters
