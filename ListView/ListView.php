@@ -101,7 +101,7 @@ class ListView
      * @param ListDataEvent $event
      * @param boolean $onlyResults
      * @param boolean $returnQueryBuilder
-     * @return array|QueryBuilder
+     * @return ArrayCollection|QueryBuilder
      */
     public function getData(ListDataEvent $event, $onlyResults = false, $returnQueryBuilder = false)
     {
