@@ -31,6 +31,8 @@ class EntityType extends FilterType
 
         $resolver->setDefault('property', 'id');
         $resolver->setDefault('joinType', 'innerJoin');
+        $resolver->setDefault('multiple', false);
+        $resolver->addAllowedTypes('multiple', 'boolean');
         $resolver->addAllowedTypes('property', 'string');
         $resolver->addAllowedTypes('joinType', 'string');
         $resolver->addAllowedValues(['joinType' => ['leftJoin', 'innerJoin', 'join']]);
@@ -47,10 +49,17 @@ class EntityType extends FilterType
         if ($value) {
             $field = empty($options['field']) ? $event->getField() : $options['field'];
 
-            $queryBuilder
-                ->{$options['joinType']}($event->getAlias() . '.' . $field, $field)
-                ->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $field)
-                ->setParameter('vardius_entity_' . $field, $value);
+            $queryBuilder->{$options['joinType']}($event->getAlias() . '.' . $field, $field);
+
+            if ($options['multiple'] && is_array($value)) {
+                $queryBuilder->where($field . '.' . $options['property'] . 'IN(:vardius_entity_' . $field . ')');
+            } elseif (!$options['multiple']) {
+                $queryBuilder->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $field);
+            } else {
+                throw new \InvalidArgumentException('The value mast be array if $options[\'multiple\'] is set to true. ' . $value . ' given with multiple: ' . $options['multiple']);
+            }
+
+            $queryBuilder->setParameter('vardius_entity_' . $field, $value);
         }
 
         return $queryBuilder;
