@@ -24,28 +24,23 @@ abstract class ColumnType implements ColumnTypeInterface
      */
     public function configureOptions(OptionsResolver $resolver, $property, $templatePath)
     {
-        $resolver->setDefaults(
-            array(
-                'property' => $property,
-                'label' => $property,
-                'sort' => false,
-                'ui' => false,
-                'attr' => [],
-                'row_action' => [],
-                'view' => $templatePath . $this->getName() . '.html.twig'
-            )
-        );
-        $resolver->setAllowedTypes(
-            array(
-                'label' => 'string',
-                'property' => 'string',
-                'view' => 'string',
-                'sort' => 'bool',
-                'ui' => 'bool',
-                'attr' => 'array',
-                'row_action' => 'array',
-            )
-        );
+        $resolver->setDefaults([
+            'property' => $property,
+            'label' => $property,
+            'sort' => false,
+            'ui' => false,
+            'attr' => [],
+            'row_action' => [],
+            'view' => $templatePath . $this->getName() . '.html.twig'
+        ]);
+
+        $resolver->setAllowedTypes('label', 'string');
+        $resolver->setAllowedTypes('property', 'string');
+        $resolver->setAllowedTypes('view', 'string');
+        $resolver->setAllowedTypes('sort', 'bool');
+        $resolver->setAllowedTypes('ui', 'bool');
+        $resolver->setAllowedTypes('attr', 'array');
+        $resolver->setAllowedTypes('row_action', 'array');
     }
 
 }

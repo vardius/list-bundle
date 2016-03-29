@@ -24,16 +24,10 @@ abstract class FilterType implements FilterTypeInterface
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'field' => '',
-            ]
-        );
-        $resolver->setAllowedTypes(
-            [
-                'field' => 'string',
-            ]
-        );
+        $resolver->setDefaults([
+            'field' => '',
+        ]);
+        $resolver->setAllowedTypes('field', 'string');
     }
 
 }

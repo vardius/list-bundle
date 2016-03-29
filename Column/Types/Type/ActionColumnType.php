@@ -60,8 +60,8 @@ class ActionColumnType extends ColumnType
     {
         parent::configureOptions($resolver, $property, $templatePath);
 
-//        $resolver->remove('url');
-//        $resolver->remove('sort');
+        $resolver->remove('url');
+        $resolver->remove('sort');
         $resolver->setDefault('ui', true);
         $resolver->setRequired('actions');
         $resolver->setAllowedTypes('actions', 'array');
