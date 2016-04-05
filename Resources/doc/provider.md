@@ -97,16 +97,19 @@ Create your provider class:
                     ],
                 ])
                 ->addFilter('product_filter', function (ListFilterEvent $event) {
-
                     $formData = $event->getData();
                     $queryBuilder = $event->getQueryBuilder();
                     $alias = $event->getAlias();
 
                     $name = $formData['name'];
 
+                    //Doctrine example
                     $queryBuilder
                         ->andWhere($alias.'.name = :name')
                         ->setParameter('name', $name);
+                        
+                    //Propel example
+                    $queryBuilder->filterByName($name);
 
                     return $queryBuilder;
                 })
