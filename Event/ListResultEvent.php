@@ -55,7 +55,7 @@ class ListResultEvent extends ListEvent
      * @param array $results
      * @return ListResultEvent
      */
-    public function setResults($results)
+    public function setResults(array $results)
     {
         $this->results = $results;
         return $this;
