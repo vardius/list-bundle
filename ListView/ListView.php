@@ -52,7 +52,7 @@ class ListView
     protected $filters;
     /** @var  string */
     protected $view;
-    /** @var  QueryBuilder|null */
+    /** @var  QueryBuilder|\ModelCriteria|null */
     protected $queryBuilder = null;
     /** @var array */
     protected $order = [];
@@ -98,58 +98,114 @@ class ListView
     }
 
     /**
-     * @param ListDataEvent $event
-     * @param boolean $onlyResults
-     * @param boolean $returnQueryBuilder
-     * @return ArrayCollection|QueryBuilder|array
+     * @param $queryBuilder
+     * @return array
      */
-    public function getData(ListDataEvent $event, $onlyResults = false, $returnQueryBuilder = false)
+    protected function getQuery($queryBuilder)
     {
-        $data = $this->queryBuilder !== null ? $this->queryBuilder : $event->getData();
+        $data = $this->queryBuilder !== null ? $this->queryBuilder : $queryBuilder;
         if ($data instanceof EntityRepository) {
             $alias = $data->getClassName();
-            $queryBuilder = $data->createQueryBuilder($alias);
+            $query = $data->createQueryBuilder($alias);
         } elseif ($data instanceof QueryBuilder) {
-            $queryBuilder = $data;
-            $aliases = $queryBuilder->getRootAliases();
+            $query = $data;
+            $aliases = $query->getRootAliases();
             $alias = array_values($aliases)[0];
+        } elseif ($data instanceof \ModelCriteria) {
+            $alias = null;
+            $query = $data;
         } else {
             throw new \InvalidArgumentException(
-                'Expected argument of type "EntityRepository or QueryBuilder", ' . get_class($data) . ' given'
+                'Expected argument of type "EntityRepository, QueryBuilder or ModelCriteria", ' . get_class($data) . ' given'
             );
         }
 
+        return [
+            'query' => $query,
+            'alias' => $alias
+        ];
+    }
+
+    /**
+     * @param QueryBuilder|\ModelCriteria $query
+     * @param string|null $alias
+     * @param string|null $column
+     * @param string|null $sort
+     * @param array $ids
+     * @return mixed
+     */
+    protected function applyQueries($query, $alias, $column, $sort, $ids = [])
+    {
+        if ($query instanceof QueryBuilder) {
+            if ($column !== null && $sort !== null) {
+                $query->addOrderBy($alias . '.' . $column, strtoupper($sort));
+            }
+            unset($sort);
+
+            if (!empty($this->order)) {
+                foreach ($this->order as $sort => $order) {
+                    if ($column !== $sort) {
+                        $query->addOrderBy($alias . '.' . $sort, strtoupper($order));
+                    }
+                }
+            }
+
+            if (!empty($ids)) {
+                $query
+                    ->andWhere($alias . '.id IN (:ids)')
+                    ->setParameter('ids', $ids);
+            }
+        } elseif ($query instanceof \ModelCriteria) {
+            if ($column !== null && $sort !== null) {
+                $query->orderBy($column, $sort);
+            }
+            unset($sort);
+
+            if (!empty($this->order)) {
+                foreach ($this->order as $sort => $order) {
+                    if ($column !== $sort) {
+                        $query->orderBy($sort, $order);
+                    }
+                }
+            }
+
+            if (!empty($ids)) {
+                $query->add('id', $ids, \Criteria::IN);
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param ListDataEvent $event
+     * @param boolean $onlyResults
+     * @param boolean $returnQueryBuilder
+     * @return QueryBuilder|\ModelCriteria|array
+     */
+    public function getData(ListDataEvent $event, $onlyResults = false, $returnQueryBuilder = false)
+    {
+        /** @var QueryBuilder|\ModelCriteria $query */
+        $query = null;
+        /** @var string|null $alias */
+        $alias = null;
+        extract($this->getQuery($event->getData()), EXTR_OVERWRITE);
+
         $request = $event->getRequest();
         $routeName = $event->getRouteName();
-        $currentPage = $event->getPage();
         $sort = $event->getSort();
         $limit = $event->getLimit();
         $limit = $limit ?: $this->getLimit();
         $column = $event->getColumn();
+        $ids = $request->get('ids', []);
         $filterForms = [];
         $paginator = null;
 
-        $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder, $request));
+        $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $query, $request));
 
-        if ($column !== null && $sort !== null) {
-            $queryBuilder->addOrderBy($alias . '.' . $column, strtoupper($sort));
-        }
-        unset($sort);
+        $query = $this->applyQueries($query, $alias, $column, $sort, $ids);
 
-        if (!empty($this->order)) {
-            foreach ($this->order as $sort => $order) {
-                if ($column !== $sort) {
-                    $queryBuilder->addOrderBy($alias . '.' . $sort, strtoupper($order));
-                }
-            }
-        }
-
-        $ids = $request->get('ids', []);
-        if (!empty($ids)) {
-            $queryBuilder
-                ->andWhere($alias . '.id IN (:ids)')
-                ->setParameter('ids', $ids);
-        } else {
+        if (empty($ids)) {
             /** @var ListViewFilter $filter */
             foreach ($this->filters as $filter) {
                 $formFactory = $this->factoryEvent->getFormFactory();
@@ -157,19 +213,19 @@ class ListView
 
                 $form->handleRequest($request);
 
-                $listFilterEvent = new ListFilterEvent($routeName, $queryBuilder, $request, $form, $alias);
+                $listFilterEvent = new ListFilterEvent($routeName, $query, $request, $form, $alias);
                 $this->dispatcher->dispatch(ListEvents::FILTER, $listFilterEvent);
 
                 $formFilter = $filter->getFilter();
                 if (is_callable($formFilter)) {
-                    $queryBuilder = call_user_func_array($formFilter, [$listFilterEvent]);
+                    $query = call_user_func_array($formFilter, [$listFilterEvent]);
                 } else {
                     foreach ($formFilter as $field => $fieldFilter) {
-                        $filterEvent = new FilterEvent($queryBuilder, $alias, $field, $form[$field]->getData());
+                        $filterEvent = new FilterEvent($query, $alias, $field, $form[$field]->getData());
                         if (is_callable($fieldFilter)) {
-                            $queryBuilder = call_user_func_array($fieldFilter, [$filterEvent]);
+                            $query = call_user_func_array($fieldFilter, [$filterEvent]);
                         } else {
-                            $queryBuilder = $fieldFilter->apply($filterEvent);
+                            $query = $fieldFilter->apply($filterEvent);
                         }
                     }
                 }
@@ -178,26 +234,20 @@ class ListView
             }
 
             if ($this->paginator) {
-                $this->dispatcher->dispatch(ListEvents::PRE_PAGINATOR, new ListEvent($routeName, $queryBuilder, $request));
+                $this->dispatcher->dispatch(ListEvents::PRE_PAGINATOR, new ListEvent($routeName, $query, $request));
 
                 $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
-                $paginator = $paginatorFactory->get($queryBuilder, $currentPage, $limit);
-
-                $offset = $limit * ($currentPage - 1);
-                $queryBuilder
-                    ->setFirstResult($offset)
-                    ->setMaxResults($limit);
-            } else {
-                $paginator = null;
+                $paginator = $paginatorFactory->get($query, $event->getPage(), $limit);
+                $query = $paginator->paginate();
             }
         }
 
-        $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $queryBuilder, $request));
+        $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $query, $request));
 
         if ($returnQueryBuilder) {
-            return $queryBuilder;
+            return $query;
         } else {
-            $resultsEvent = new ListResultEvent($routeName, $queryBuilder, $request, $queryBuilder->getQuery()->getResult());
+            $resultsEvent = new ListResultEvent($routeName, $query, $request);
             $results = $this->dispatcher->dispatch(ListEvents::RESULTS, $resultsEvent)->getResults();
 
             if ($onlyResults) {
@@ -212,7 +262,6 @@ class ListView
                 ];
             }
         }
-
     }
 
     /**
@@ -412,7 +461,7 @@ class ListView
     }
 
     /**
-     * @return QueryBuilder|null
+     * @return QueryBuilder|\ModelCriteria|null
      */
     public function getQueryBuilder()
     {
@@ -420,10 +469,10 @@ class ListView
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
+     * @param QueryBuilder|\ModelCriteria $queryBuilder
      * @return $this
      */
-    public function setQueryBuilder(QueryBuilder $queryBuilder)
+    public function setQueryBuilder($queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
 
