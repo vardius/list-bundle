@@ -10,6 +10,8 @@ Configuration
 
 ### Create your entity
 
+**Doctrine** and **Propel** are supported
+
 ``` php
     /**
      * Product
@@ -41,7 +43,6 @@ Configuration
 ```
 
 ### Create ListViewProvider
-Entity class
 
 ``` php
     <?php
@@ -83,7 +84,8 @@ Service:
 
 ### Usage
 
-In your action you can use list as follows:
+In your action you can use list as presented in the class example below.
+*Notice* that you can pass to ListDataEvent your `EntityRepository|QueryBuilder|\ModelCriteria` as a first argument.
 
 ``` php
 <?php
@@ -98,7 +100,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @Route("/example")
  */
-class OverlaysController extends Controller
+class ProductController extends Controller
 {
     /**
      * @Route("/list", name="example_list")
@@ -106,10 +108,22 @@ class OverlaysController extends Controller
      */
     public function listAction(Request $request)
     {
+        //Doctrine EntityRepository example
         $entityManager = $this->get('doctrine.orm.entity_manager');
         $repository = $entityManager->getRepository('AppBundle:Product');
-        $listView = $this->get('app.product.list_view');
         $listDataEvent = new ListDataEvent($repository, $request);
+        
+        //Doctrine QueryBuilder example
+        $queryBuilder = $repository->createQueryBuilder('p')
+            ->where('p.price > :price')
+            ->setParameter('price', '19.99');
+        $listDataEvent = new ListDataEvent($queryBuilder, $request);
+        
+        //Propel example
+        $query = \PropelQuery::from('AppBundle\Product');
+        $listDataEvent = new ListDataEvent($query, $request);
+        
+        $listView = $this->get('app.product.list_view');
         
         return [
             'list' => $listView->render($listDataEvent),

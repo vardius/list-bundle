@@ -10,8 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Paginator;
 
-use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Twig\TwigEngine;
 
 /**
@@ -19,7 +17,7 @@ use Symfony\Bridge\Twig\TwigEngine;
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class Paginator
+abstract class Paginator implements PaginatorInterface
 {
     /** @var  int */
     protected $page;
@@ -33,42 +31,7 @@ class Paginator
     protected $templatePath;
 
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param $page
-     * @param $limit
-     */
-    function __construct(QueryBuilder $queryBuilder, $page, $limit)
-    {
-        $this->page = $page;
-        $this->limit = $limit;
-
-        $aliases = $queryBuilder->getRootAliases();
-        $alias = array_values($aliases)[0];
-
-        $cloneQueryBuilder = clone $queryBuilder;
-        $from = $cloneQueryBuilder->getDQLPart('from');
-
-        $cloneQueryBuilder->resetDQLParts();
-
-        //SQL Walkers error
-        //http://doctrine-orm.readthedocs.org/projects/doctrine-orm/en/latest/cookbook/dql-custom-walkers.html
-
-        $newQueryBuilder = $cloneQueryBuilder
-            ->select('count(' . $alias . '.id)')
-            ->add('from', $from[0])
-            ->setParameters([]);
-
-        try {
-            $this->total = $newQueryBuilder->getQuery()->getSingleScalarResult();
-        } catch (NoResultException $e) {
-            $this->total = 0;
-        }
-    }
-
-    /**
-     * Renders view
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function render()
     {
@@ -81,9 +44,7 @@ class Paginator
     }
 
     /**
-     * Returns last page number
-     *
-     * @return float
+     * {@inheritdoc}
      */
     public function getLastPage()
     {
@@ -91,9 +52,7 @@ class Paginator
     }
 
     /**
-     * Returns current page number
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getCurrentPage()
     {
@@ -101,9 +60,7 @@ class Paginator
     }
 
     /**
-     * Returns previous page number
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getPreviousPage()
     {
@@ -111,9 +68,7 @@ class Paginator
     }
 
     /**
-     * Returns next page number
-     *
-     * @return float
+     * {@inheritdoc}
      */
     public function getNextPage()
     {
@@ -121,7 +76,7 @@ class Paginator
     }
 
     /**
-     * @return TwigEngine
+     * {@inheritdoc}
      */
     public function getTemplating()
     {
@@ -129,7 +84,7 @@ class Paginator
     }
 
     /**
-     * @param TwigEngine $templating
+     * {@inheritdoc}
      */
     public function setTemplating($templating)
     {
@@ -137,7 +92,7 @@ class Paginator
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getTemplatePath()
     {
@@ -145,7 +100,7 @@ class Paginator
     }
 
     /**
-     * @param string $templatePath
+     * {@inheritdoc}
      */
     public function setTemplatePath($templatePath)
     {

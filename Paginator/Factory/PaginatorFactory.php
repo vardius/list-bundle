@@ -12,7 +12,9 @@ namespace Vardius\Bundle\ListBundle\Paginator\Factory;
 
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Twig\TwigEngine;
-use Vardius\Bundle\ListBundle\Paginator\Paginator;
+use Vardius\Bundle\ListBundle\Paginator\PaginatorInterface;
+use Vardius\Bundle\ListBundle\Paginator\Doctrine\Paginator as DoctrinePaginator;
+use Vardius\Bundle\ListBundle\Paginator\Propel\Paginator as PropelPaginator;
 
 /**
  * PaginatorFactory
@@ -36,9 +38,24 @@ class PaginatorFactory
         $this->templatePath = $templatePath;
     }
 
-    public function get(QueryBuilder $queryBuilder, $page, $limit)
+    /**
+     * @param QueryBuilder|\ModelCriteria $queryBuilder
+     * @param $page
+     * @param $limit
+     * @return PaginatorInterface
+     */
+    public function get($queryBuilder, $page, $limit)
     {
-        $paginator = new Paginator($queryBuilder, $page, $limit);
+        if ($queryBuilder instanceof QueryBuilder) {
+            $paginator = new DoctrinePaginator($queryBuilder, $page, $limit);
+        } elseif ($queryBuilder instanceof \ModelCriteria) {
+            $paginator = new PropelPaginator($queryBuilder, $page, $limit);
+        } else {
+            throw new \InvalidArgumentException(
+                'Expected argument of type "QueryBuilder or ModelCriteria", ' . get_class($queryBuilder) . ' given'
+            );
+        }
+
         $paginator->setTemplatePath($this->templatePath);
         $paginator->setTemplating($this->templating);
 

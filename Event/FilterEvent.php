@@ -19,7 +19,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class FilterEvent
 {
-    /** @var QueryBuilder */
+    /** @var QueryBuilder|\ModelCriteria */
     protected $queryBuilder;
     /** @var string */
     protected $alias;
@@ -30,12 +30,12 @@ class FilterEvent
 
     /**
      * FilterEvent constructor.
-     * @param QueryBuilder $queryBuilder
+     * @param QueryBuilder|\ModelCriteria $queryBuilder
      * @param string $alias
      * @param string $field
      * @param string $value
      */
-    public function __construct(QueryBuilder $queryBuilder, $alias, $field, $value)
+    public function __construct($queryBuilder, $alias, $field, $value)
     {
         $this->queryBuilder = $queryBuilder;
         $this->alias = $alias;
@@ -44,7 +44,7 @@ class FilterEvent
     }
 
     /**
-     * @return QueryBuilder
+     * @return QueryBuilder|\ModelCriteria
      */
     public function getQueryBuilder()
     {

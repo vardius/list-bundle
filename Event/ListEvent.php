@@ -24,17 +24,17 @@ class ListEvent extends Event
 {
     /** @var  string */
     protected $routeName;
-    /** @var QueryBuilder */
+    /** @var QueryBuilder|\ModelCriteria */
     protected $queryBuilder;
     /** @var  Request */
     protected $request;
 
     /**
      * @param $routeName
-     * @param QueryBuilder $queryBuilder
+     * @param QueryBuilder|\ModelCriteria $queryBuilder
      * @param Request $request
      */
-    function __construct($routeName, QueryBuilder $queryBuilder, Request $request)
+    function __construct($routeName, $queryBuilder, Request $request)
     {
         $this->routeName = $routeName;
         $this->queryBuilder = $queryBuilder;
@@ -50,7 +50,7 @@ class ListEvent extends Event
     }
 
     /**
-     * @return QueryBuilder
+     * @return QueryBuilder|\ModelCriteria
      */
     public function getQueryBuilder()
     {
@@ -63,5 +63,35 @@ class ListEvent extends Event
     public function getRequest()
     {
         return $this->request;
+    }
+
+    /**
+     * @param string $routeName
+     * @return ListEvent
+     */
+    public function setRouteName($routeName)
+    {
+        $this->routeName = $routeName;
+        return $this;
+    }
+
+    /**
+     * @param QueryBuilder|\ModelCriteria $queryBuilder
+     * @return ListEvent
+     */
+    public function setQueryBuilder($queryBuilder)
+    {
+        $this->queryBuilder = $queryBuilder;
+        return $this;
+    }
+
+    /**
+     * @param Request $request
+     * @return ListEvent
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+        return $this;
     }
 }

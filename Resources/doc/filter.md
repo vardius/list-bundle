@@ -27,9 +27,13 @@ There are multiple options to apply filter to your list, first of them you may a
 
                     $name = $formData['name'];
 
+                    //Doctrine example
                     $queryBuilder
                         ->andWhere($alias.'.name = :name')
                         ->setParameter('name', $name);
+                        
+                    //Propel example
+                    $queryBuilder->filterByName($name);
 
                     return $queryBuilder;
                 });
@@ -80,11 +84,15 @@ class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterPr
             ])
             ->addFilter('dateFrom', function (FilterEvent $event) {
                 $queryBuilder = $event->getQueryBuilder();
-                $expression = $queryBuilder->expr();
                 
+                //Doctrine example
+                $expression = $queryBuilder->expr();
                 $queryBuilder
                     ->andWhere($expression->gte($event->getAlias().'.date', ':date'))
                     ->setParameter('date', $event->getValue());
+                    
+                //Propel example
+                $queryBuilder->filterByDate(["min" => $event->getValue()])
                 
                 return $queryBuilder;
             });
