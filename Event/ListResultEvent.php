@@ -35,7 +35,11 @@ class ListResultEvent extends ListEvent
         if ($queryBuilder instanceof QueryBuilder) {
             $this->results = $queryBuilder->getQuery()->getResult();
         } elseif ($queryBuilder instanceof \ModelCriteria) {
-            $this->results = $queryBuilder->find();
+            $results = $queryBuilder->find();
+
+            if ($this->results instanceof \PropelObjectCollection) {
+                $this->results = $results->toArray();
+            }
         }
     }
 
