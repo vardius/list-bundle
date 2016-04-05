@@ -28,3 +28,7 @@ RELEASE NOTES
 **0.6.0**
 
 - Major fixes for filters
+
+**0.7.0**
+
+- Propel support

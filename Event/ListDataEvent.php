@@ -24,11 +24,11 @@ class ListDataEvent
 {
     /** @var  Request */
     protected $request;
-    /** @var EntityRepository|QueryBuilder */
+    /** @var EntityRepository|QueryBuilder|\ModelCriteria */
     protected $data;
 
     /**
-     * @param EntityRepository|QueryBuilder $data
+     * @param EntityRepository|QueryBuilder|\ModelCriteria $data
      * @param Request $request
      */
     function __construct($data, Request $request)
@@ -46,7 +46,7 @@ class ListDataEvent
     }
 
     /**
-     * @return EntityRepository|QueryBuilder
+     * @return EntityRepository|QueryBuilder|\ModelCriteria
      */
     public function getData()
     {

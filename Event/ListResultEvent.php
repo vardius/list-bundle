@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Event;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,27 +20,40 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ListResultEvent extends ListEvent
 {
-    /** @var ArrayCollection */
+    /** @var array */
     protected $results;
 
     /**
      * @param string $routeName
-     * @param QueryBuilder $queryBuilder
+     * @param QueryBuilder|\ModelCriteria $queryBuilder
      * @param Request $request
-     * @param array $results
      */
-    function __construct($routeName, QueryBuilder $queryBuilder, Request $request, array $results)
+    function __construct($routeName, $queryBuilder, Request $request)
     {
         parent::__construct($routeName, $queryBuilder, $request);
 
-        $this->results = new ArrayCollection($results);
+        if ($queryBuilder instanceof QueryBuilder) {
+            $this->results = $queryBuilder->getQuery()->getResult();
+        } elseif ($queryBuilder instanceof \ModelCriteria) {
+            $this->results = $queryBuilder->find();
+        }
     }
 
     /**
-     * @return ArrayCollection
+     * @return array
      */
     public function getResults()
     {
         return $this->results;
+    }
+
+    /**
+     * @param array $results
+     * @return ListResultEvent
+     */
+    public function setResults($results)
+    {
+        $this->results = $results;
+        return $this;
     }
 }
