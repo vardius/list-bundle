@@ -35,7 +35,7 @@ class EntityType extends FilterType
         $resolver->addAllowedTypes('multiple', 'boolean');
         $resolver->addAllowedTypes('property', 'string');
         $resolver->addAllowedTypes('joinType', 'string');
-        $resolver->addAllowedValues(['joinType' => ['leftJoin', 'innerJoin', 'join']]);
+        $resolver->addAllowedValues('joinType', ['leftJoin', 'innerJoin', 'join']);
     }
 
     /**

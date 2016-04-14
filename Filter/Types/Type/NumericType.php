@@ -31,7 +31,7 @@ class NumericType extends FilterType
 
         $resolver->setDefault('condition', 'eq');
         $resolver->addAllowedTypes('condition', 'string');
-        $resolver->addAllowedValues(['condition' => ['eq', 'neq', 'lt', 'lte', 'gt', 'gte']]);
+        $resolver->addAllowedValues('condition', ['eq', 'neq', 'lt', 'lte', 'gt', 'gte']);
     }
 
     /**
