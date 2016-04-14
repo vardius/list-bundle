@@ -1,0 +1,10 @@
+{% for action in actions %}
+    <a href="{{ path(action.path, action.parameters) }}">
+        {% if action.icon is not null %}
+            <i class="fa {{ action.icon }}"></i>
+        {% endif %}
+        {% if action.name is not null %}
+            {{ action.name }}
+        {% endif %}
+    </a>
+{% endfor %}

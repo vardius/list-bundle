@@ -1,0 +1,11 @@
+{% if entity is not defined or entity is null %}
+    <input type="checkbox"
+           class="list-option-{{ option.property }}"
+           name="{{ option.property }}"
+           value=""/>
+{% else %}
+    <input type="checkbox"
+           class="list-option-{{ option.property }}"
+           name="{{ option.property }}"
+           value="{{ entity.id }}"/>
+{% endif %}

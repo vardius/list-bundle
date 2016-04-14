@@ -1,0 +1,7 @@
+{% if action is defined and action is not null and action is not empty %}
+<a href="{{ path(action.path, action.parameters) }}">
+    {% endif %}
+    <img src="{{ property }}"/>
+    {% if action is defined and action is not null %}
+</a>
+{% endif %}

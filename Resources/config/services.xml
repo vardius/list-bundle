@@ -1,0 +1,139 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <!--LIST-->
+        <parameter key="vardius_list.list_view.class">Vardius\Bundle\ListBundle\ListView\ListView</parameter>
+        <parameter key="vardius_list.list_view.factory.class">Vardius\Bundle\ListBundle\ListView\Factory\ListViewFactory</parameter>
+        <parameter key="vardius_list.list_view.provider.class">Vardius\Bundle\ListBundle\ListView\Provider\ListViewProvider</parameter>
+        <!--FILTER-->
+        <parameter key="vardius_list.list_view_filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory</parameter>
+        <parameter key="vardius_list.filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\FilterFactory</parameter>
+        <parameter key="vardius_list.filter_type_pool.class">Vardius\Bundle\ListBundle\Filter\Types\FilterTypePool</parameter>
+        <parameter key="vardius_list.filter.provider.class">Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider</parameter>
+        <parameter key="vardius_list.filter_type.date.class">Vardius\Bundle\ListBundle\Filter\Types\Type\DateType</parameter>
+        <parameter key="vardius_list.filter_type.text.class">Vardius\Bundle\ListBundle\Filter\Types\Type\TextType</parameter>
+        <parameter key="vardius_list.filter_type.numeric.class">Vardius\Bundle\ListBundle\Filter\Types\Type\NumericType</parameter>
+        <parameter key="vardius_list.filter_type.entity.class">Vardius\Bundle\ListBundle\Filter\Types\Type\EntityType</parameter>
+        <parameter key="vardius_list.filter_type.property.class">Vardius\Bundle\ListBundle\Filter\Types\Type\PropertyType</parameter>
+        <!--COLUMN-->
+        <parameter key="vardius_list.column.class">Vardius\Bundle\ListBundle\Column\Column</parameter>
+        <parameter key="vardius_list.column.factory.class">Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory</parameter>
+        <parameter key="vardius_list.column_type_pool.class">Vardius\Bundle\ListBundle\Column\Types\ColumnTypePool</parameter>
+        <parameter key="vardius_list.column_type.property.class">Vardius\Bundle\ListBundle\Column\Types\Type\PropertyColumnType</parameter>
+        <parameter key="vardius_list.column_type.option.class">Vardius\Bundle\ListBundle\Column\Types\Type\OptionColumnType</parameter>
+        <parameter key="vardius_list.column_type.callable.class">Vardius\Bundle\ListBundle\Column\Types\Type\CallableColumnType</parameter>
+        <parameter key="vardius_list.column_type.date.class">Vardius\Bundle\ListBundle\Column\Types\Type\DateColumnType</parameter>
+        <parameter key="vardius_list.column_type.image.class">Vardius\Bundle\ListBundle\Column\Types\Type\ImageColumnType</parameter>
+        <parameter key="vardius_list.column_type.raw.class">Vardius\Bundle\ListBundle\Column\Types\Type\RawColumnType</parameter>
+        <parameter key="vardius_list.column_type.action.class">Vardius\Bundle\ListBundle\Column\Types\Type\ActionColumnType</parameter>
+        <!--ACTION-->
+        <parameter key="vardius_list.action.class">Vardius\Bundle\ListBundle\Action\Action</parameter>
+        <parameter key="vardius_list.action.factory.class">Vardius\Bundle\ListBundle\Action\Factory\ActionFactory</parameter>
+        <!--PAGINATOR-->
+        <parameter key="vardius_list.paginator.class">Vardius\Bundle\ListBundle\Paginator\Paginator</parameter>
+        <parameter key="vardius_list.paginator.factory.class">Vardius\Bundle\ListBundle\Paginator\Factory\PaginatorFactory</parameter>
+        <!--RESPONSE HANDLER-->
+        <parameter key="vardius_list.view.renderer.class">Vardius\Bundle\ListBundle\View\Renderer</parameter>
+    </parameters>
+
+    <services>
+        <service id="vardius_list.view.renderer" class="%vardius_list.view.renderer.class%">
+            <argument type="service" id="templating"/>
+        </service>
+
+        <service id="vardius_list.list_view.factory" class="%vardius_list.list_view.factory.class%">
+            <argument>%vardius_list.limit%</argument>
+            <argument>%vardius_list.title%</argument>
+            <argument>%vardius_list.paginator%</argument>
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="vardius_list.column.factory" class="%vardius_list.column.factory.class%">
+            <argument type="service" id="vardius_list.column_type_pool"/>
+            <argument type="service" id="templating"/>
+        </service>
+
+        <service id="vardius_list.list_view.provider" class="%vardius_list.list_view.provider.class%" abstract="true">
+            <argument type="service" id="vardius_list.list_view.factory"/>
+        </service>
+
+        <service id="vardius_list.paginator.factory" class="%vardius_list.paginator.factory.class%">
+            <argument type="service" id="templating"/>
+        </service>
+
+        <service id="vardius_list.action.factory" class="%vardius_list.action.factory.class%"/>
+
+        <!--FILTER-->
+        <service id="vardius_list.list_view_filter.factory" class="%vardius_list.list_view_filter.factory.class%">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="vardius_list.filter.factory" class="%vardius_list.filter.factory.class%">
+            <argument type="service" id="vardius_list.filter_type_pool"/>
+        </service>
+
+        <service id="vardius_list.filter.provider" class="%vardius_list.filter.provider.class%" abstract="true">
+            <argument type="service" id="vardius_list.filter.factory"/>
+        </service>
+
+        <!--FILTER POOL-->
+        <service id="vardius_list.filter_type_pool" class="%vardius_list.filter_type_pool.class%" />
+
+        <!--FILTER TYPES-->
+        <service id="vardius_list.filter_type.date" class="%vardius_list.filter_type.date.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
+        <service id="vardius_list.filter_type.text" class="%vardius_list.filter_type.text.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
+        <service id="vardius_list.filter_type.numeric" class="%vardius_list.filter_type.numeric.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
+        <service id="vardius_list.filter_type.entity" class="%vardius_list.filter_type.entity.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
+        <service id="vardius_list.filter_type.property" class="%vardius_list.filter_type.property.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
+
+        <!--COLUMN POOL-->
+        <service id="vardius_list.column_type_pool" class="%vardius_list.column_type_pool.class%" />
+
+        <!--COLUM TYPES-->
+        <service id="vardius_list.column_type.property" class="%vardius_list.column_type.property.class%">
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.option" class="%vardius_list.column_type.option.class%">
+            <argument type="service" id="templating"/>
+
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.callable" class="%vardius_list.column_type.callable.class%">
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.date" class="%vardius_list.column_type.date.class%">
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.image" class="%vardius_list.column_type.image.class%">
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.raw" class="%vardius_list.column_type.raw.class%">
+            <tag name="vardius_list.column_type" />
+        </service>
+
+        <service id="vardius_list.column_type.action" class="%vardius_list.column_type.action.class%">
+            <argument type="service" id="vardius_list.action.factory"/>
+
+            <tag name="vardius_list.column_type" />
+        </service>
+    </services>
+</container>

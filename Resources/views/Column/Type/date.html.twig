@@ -1,0 +1,11 @@
+{% if action is defined and action is not null and action is not empty %}
+<a href="{{ path(action.path, action.parameters) }}">
+    {% endif %}
+    {% if format is defined and format is not null %}
+        {{ property|date(format) }}
+    {% else %}
+        {{ property|date("m/d/Y") }}
+    {% endif %}
+    {% if action is defined and action is not null %}
+</a>
+{% endif %}
