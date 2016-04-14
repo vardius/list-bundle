@@ -20,7 +20,6 @@ There are multiple options to apply filter to your list, first of them you may a
             $listView
                 ...
                 ->addFilter('product_filter', function (ListFilterEvent $event) {
-
                     $formData = $event->getData();
                     $queryBuilder = $event->getQueryBuilder();
                     $alias = $event->getAlias();

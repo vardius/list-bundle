@@ -26,7 +26,7 @@ class TextType extends FilterType
      */
     public function apply(FilterEvent $event, array $options)
     {
-        $queryBuilder = $event->getQueryBuilder();
+        $queryBuilder = $event->getQuery();
         $value = $event->getValue();
 
         if ($value) {
