@@ -12,6 +12,9 @@ namespace Vardius\Bundle\ListBundle\ListView;
 
 use Vardius\Bundle\ListBundle\Action\Action;
 use Vardius\Bundle\ListBundle\Action\ActionInterface;
+use Vardius\Bundle\ListBundle\Collection\ActionCollection;
+use Vardius\Bundle\ListBundle\Collection\ColumnCollection;
+use Vardius\Bundle\ListBundle\Collection\FilterCollection;
 use Vardius\Bundle\ListBundle\Column\Column;
 use Vardius\Bundle\ListBundle\Column\ColumnInterface;
 use Vardius\Bundle\ListBundle\Data\Factory\DataProviderFactory;
@@ -51,11 +54,11 @@ class ListView
     protected $paginator;
     /** @var  ContainerInterface */
     protected $container;
-    /** @var  ArrayCollection|ColumnInterface[] */
+    /** @var  ColumnCollection|ColumnInterface[] */
     protected $columns;
-    /** @var  ArrayCollection|ActionInterface */
+    /** @var  ActionCollection|ActionInterface */
     protected $actions;
-    /** @var ArrayCollection|FilterInterface[] */
+    /** @var  FilterCollection|FilterInterface[] */
     protected $filters;
     /** @var  EntityRepository|QueryBuilder|\ModelCriteria|null */
     protected $query = null;
@@ -72,9 +75,9 @@ class ListView
         $this->dbDriver = $dbDriver;
         $this->paginator = $paginator;
         $this->container = $container;
-        $this->columns = new ArrayCollection();
-        $this->filters = new ArrayCollection();
-        $this->actions = new ArrayCollection();
+        $this->columns = new ColumnCollection($container->get('vardius_list.column.factory'));
+        $this->filters = new FilterCollection($container->get('vardius_list.list_view_filter.factory'));
+        $this->actions = new ActionCollection($container->get('vardius_list.action.factory'));
     }
 
     /**
@@ -280,7 +283,7 @@ class ListView
     }
 
     /**
-     * @return ArrayCollection|ColumnInterface[]
+     * @return ColumnCollection|ColumnInterface[]
      */
     public function getColumns()
     {
@@ -295,9 +298,7 @@ class ListView
      */
     public function addColumn($name, $type, array $options = [])
     {
-        $columnFactory = $this->container->get('vardius_list.column.factory');
-        $column = $columnFactory->get($name, $type, $options);
-        $this->columns->add($column);
+        $this->columns->add($name, $type, $options);
 
         return $this;
     }
@@ -330,9 +331,7 @@ class ListView
      */
     public function addAction($path, $name = null, $icon = null, $parameters = [])
     {
-        $actionFactory = $this->container->get('vardius_list.action.factory');
-        $action = $actionFactory->get($path, $name, $icon, $parameters);
-        $this->actions->add($action);
+        $this->actions->add($path, $name, $icon, $parameters);
 
         return $this;
     }
@@ -363,9 +362,7 @@ class ListView
      */
     public function addFilter($formType, $filter)
     {
-        $filterFactory = $this->container->get('vardius_list.list_view_filter.factory');
-        $filter = $filterFactory->get($formType, $filter);
-        $this->filters->add($filter);
+        $this->filters->add($formType, $filter);
 
         return $this;
     }
