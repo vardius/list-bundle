@@ -32,3 +32,7 @@ RELEASE NOTES
 **0.7.0**
 
 - Propel support
+
+**0.7.1**
+
+- Add data providers
