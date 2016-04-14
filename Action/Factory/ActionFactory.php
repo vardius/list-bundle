@@ -10,7 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Action\Factory;
 
-
+use Vardius\Bundle\CrudBundle\Actions\ActionInterface;
 use Vardius\Bundle\ListBundle\Action\Action;
 
 /**
@@ -25,7 +25,7 @@ class ActionFactory
      * @param string $name
      * @param string $icon
      * @param array $parameters
-     * @return Action
+     * @return ActionInterface
      */
     public function get($path, $name = null, $icon = null, $parameters = [])
     {

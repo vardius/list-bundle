@@ -9,6 +9,8 @@
         <parameter key="vardius_list.list_view.class">Vardius\Bundle\ListBundle\ListView\ListView</parameter>
         <parameter key="vardius_list.list_view.factory.class">Vardius\Bundle\ListBundle\ListView\Factory\ListViewFactory</parameter>
         <parameter key="vardius_list.list_view.provider.class">Vardius\Bundle\ListBundle\ListView\Provider\ListViewProvider</parameter>
+        <!--DATA PROVIDER-->
+        <parameter key="vardius_list.data_provider.factory.class">Vardius\Bundle\ListBundle\Data\Factory\DataProviderFactory</parameter>
         <!--FILTER-->
         <parameter key="vardius_list.list_view_filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory</parameter>
         <parameter key="vardius_list.filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\FilterFactory</parameter>
@@ -47,10 +49,12 @@
 
         <service id="vardius_list.list_view.factory" class="%vardius_list.list_view.factory.class%">
             <argument>%vardius_list.limit%</argument>
-            <argument>%vardius_list.title%</argument>
+            <argument>%vardius_list.db_driver%</argument>
             <argument>%vardius_list.paginator%</argument>
             <argument type="service" id="service_container"/>
         </service>
+
+        <service id="vardius_list.data_provider.factory" class="%vardius_list.data_provider.factory.class%"/>
 
         <service id="vardius_list.column.factory" class="%vardius_list.column.factory.class%">
             <argument type="service" id="vardius_list.column_type_pool"/>

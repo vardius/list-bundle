@@ -48,7 +48,7 @@ Create your provider class:
                 ->setTitle('Page title') //set page title
                 ->setLimit(10) // set the entries per page
                 ->addOrder('name', 'DESC') // set order for column
-                ->setQueryBuilder($entityManager->getRepository('AppBundle:Product')->getCustomQueryBuilder()) //set custom query builder
+                ->setQuery($entityManager->getRepository('AppBundle:Product')->getCustomQueryBuilder()) //set custom query builder, or model criteria
                 ->addColumn('name', 'property', [ // add column
                     'sort' => true, //enable colum sorting
                     'label' => 'My Label', //custom column label
