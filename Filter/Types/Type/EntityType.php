@@ -51,12 +51,11 @@ class EntityType extends FilterType
 
             $queryBuilder->{$options['joinType']}($event->getAlias() . '.' . $field, $field);
 
-            if ($options['multiple'] && is_array($value)) {
+            if ($options['multiple']) {
+                $value = is_array($value) ?: [$value];
                 $queryBuilder->where($field . '.' . $options['property'] . 'IN(:vardius_entity_' . $field . ')');
-            } elseif (!$options['multiple']) {
-                $queryBuilder->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $field);
             } else {
-                throw new \InvalidArgumentException('The value mast be array if $options[\'multiple\'] is set to true. ' . $value . ' given with multiple: ' . $options['multiple']);
+                $queryBuilder->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $field);
             }
 
             $queryBuilder->setParameter('vardius_entity_' . $field, $value);
