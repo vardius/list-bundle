@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Event;
 
-
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
