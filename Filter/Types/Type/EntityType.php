@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Filter\Types\Type;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
@@ -46,14 +47,18 @@ class EntityType extends FilterType
         $queryBuilder = $event->getQuery();
         $value = $event->getValue();
 
-        if ($value) {
+        if ($value instanceof ArrayCollection) {
+            $value = $value->toArray();
+        }
+
+        if ($value && !empty($value)) {
             $field = empty($options['field']) ? $event->getField() : $options['field'];
 
             $queryBuilder->{$options['joinType']}($event->getAlias() . '.' . $field, $field);
 
             if ($options['multiple']) {
                 $value = is_array($value) ?: [$value];
-                $queryBuilder->where($field . '.' . $options['property'] . 'IN(:vardius_entity_' . $field . ')');
+                $queryBuilder->where($field . '.' . $options['property'] . ' IN(:vardius_entity_' . $field . ')');
             } else {
                 $queryBuilder->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $field);
             }

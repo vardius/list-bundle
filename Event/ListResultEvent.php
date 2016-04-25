@@ -25,17 +25,17 @@ class ListResultEvent extends ListEvent
 
     /**
      * @param string $routeName
-     * @param QueryBuilder|\ModelCriteria $queryBuilder
+     * @param QueryBuilder|\ModelCriteria $query
      * @param Request $request
      */
-    function __construct($routeName, $queryBuilder, Request $request)
+    function __construct($routeName, $query, Request $request)
     {
-        parent::__construct($routeName, $queryBuilder, $request);
+        parent::__construct($routeName, $query, $request);
 
-        if ($queryBuilder instanceof QueryBuilder) {
-            $this->results = $queryBuilder->getQuery()->getResult();
-        } elseif ($queryBuilder instanceof \ModelCriteria) {
-            $results = $queryBuilder->find();
+        if ($query instanceof QueryBuilder) {
+            $this->results = $query->getQuery()->getResult();
+        } elseif ($query instanceof \ModelCriteria) {
+            $results = $query->find();
 
             if ($results instanceof \PropelObjectCollection) {
                 $this->results = $results->toArray();
