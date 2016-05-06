@@ -58,12 +58,12 @@ class EntityType extends FilterType
 
             if ($options['multiple']) {
                 $value = is_array($value) ?: [$value];
-                $queryBuilder->where($field . '.' . $options['property'] . ' IN(:vardius_entity_' . $field . ')');
+                $queryBuilder->where($field . '.' . $options['property'] . ' IN(:vardius_entity_' . $event->getField() . ')');
             } else {
-                $queryBuilder->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $field);
+                $queryBuilder->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $event->getField());
             }
 
-            $queryBuilder->setParameter('vardius_entity_' . $field, $value);
+            $queryBuilder->setParameter('vardius_entity_' . $event->getField(), $value);
         }
 
         return $queryBuilder;
