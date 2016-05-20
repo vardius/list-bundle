@@ -127,11 +127,13 @@ class ListView
                     $query = call_user_func_array($formFilter, [$listFilterEvent]);
                 } else {
                     foreach ($formFilter as $field => $fieldFilter) {
-                        $filterEvent = new FilterEvent($query, $alias, $field, $form[$field]->getData());
-                        if (is_callable($fieldFilter)) {
-                            $query = call_user_func_array($fieldFilter, [$filterEvent]);
-                        } else {
-                            $query = $fieldFilter->apply($filterEvent);
+                        if ($form->has($field)) {
+                            $filterEvent = new FilterEvent($query, $alias, $field, $form[$field]->getData());
+                            if (is_callable($fieldFilter)) {
+                                $query = call_user_func_array($fieldFilter, [$filterEvent]);
+                            } else {
+                                $query = $fieldFilter->apply($filterEvent);
+                            }
                         }
                     }
                 }
