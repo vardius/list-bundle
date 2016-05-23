@@ -104,6 +104,8 @@ class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterPr
 
 `date` - available options: `['filed' => 'field name', 'condition' => 'eq|neq|lt|lte|gt|gte']`
 
+`null` - available options: `['filed' => 'field name']`
+
 `text` - available options: `['filed' => 'field name']`
 
 `numeric` - available options: `['filed' => 'field name', 'condition' => 'eq|neq|lt|lte|gt|gte']`
