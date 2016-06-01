@@ -10,26 +10,28 @@
 
 namespace Vardius\Bundle\ListBundle\ListView;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormTypeInterface;
-use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Vardius\Bundle\ListBundle\Action\Action;
+use Vardius\Bundle\ListBundle\Action\ActionInterface;
+use Vardius\Bundle\ListBundle\Collection\ActionCollection;
+use Vardius\Bundle\ListBundle\Collection\ColumnCollection;
+use Vardius\Bundle\ListBundle\Collection\FilterCollection;
 use Vardius\Bundle\ListBundle\Column\Column;
 use Vardius\Bundle\ListBundle\Column\ColumnInterface;
-use Vardius\Bundle\ListBundle\Event\FactoryEvent;
+use Vardius\Bundle\ListBundle\Data\Factory\DataProviderFactory;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvents;
 use Vardius\Bundle\ListBundle\Event\ListFilterEvent;
 use Vardius\Bundle\ListBundle\Event\ListResultEvent;
+use Vardius\Bundle\ListBundle\Filter\FilterInterface;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
-use Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider;
-use Vardius\Bundle\ListBundle\View\RendererInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Form\ResolvedFormTypeInterface;
 
 /**
  * ListView
@@ -38,143 +40,44 @@ use Vardius\Bundle\ListBundle\View\RendererInterface;
  */
 class ListView
 {
-    /** @var FactoryEvent */
-    protected $factoryEvent;
+    /** @var string */
+    protected $dbDriver;
     /** @var int */
     protected $limit;
     /** @var string */
-    protected $title;
-    /** @var  ArrayCollection|ColumnInterface[] */
-    protected $columns;
-    /** @var  ArrayCollection */
-    protected $actions;
-    /** @var ArrayCollection */
-    protected $filters;
+    protected $title = '';
     /** @var  string */
     protected $view;
-    /** @var  QueryBuilder|\ModelCriteria|null */
-    protected $queryBuilder = null;
     /** @var array */
     protected $order = [];
     /** @var boolean */
     protected $paginator;
-    /** @var  RendererInterface */
-    protected $renderer;
-    /** @var  EventDispatcherInterface */
-    protected $dispatcher;
+    /** @var  ContainerInterface */
+    protected $container;
+    /** @var  ColumnCollection|ColumnInterface[] */
+    protected $columns;
+    /** @var  ActionCollection|ActionInterface */
+    protected $actions;
+    /** @var  FilterCollection|FilterInterface[] */
+    protected $filters;
+    /** @var  EntityRepository|QueryBuilder|\ModelCriteria|null */
+    protected $query = null;
 
     /**
      * @param ContainerInterface $container
      * @param int $limit
-     * @param string $title
+     * @param string $dbDriver
      * @param boolean $paginator
-     * @param EventDispatcherInterface $eventDispatcher
      */
-    function __construct(
-        ContainerInterface $container,
-        $limit,
-        $title,
-        $paginator,
-        EventDispatcherInterface $eventDispatcher
-    )
+    function __construct($limit, $dbDriver, $paginator, ContainerInterface $container)
     {
-        $formFactory = $container->get('form.factory');
-        $columnFactory = $container->get('vardius_list.column.factory');
-        $actionFactory = $container->get('vardius_list.action.factory');
-        $filterFactory = $container->get('vardius_list.list_view_filter.factory');
-        $paginatorFactory = $container->get('vardius_list.paginator.factory');
-
-        $event = new FactoryEvent($formFactory, $columnFactory, $actionFactory, $filterFactory, $paginatorFactory);
-
         $this->limit = $limit;
-        $this->title = $title;
+        $this->dbDriver = $dbDriver;
         $this->paginator = $paginator;
-        $this->factoryEvent = $event;
-        $this->dispatcher = $eventDispatcher;
-        $this->renderer = $container->get('vardius_list.view.renderer');
-        $this->columns = new ArrayCollection();
-        $this->filters = new ArrayCollection();
-        $this->actions = new ArrayCollection();
-    }
-
-    /**
-     * @param $queryBuilder
-     * @return array
-     */
-    protected function getQuery($queryBuilder)
-    {
-        $data = $this->queryBuilder !== null ? $this->queryBuilder : $queryBuilder;
-        if ($data instanceof EntityRepository) {
-            $alias = $data->getClassName();
-            $query = $data->createQueryBuilder($alias);
-        } elseif ($data instanceof QueryBuilder) {
-            $query = $data;
-            $aliases = $query->getRootAliases();
-            $alias = array_values($aliases)[0];
-        } elseif ($data instanceof \ModelCriteria) {
-            $alias = null;
-            $query = $data;
-        } else {
-            throw new \InvalidArgumentException(
-                'Expected argument of type "EntityRepository, QueryBuilder or ModelCriteria", ' . get_class($data) . ' given'
-            );
-        }
-
-        return [
-            'query' => $query,
-            'alias' => $alias
-        ];
-    }
-
-    /**
-     * @param QueryBuilder|\ModelCriteria $query
-     * @param string|null $alias
-     * @param string|null $column
-     * @param string|null $sort
-     * @param array $ids
-     * @return mixed
-     */
-    protected function applyQueries($query, $alias, $column, $sort, $ids = [])
-    {
-        if ($query instanceof QueryBuilder) {
-            if ($column !== null && $sort !== null) {
-                $query->addOrderBy($alias . '.' . $column, strtoupper($sort));
-            }
-            unset($sort);
-
-            if (!empty($this->order)) {
-                foreach ($this->order as $sort => $order) {
-                    if ($column !== $sort) {
-                        $query->addOrderBy($alias . '.' . $sort, strtoupper($order));
-                    }
-                }
-            }
-
-            if (!empty($ids)) {
-                $query
-                    ->andWhere($alias . '.id IN (:ids)')
-                    ->setParameter('ids', $ids);
-            }
-        } elseif ($query instanceof \ModelCriteria) {
-            if ($column !== null && $sort !== null) {
-                $query->orderBy($column, $sort);
-            }
-            unset($sort);
-
-            if (!empty($this->order)) {
-                foreach ($this->order as $sort => $order) {
-                    if ($column !== $sort) {
-                        $query->orderBy($sort, $order);
-                    }
-                }
-            }
-
-            if (!empty($ids)) {
-                $query->add('id', $ids, \Criteria::IN);
-            }
-        }
-
-        return $query;
+        $this->container = $container;
+        $this->columns = new ColumnCollection($container->get('vardius_list.column.factory'));
+        $this->filters = new FilterCollection($container->get('vardius_list.list_view_filter.factory'));
+        $this->actions = new ActionCollection($container->get('vardius_list.action.factory'));
     }
 
     /**
@@ -185,11 +88,13 @@ class ListView
      */
     public function getData(ListDataEvent $event, $onlyResults = false, $returnQueryBuilder = false)
     {
-        /** @var QueryBuilder|\ModelCriteria $query */
-        $query = null;
         /** @var string|null $alias */
         $alias = null;
-        extract($this->getQuery($event->getData()), EXTR_OVERWRITE);
+        /** @var QueryBuilder|\ModelCriteria $query */
+        $query = null;
+
+        $dataProvider = $this->container->get('vardius_list.data_provider.factory')->get($this->dbDriver);
+        extract($dataProvider->getQuery($event->getData()), EXTR_OVERWRITE);
 
         $request = $event->getRequest();
         $routeName = $event->getRouteName();
@@ -201,31 +106,34 @@ class ListView
         $filterForms = [];
         $paginator = null;
 
-        $this->dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $query, $request));
+        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $query, $request));
 
-        $query = $this->applyQueries($query, $alias, $column, $sort, $ids);
+        $query = $dataProvider->applyQueries($query, $alias, $column, $sort, $ids);
 
         if (empty($ids)) {
             /** @var ListViewFilter $filter */
             foreach ($this->filters as $filter) {
-                $formFactory = $this->factoryEvent->getFormFactory();
+                $formFactory = $this->container->get('form.factory');
                 $form = $formFactory->create($filter->getFormType());
 
                 $form->handleRequest($request);
 
                 $listFilterEvent = new ListFilterEvent($routeName, $query, $request, $form, $alias);
-                $this->dispatcher->dispatch(ListEvents::FILTER, $listFilterEvent);
+                $dispatcher->dispatch(ListEvents::FILTER, $listFilterEvent);
 
                 $formFilter = $filter->getFilter();
                 if (is_callable($formFilter)) {
                     $query = call_user_func_array($formFilter, [$listFilterEvent]);
                 } else {
                     foreach ($formFilter as $field => $fieldFilter) {
-                        $filterEvent = new FilterEvent($query, $alias, $field, $form[$field]->getData());
-                        if (is_callable($fieldFilter)) {
-                            $query = call_user_func_array($fieldFilter, [$filterEvent]);
-                        } else {
-                            $query = $fieldFilter->apply($filterEvent);
+                        if ($form->has($field)) {
+                            $filterEvent = new FilterEvent($query, $alias, $field, $form[$field]->getData());
+                            if (is_callable($fieldFilter)) {
+                                $query = call_user_func_array($fieldFilter, [$filterEvent]);
+                            } else {
+                                $query = $fieldFilter->apply($filterEvent);
+                            }
                         }
                     }
                 }
@@ -234,21 +142,21 @@ class ListView
             }
 
             if ($this->paginator) {
-                $this->dispatcher->dispatch(ListEvents::PRE_PAGINATOR, new ListEvent($routeName, $query, $request));
+                $dispatcher->dispatch(ListEvents::PRE_PAGINATOR, new ListEvent($routeName, $query, $request));
 
-                $paginatorFactory = $this->factoryEvent->getPaginatorFactory();
+                $paginatorFactory = $this->container->get('vardius_list.paginator.factory');
                 $paginator = $paginatorFactory->get($query, $event->getPage(), $limit);
                 $query = $paginator->paginate();
             }
         }
 
-        $this->dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $query, $request));
+        $dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $query, $request));
 
         if ($returnQueryBuilder) {
             return $query;
         } else {
             $resultsEvent = new ListResultEvent($routeName, $query, $request);
-            $results = $this->dispatcher->dispatch(ListEvents::RESULTS, $resultsEvent)->getResults();
+            $results = $dispatcher->dispatch(ListEvents::RESULTS, $resultsEvent)->getResults();
 
             if ($onlyResults) {
 
@@ -284,7 +192,7 @@ class ListView
             ]
         );
 
-        return $this->renderer->renderView($this->getView(), $params);
+        return $this->container->get('vardius_list.view.renderer')->renderView($this->getView(), $params);
     }
 
     /**
@@ -326,6 +234,24 @@ class ListView
     }
 
     /**
+     * @return string
+     */
+    public function getDbDriver()
+    {
+        return $this->dbDriver;
+    }
+
+    /**
+     * @param string $dbDriver
+     * @return ListView
+     */
+    public function setDbDriver($dbDriver)
+    {
+        $this->dbDriver = $dbDriver;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getOrder()
@@ -359,7 +285,7 @@ class ListView
     }
 
     /**
-     * @return ArrayCollection|ColumnInterface[]
+     * @return ColumnCollection|ColumnInterface[]
      */
     public function getColumns()
     {
@@ -374,9 +300,7 @@ class ListView
      */
     public function addColumn($name, $type, array $options = [])
     {
-        $columnFactory = $this->factoryEvent->getColumnFactory();
-        $column = $columnFactory->get($name, $type, $options);
-        $this->columns->add($column);
+        $this->columns->add($name, $type, $options);
 
         return $this;
     }
@@ -409,9 +333,7 @@ class ListView
      */
     public function addAction($path, $name = null, $icon = null, $parameters = [])
     {
-        $actionFactory = $this->factoryEvent->getActionFactory();
-        $action = $actionFactory->get($path, $name, $icon, $parameters);
-        $this->actions->add($action);
+        $this->actions->add($path, $name, $icon, $parameters);
 
         return $this;
     }
@@ -442,9 +364,7 @@ class ListView
      */
     public function addFilter($formType, $filter)
     {
-        $filterFactory = $this->factoryEvent->getFilterFactory();
-        $filter = $filterFactory->get($formType, $filter);
-        $this->filters->add($filter);
+        $this->filters->add($formType, $filter);
 
         return $this;
     }
@@ -463,18 +383,18 @@ class ListView
     /**
      * @return QueryBuilder|\ModelCriteria|null
      */
-    public function getQueryBuilder()
+    public function getQuery()
     {
-        return $this->queryBuilder;
+        return $this->query;
     }
 
     /**
-     * @param QueryBuilder|\ModelCriteria $queryBuilder
+     * @param QueryBuilder|\ModelCriteria $query
      * @return $this
      */
-    public function setQueryBuilder($queryBuilder)
+    public function setQuery($query)
     {
-        $this->queryBuilder = $queryBuilder;
+        $this->query = $query;
 
         return $this;
     }

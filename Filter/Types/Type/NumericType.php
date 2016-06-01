@@ -31,7 +31,7 @@ class NumericType extends FilterType
 
         $resolver->setDefault('condition', 'eq');
         $resolver->addAllowedTypes('condition', 'string');
-        $resolver->addAllowedValues(['condition' => ['eq', 'neq', 'lt', 'lte', 'gt', 'gte']]);
+        $resolver->addAllowedValues('condition', ['eq', 'neq', 'lt', 'lte', 'gt', 'gte']);
     }
 
     /**
@@ -39,7 +39,7 @@ class NumericType extends FilterType
      */
     public function apply(FilterEvent $event, array $options)
     {
-        $queryBuilder = $event->getQueryBuilder();
+        $queryBuilder = $event->getQuery();
         $value = $event->getValue();
 
         if ($value) {
@@ -48,8 +48,8 @@ class NumericType extends FilterType
             $expression = $queryBuilder->expr();
 
             $queryBuilder
-                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_numeric_' . $field))
-                ->setParameter('vardius_numeric_' . $field, $value);
+                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_numeric_' . $event->getField()))
+                ->setParameter('vardius_numeric_' . $event->getField(), $value);
         }
 
         return $queryBuilder;

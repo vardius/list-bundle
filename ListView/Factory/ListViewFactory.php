@@ -24,27 +24,24 @@ class ListViewFactory
     /** @var int */
     protected $limit;
     /** @var string */
-    protected $title;
+    protected $driver;
     /** @var boolean */
     protected $paginator;
-    /** @var  EventDispatcherInterface */
-    protected $dispatcher;
     /** @var ContainerInterface */
     protected $container;
 
     /**
      * @param int $limit
-     * @param string $title
+     * @param string $driver
      * @param boolean $paginator
      * @param ContainerInterface $container
      */
-    function __construct($limit, $title, $paginator, ContainerInterface $container)
+    function __construct($limit, $driver, $paginator, ContainerInterface $container)
     {
         $this->limit = $limit;
-        $this->title = $title;
+        $this->driver = $driver;
         $this->paginator = $paginator;
         $this->container = $container;
-        $this->dispatcher = $this->container->get('event_dispatcher');
     }
 
     /**
@@ -52,7 +49,7 @@ class ListViewFactory
      */
     public function get()
     {
-        $listView = new ListView($this->container, $this->limit, $this->title, $this->paginator, $this->dispatcher);
+        $listView = new ListView($this->limit, $this->driver, $this->paginator, $this->container);
 
         return $listView;
     }

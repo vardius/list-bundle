@@ -10,13 +10,12 @@
 
 namespace Vardius\Bundle\ListBundle\Action;
 
-
 /**
  * Action
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class Action
+class Action implements ActionInterface
 {
     /** @var  string */
     protected $name;
@@ -28,10 +27,7 @@ class Action
     protected $parameters;
 
     /**
-     * @param string $path
-     * @param string $name
-     * @param string $icon
-     * @param array $parameters
+     * @inheritDoc
      */
     function __construct($path, $name = null, $icon = null, $parameters = [])
     {
@@ -42,7 +38,7 @@ class Action
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getName()
     {
@@ -50,7 +46,7 @@ class Action
     }
 
     /**
-     * @param string $name
+     * @inheritDoc
      */
     public function setName($name)
     {
@@ -58,7 +54,7 @@ class Action
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getPath()
     {
@@ -66,7 +62,7 @@ class Action
     }
 
     /**
-     * @param string $path
+     * @inheritDoc
      */
     public function setPath($path)
     {
@@ -74,7 +70,7 @@ class Action
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getIcon()
     {
@@ -82,7 +78,7 @@ class Action
     }
 
     /**
-     * @param string $icon
+     * @inheritDoc
      */
     public function setIcon($icon)
     {
@@ -90,7 +86,7 @@ class Action
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function getParameters()
     {
@@ -98,7 +94,7 @@ class Action
     }
 
     /**
-     * @param array $parameters
+     * @inheritDoc
      */
     public function setParameters($parameters)
     {

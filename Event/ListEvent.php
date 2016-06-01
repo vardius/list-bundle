@@ -31,13 +31,13 @@ class ListEvent extends Event
 
     /**
      * @param $routeName
-     * @param QueryBuilder|\ModelCriteria $queryBuilder
+     * @param QueryBuilder|\ModelCriteria $query
      * @param Request $request
      */
-    function __construct($routeName, $queryBuilder, Request $request)
+    function __construct($routeName, $query, Request $request)
     {
         $this->routeName = $routeName;
-        $this->queryBuilder = $queryBuilder;
+        $this->queryBuilder = $query;
         $this->request = $request;
     }
 

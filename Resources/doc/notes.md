@@ -32,3 +32,12 @@ RELEASE NOTES
 **0.7.0**
 
 - Propel support
+
+**0.7.1**
+
+- Add data providers
+
+**0.7.2**
+
+- Add NULL filter type
+- Fixed multiple filters for the same field

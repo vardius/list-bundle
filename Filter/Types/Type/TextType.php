@@ -26,7 +26,7 @@ class TextType extends FilterType
      */
     public function apply(FilterEvent $event, array $options)
     {
-        $queryBuilder = $event->getQueryBuilder();
+        $queryBuilder = $event->getQuery();
         $value = $event->getValue();
 
         if ($value) {
@@ -35,8 +35,8 @@ class TextType extends FilterType
             $expression = $queryBuilder->expr();
 
             $queryBuilder
-                ->andWhere($expression->like($event->getAlias() . '.' . $field, ':vardius_text_' . $field))
-                ->setParameter('vardius_text_' . $field, $value);
+                ->andWhere($expression->like($event->getAlias() . '.' . $field, ':vardius_text_' . $event->getField()))
+                ->setParameter('vardius_text_' . $event->getField(), $value);
         }
 
         return $queryBuilder;

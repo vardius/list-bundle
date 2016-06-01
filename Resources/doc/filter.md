@@ -20,7 +20,6 @@ There are multiple options to apply filter to your list, first of them you may a
             $listView
                 ...
                 ->addFilter('product_filter', function (ListFilterEvent $event) {
-
                     $formData = $event->getData();
                     $queryBuilder = $event->getQueryBuilder();
                     $alias = $event->getAlias();
@@ -104,6 +103,8 @@ class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterPr
 ### Available filters
 
 `date` - available options: `['filed' => 'field name', 'condition' => 'eq|neq|lt|lte|gt|gte']`
+
+`null` - available options: `['filed' => 'field name']`
 
 `text` - available options: `['filed' => 'field name']`
 

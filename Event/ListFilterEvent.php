@@ -28,14 +28,14 @@ class ListFilterEvent extends ListEvent
 
     /**
      * @param string $routeName
-     * @param QueryBuilder|\ModelCriteria $queryBuilder
+     * @param QueryBuilder|\ModelCriteria $query
      * @param Request $request
      * @param FormInterface $form
      * @param string $alias
      */
-    function __construct($routeName, $queryBuilder, Request $request, FormInterface $form, $alias)
+    function __construct($routeName, $query, Request $request, FormInterface $form, $alias)
     {
-        parent::__construct($routeName, $queryBuilder, $request);
+        parent::__construct($routeName, $query, $request);
 
         $this->form = $form;
         $this->alias = $alias;

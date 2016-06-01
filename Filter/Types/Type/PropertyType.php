@@ -25,15 +25,15 @@ class PropertyType extends FilterType
      */
     public function apply(FilterEvent $event, array $options)
     {
-        $queryBuilder = $event->getQueryBuilder();
+        $queryBuilder = $event->getQuery();
         $value = $event->getValue();
 
         if ($value) {
             $field = empty($options['field']) ? $event->getField() : $options['field'];
 
             $queryBuilder
-                ->andWhere($event->getAlias() . '.' . $field . ' = :vardius_property_' . $field)
-                ->setParameter('vardius_property_' . $field, $value);
+                ->andWhere($event->getAlias() . '.' . $field . ' = :vardius_property_' . $event->getField())
+                ->setParameter('vardius_property_' . $event->getField(), $value);
 
         }
 

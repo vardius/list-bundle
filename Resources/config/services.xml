@@ -9,12 +9,15 @@
         <parameter key="vardius_list.list_view.class">Vardius\Bundle\ListBundle\ListView\ListView</parameter>
         <parameter key="vardius_list.list_view.factory.class">Vardius\Bundle\ListBundle\ListView\Factory\ListViewFactory</parameter>
         <parameter key="vardius_list.list_view.provider.class">Vardius\Bundle\ListBundle\ListView\Provider\ListViewProvider</parameter>
+        <!--DATA PROVIDER-->
+        <parameter key="vardius_list.data_provider.factory.class">Vardius\Bundle\ListBundle\Data\Factory\DataProviderFactory</parameter>
         <!--FILTER-->
         <parameter key="vardius_list.list_view_filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\ListViewFilterFactory</parameter>
         <parameter key="vardius_list.filter.factory.class">Vardius\Bundle\ListBundle\Filter\Factory\FilterFactory</parameter>
         <parameter key="vardius_list.filter_type_pool.class">Vardius\Bundle\ListBundle\Filter\Types\FilterTypePool</parameter>
         <parameter key="vardius_list.filter.provider.class">Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider</parameter>
         <parameter key="vardius_list.filter_type.date.class">Vardius\Bundle\ListBundle\Filter\Types\Type\DateType</parameter>
+        <parameter key="vardius_list.filter_type.null.class">Vardius\Bundle\ListBundle\Filter\Types\Type\NullType</parameter>
         <parameter key="vardius_list.filter_type.text.class">Vardius\Bundle\ListBundle\Filter\Types\Type\TextType</parameter>
         <parameter key="vardius_list.filter_type.numeric.class">Vardius\Bundle\ListBundle\Filter\Types\Type\NumericType</parameter>
         <parameter key="vardius_list.filter_type.entity.class">Vardius\Bundle\ListBundle\Filter\Types\Type\EntityType</parameter>
@@ -47,10 +50,12 @@
 
         <service id="vardius_list.list_view.factory" class="%vardius_list.list_view.factory.class%">
             <argument>%vardius_list.limit%</argument>
-            <argument>%vardius_list.title%</argument>
+            <argument>%vardius_list.db_driver%</argument>
             <argument>%vardius_list.paginator%</argument>
             <argument type="service" id="service_container"/>
         </service>
+
+        <service id="vardius_list.data_provider.factory" class="%vardius_list.data_provider.factory.class%"/>
 
         <service id="vardius_list.column.factory" class="%vardius_list.column.factory.class%">
             <argument type="service" id="vardius_list.column_type_pool"/>
@@ -85,6 +90,9 @@
 
         <!--FILTER TYPES-->
         <service id="vardius_list.filter_type.date" class="%vardius_list.filter_type.date.class%">
+            <tag name="vardius_list.filter_type" />
+        </service>
+        <service id="vardius_list.filter_type.null" class="%vardius_list.filter_type.null.class%">
             <tag name="vardius_list.filter_type" />
         </service>
         <service id="vardius_list.filter_type.text" class="%vardius_list.filter_type.text.class%">

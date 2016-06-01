@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Filter\Types\Type;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
@@ -35,7 +36,7 @@ class EntityType extends FilterType
         $resolver->addAllowedTypes('multiple', 'boolean');
         $resolver->addAllowedTypes('property', 'string');
         $resolver->addAllowedTypes('joinType', 'string');
-        $resolver->addAllowedValues(['joinType' => ['leftJoin', 'innerJoin', 'join']]);
+        $resolver->addAllowedValues('joinType', ['leftJoin', 'innerJoin', 'join']);
     }
 
     /**
@@ -43,23 +44,26 @@ class EntityType extends FilterType
      */
     public function apply(FilterEvent $event, array $options)
     {
-        $queryBuilder = $event->getQueryBuilder();
+        $queryBuilder = $event->getQuery();
         $value = $event->getValue();
 
-        if ($value) {
+        if ($value instanceof ArrayCollection) {
+            $value = $value->toArray();
+        }
+
+        if ($value && !empty($value)) {
             $field = empty($options['field']) ? $event->getField() : $options['field'];
 
             $queryBuilder->{$options['joinType']}($event->getAlias() . '.' . $field, $field);
 
-            if ($options['multiple'] && is_array($value)) {
-                $queryBuilder->where($field . '.' . $options['property'] . 'IN(:vardius_entity_' . $field . ')');
-            } elseif (!$options['multiple']) {
-                $queryBuilder->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $field);
+            if ($options['multiple']) {
+                $value = is_array($value) ?: [$value];
+                $queryBuilder->where($field . '.' . $options['property'] . ' IN(:vardius_entity_' . $event->getField() . ')');
             } else {
-                throw new \InvalidArgumentException('The value mast be array if $options[\'multiple\'] is set to true. ' . $value . ' given with multiple: ' . $options['multiple']);
+                $queryBuilder->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $event->getField());
             }
 
-            $queryBuilder->setParameter('vardius_entity_' . $field, $value);
+            $queryBuilder->setParameter('vardius_entity_' . $event->getField(), $value);
         }
 
         return $queryBuilder;

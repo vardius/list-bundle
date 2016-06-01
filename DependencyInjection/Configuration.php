@@ -44,8 +44,9 @@ class Configuration implements ConfigurationInterface
                     ->min(1)
                     ->defaultValue(10)
                 ->end()
-                ->scalarNode('title')
-                    ->defaultValue('List')
+                ->enumNode('db_driver')
+                    ->defaultValue('orm')
+                    ->values(['orm', 'propel'])
                 ->end()
             ->end();
 

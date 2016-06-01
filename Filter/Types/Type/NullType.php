@@ -10,29 +10,16 @@
 
 namespace Vardius\Bundle\ListBundle\Filter\Types\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
 
 /**
- * DateType
+ * NullType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class DateType extends FilterType
+class NullType extends FilterType
 {
-    /**
-     * @inheritDoc
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setDefault('condition', 'gte');
-        $resolver->addAllowedTypes('condition', 'string');
-        $resolver->addAllowedValues('condition', ['eq', 'neq', 'lt', 'lte', 'gt', 'gte']);
-    }
-
     /**
      * @inheritDoc
      */
@@ -46,9 +33,7 @@ class DateType extends FilterType
 
             $expression = $queryBuilder->expr();
 
-            $queryBuilder
-                ->andWhere($expression->{$options['condition']}($event->getAlias() . '.' . $field, ':vardius_date_' . $event->getField()))
-                ->setParameter('vardius_date_' . $event->getField(), $value);
+            $queryBuilder->andWhere($expression->isNull($event->getAlias() . '.' . $field));
         }
 
         return $queryBuilder;
@@ -59,7 +44,6 @@ class DateType extends FilterType
      */
     public function getName()
     {
-        return 'date';
+        return 'null';
     }
-
 }
