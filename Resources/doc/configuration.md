@@ -166,4 +166,4 @@ Advanced configuration
 1. [Configure ListViewProvider](provider.md)
 2. [List Filters](filter.md)
 3. [Custom template](template.md)
-4. [Using elastic search](elasticsearch.md)
+4. [ElasticSearch](elasticsearch.md)
