@@ -33,6 +33,13 @@ There are multiple options to apply filter to your list, first of them you may a
                         
                     //Propel example
                     $queryBuilder->filterByName($name);
+                    
+                    //ElasticSearch Example
+                    $filter = $query->getFilter();
+                    $fieldQuery = new \Elastica\Query\Match();
+                    $fieldQuery->setFieldQuery('title', 'I am a title string');
+                    $filter->addShould($fieldQuery);
+                    $query->setFilter($filter);
 
                     return $queryBuilder;
                 });
@@ -92,6 +99,11 @@ class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterPr
                     
                 //Propel example
                 $queryBuilder->filterByDate(["min" => $event->getValue()])
+                    
+                //ElasticSearch Example
+                $filter = $query->getFilter();
+                $filter->addMust(new Range('date', ['lte' => '2014-11-14']));
+                $query->setFilter($filter);
                 
                 return $queryBuilder;
             });

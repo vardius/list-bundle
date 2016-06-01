@@ -43,5 +43,4 @@ interface FilterTypeInterface
      * @return string
      */
     public function getName();
-
 }

@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Filter\Types\Type;
 
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
@@ -39,8 +40,11 @@ class DateType extends FilterType
     public function apply(FilterEvent $event, array $options)
     {
         $queryBuilder = $event->getQuery();
-        $value = $event->getValue();
+        if (!$queryBuilder instanceof QueryBuilder) {
+            throw new \Exception('Vardius\Bundle\ListBundle\Filter\Types\FilterType supports only doctrine filters for now. To filter Propel or ElasticSearch Queries use callbacks or create your own FilterType classes');
+        }
 
+        $value = $event->getValue();
         if ($value) {
             $field = empty($options['field']) ? $event->getField() : $options['field'];
 
@@ -61,5 +65,4 @@ class DateType extends FilterType
     {
         return 'date';
     }
-
 }

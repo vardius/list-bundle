@@ -10,6 +10,11 @@
 
 namespace Vardius\Bundle\ListBundle\ListView;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Elastica\Query;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Vardius\Bundle\ListBundle\Action\Action;
 use Vardius\Bundle\ListBundle\Action\ActionInterface;
 use Vardius\Bundle\ListBundle\Collection\ActionCollection;
@@ -17,7 +22,6 @@ use Vardius\Bundle\ListBundle\Collection\ColumnCollection;
 use Vardius\Bundle\ListBundle\Collection\FilterCollection;
 use Vardius\Bundle\ListBundle\Column\Column;
 use Vardius\Bundle\ListBundle\Column\ColumnInterface;
-use Vardius\Bundle\ListBundle\Data\Factory\DataProviderFactory;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 use Vardius\Bundle\ListBundle\Event\ListEvent;
@@ -26,12 +30,6 @@ use Vardius\Bundle\ListBundle\Event\ListFilterEvent;
 use Vardius\Bundle\ListBundle\Event\ListResultEvent;
 use Vardius\Bundle\ListBundle\Filter\FilterInterface;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Form\FormTypeInterface;
-use Symfony\Component\Form\ResolvedFormTypeInterface;
 
 /**
  * ListView
@@ -60,7 +58,7 @@ class ListView
     protected $actions;
     /** @var  FilterCollection|FilterInterface[] */
     protected $filters;
-    /** @var  EntityRepository|QueryBuilder|\ModelCriteria|null */
+    /** @var  mixed */
     protected $query = null;
 
     /**
@@ -84,17 +82,17 @@ class ListView
      * @param ListDataEvent $event
      * @param boolean $onlyResults
      * @param boolean $returnQueryBuilder
-     * @return QueryBuilder|\ModelCriteria|array
+     * @return mixed
      */
     public function getData(ListDataEvent $event, $onlyResults = false, $returnQueryBuilder = false)
     {
         /** @var string|null $alias */
         $alias = null;
-        /** @var QueryBuilder|\ModelCriteria $query */
+        /** @var mixed $query */
         $query = null;
 
         $dataProvider = $this->container->get('vardius_list.data_provider.factory')->get($this->dbDriver);
-        extract($dataProvider->getQuery($event->getData()), EXTR_OVERWRITE);
+        extract($dataProvider->getQuery($event->getData(), $this->getQuery()), EXTR_OVERWRITE);
 
         $request = $event->getRequest();
         $routeName = $event->getRouteName();
@@ -108,8 +106,6 @@ class ListView
 
         $dispatcher = $this->container->get('event_dispatcher');
         $dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $query, $request));
-
-        $query = $dataProvider->applyQueries($query, $alias, $column, $sort, $ids);
 
         if (empty($ids)) {
             /** @var ListViewFilter $filter */
@@ -140,14 +136,16 @@ class ListView
 
                 $filterForms[] = $form->createView();
             }
+        }
 
-            if ($this->paginator) {
-                $dispatcher->dispatch(ListEvents::PRE_PAGINATOR, new ListEvent($routeName, $query, $request));
+        $query = $dataProvider->applyQueries($query, $alias, $column, $sort, $ids);
 
-                $paginatorFactory = $this->container->get('vardius_list.paginator.factory');
-                $paginator = $paginatorFactory->get($query, $event->getPage(), $limit);
-                $query = $paginator->paginate();
-            }
+        if ($this->paginator && empty($ids)) {
+            $dispatcher->dispatch(ListEvents::PRE_PAGINATOR, new ListEvent($routeName, $query, $request));
+
+            $paginatorFactory = $this->container->get('vardius_list.paginator.factory');
+            $paginator = $paginatorFactory->get($query, $event->getPage(), $limit);
+            $query = $paginator->paginate();
         }
 
         $dispatcher->dispatch(ListEvents::POST_QUERY_BUILDER, new ListEvent($routeName, $query, $request));
@@ -381,7 +379,7 @@ class ListView
     }
 
     /**
-     * @return QueryBuilder|\ModelCriteria|null
+     * @return mixed
      */
     public function getQuery()
     {
@@ -389,7 +387,7 @@ class ListView
     }
 
     /**
-     * @param QueryBuilder|\ModelCriteria $query
+     * @param mixed $query
      * @return $this
      */
     public function setQuery($query)

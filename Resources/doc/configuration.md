@@ -85,7 +85,7 @@ Service:
 ### Usage
 
 In your action you can use list as presented in the class example below.
-*Notice* that you can pass to ListDataEvent your `EntityRepository|QueryBuilder|\ModelCriteria` as a first argument.
+*Notice* that you can pass to ListDataEvent your `EntityRepository|QueryBuilder|\ModelCriteria|Elastica\Query\Filtered` as a first argument.
 
 ``` php
 <?php
@@ -123,6 +123,12 @@ class ProductController extends Controller
         $query = \PropelQuery::from('AppBundle\Product');
         $listDataEvent = new ListDataEvent($query, $request);
         
+        //ElasticSearch example
+        $query = new \Elastica\Query\MatchAll();
+        $filter = new \Elastica\Filter\Bool();
+        $query = new Query\Filtered($query, $filter);
+        $listDataEvent = new ListDataEvent($query, $request);
+        
         $listView = $this->get('app.product.list_view');
         
         return [
@@ -152,11 +158,12 @@ For icons include styles in your view:
 
 or get latest from
 
-        [Bootstrap](http://getbootstrap.com/getting-started/#download)
-        [Font Awesome](http://fortawesome.github.io/Font-Awesome/get-started/)
+[Bootstrap](http://getbootstrap.com/getting-started/#download)
+[Font Awesome](http://fortawesome.github.io/Font-Awesome/get-started/)
 
 Advanced configuration
 ----------------
 1. [Configure ListViewProvider](provider.md)
 2. [List Filters](filter.md)
 3. [Custom template](template.md)
+4. [Using elastic search](elasticsearch.md)

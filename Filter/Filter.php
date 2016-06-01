@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Filter;
 
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterType;

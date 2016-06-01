@@ -10,7 +10,8 @@
 
 namespace Vardius\Bundle\ListBundle\Paginator;
 
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\QueryBuilder;
+use Elastica\Query;
 use Symfony\Bridge\Twig\TwigEngine;
 
 /**
@@ -23,7 +24,7 @@ interface PaginatorInterface
     /**
      * Paginate the results
      *
-     * @return QueryBuilder|\ModelCriteria
+     * @return mixed
      */
     public function paginate();
 

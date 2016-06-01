@@ -36,7 +36,7 @@ Add to config.yml:
     vardius_list:
         limit: 10   //default 10
         paginator: true //turn on/off paginator
-        db_driver: orm //available orm and propel
+        db_driver: orm //available orm, propel and elasticsearch
 ```
 
 You can also provide your custom value for list by setting them in provider class
@@ -47,4 +47,3 @@ Include javascript for list view
 ``` html
     <script src="{{ asset('bundles/vardiuslist/js/list.js') }}"></script>
 ```
-

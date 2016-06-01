@@ -32,7 +32,7 @@ class DataProvider implements DataProviderInterface
             $query = $data;
         } else {
             throw new \InvalidArgumentException(
-                'Expected argument of type "EntityRepository, QueryBuilder or ModelCriteria", ' . get_class($data) . ' given'
+                'Expected argument of type "ModelCriteria", ' . get_class($data) . ' given'
             );
         }
 

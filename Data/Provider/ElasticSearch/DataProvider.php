@@ -8,37 +8,34 @@
  * file that was distributed with this source code.
  */
 
-namespace Vardius\Bundle\ListBundle\Data\Provider\Doctrine;
+namespace Vardius\Bundle\ListBundle\Data\Provider\ElasticSearch;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
+use Elastica\Filter\Terms;
+use Elastica\Query;
+use Elastica\Query\Filtered;
 use Vardius\Bundle\ListBundle\Data\DataProviderInterface;
 
 /**
  * Class DataProvider
- * @package Vardius\Bundle\ListBundle\Data\Provider\Doctrine
+ * @package Vardius\Bundle\ListBundle\Data\Provider\ElasticSearch
  * @author Rafał Lorenz <vardius@gmail.com>
  */
 class DataProvider implements DataProviderInterface
 {
     /**
-     * @param QueryBuilder|EntityRepository $data
-     * @param QueryBuilder|null $query
+     * @param Filtered $data
+     * @param Filtered|null $query
      * @return array
      */
     public function getQuery($data, $query = null)
     {
         $data = $query !== null ? $query : $data;
-        if ($data instanceof EntityRepository) {
-            $alias = $data->getClassName();
-            $query = $data->createQueryBuilder($alias);
-        } elseif ($data instanceof QueryBuilder) {
+        if ($data instanceof Filtered) {
+            $alias = null;
             $query = $data;
-            $aliases = $query->getRootAliases();
-            $alias = array_values($aliases)[0];
         } else {
             throw new \InvalidArgumentException(
-                'Expected argument of type "Doctrine\ORM\EntityRepository" or "Doctrine\ORM\QueryBuilder", ' . get_class($data) . ' given'
+                'Expected argument of type "Elastica\Query\Filtered", ' . get_class($data) . ' given'
             );
         }
 
@@ -49,7 +46,7 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * @param QueryBuilder $query
+     * @param Filtered $query
      * @param string|null $alias
      * @param string|null $column
      * @param string|null $sort
@@ -58,29 +55,37 @@ class DataProvider implements DataProviderInterface
      */
     public function applyQueries($query, $alias, $column, $sort, $ids = [])
     {
-        if (!$query instanceof QueryBuilder) {
+        if (!$query instanceof Filtered) {
             throw new \InvalidArgumentException(
-                'Expected argument of type "QueryBuilder", ' . get_class($query) . ' given'
+                'Expected argument of type "Elastica\Query\Filtered", ' . get_class($query) . ' given'
             );
         }
 
+        if (!empty($ids)) {
+            /** @var \Elastica\Filter\Bool $filter */
+            $filter = $query->getFilter();
+            $idsFilter = new Terms();
+            $idsFilter->setTerms('id', $ids);
+            $filter->addMust($idsFilter);
+            $query->setFilter($filter);
+        }
+
+        $newQuery = new Query();
+        $newQuery->setQuery($query);
+        $query = $newQuery;
+        unset($newQuery);
+
         if ($column !== null && $sort !== null) {
-            $query->addOrderBy($alias . '.' . $column, strtoupper($sort));
+            $query->addSort([$column => ['order' => strtolower($sort)]]);
         }
         unset($sort);
 
         if (!empty($this->order)) {
             foreach ($this->order as $sort => $order) {
                 if ($column !== $sort) {
-                    $query->addOrderBy($alias . '.' . $sort, strtoupper($order));
+                    $query->addSort([$sort => ['order' => strtolower($order)]]);
                 }
             }
-        }
-
-        if (!empty($ids)) {
-            $query
-                ->andWhere($alias . '.id IN (:ids)')
-                ->setParameter('ids', $ids);
         }
 
         return $query;

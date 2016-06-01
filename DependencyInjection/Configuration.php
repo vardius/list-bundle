@@ -46,7 +46,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->enumNode('db_driver')
                     ->defaultValue('orm')
-                    ->values(['orm', 'propel'])
+                    ->values(['orm', 'propel', 'elasticsearch'])
                 ->end()
             ->end();
 

@@ -79,5 +79,4 @@ abstract class FilterProvider implements FilterProviderInterface
 
         return $this;
     }
-
 }

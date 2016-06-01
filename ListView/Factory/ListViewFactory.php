@@ -11,7 +11,6 @@
 namespace Vardius\Bundle\ListBundle\ListView\Factory;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vardius\Bundle\ListBundle\ListView\ListView;
 
 /**

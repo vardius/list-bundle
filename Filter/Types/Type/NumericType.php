@@ -40,8 +40,11 @@ class NumericType extends FilterType
     public function apply(FilterEvent $event, array $options)
     {
         $queryBuilder = $event->getQuery();
-        $value = $event->getValue();
+        if (!$queryBuilder instanceof QueryBuilder) {
+            throw new \Exception('Vardius\Bundle\ListBundle\Filter\Types\FilterType supports only doctrine filters for now. To filter Propel or ElasticSearch Queries use callbacks or create your own FilterType classes');
+        }
 
+        $value = $event->getValue();
         if ($value) {
             $field = empty($options['field']) ? $event->getField() : $options['field'];
 
@@ -62,5 +65,4 @@ class NumericType extends FilterType
     {
         return 'numeric';
     }
-
 }

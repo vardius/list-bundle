@@ -10,8 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Event;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -23,11 +21,11 @@ class ListDataEvent
 {
     /** @var  Request */
     protected $request;
-    /** @var EntityRepository|QueryBuilder|\ModelCriteria */
+    /** @var mixed */
     protected $data;
 
     /**
-     * @param EntityRepository|QueryBuilder|\ModelCriteria $data
+     * @param mixed $data
      * @param Request $request
      */
     function __construct($data, Request $request)
@@ -45,7 +43,7 @@ class ListDataEvent
     }
 
     /**
-     * @return EntityRepository|QueryBuilder|\ModelCriteria
+     * @return mixed
      */
     public function getData()
     {
@@ -71,7 +69,7 @@ class ListDataEvent
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getColumn()
     {
@@ -81,7 +79,7 @@ class ListDataEvent
 
     /**
      * asc|desc
-     * @return string
+     * @return string|null
      */
     public function getSort()
     {
@@ -89,7 +87,7 @@ class ListDataEvent
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
     public function getLimit()
     {

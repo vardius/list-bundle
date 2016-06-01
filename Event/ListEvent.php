@@ -10,8 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Event;
 
-
-use Doctrine\ORM\QueryBuilder;
+use Elastica\Query;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,14 +23,14 @@ class ListEvent extends Event
 {
     /** @var  string */
     protected $routeName;
-    /** @var QueryBuilder|\ModelCriteria */
+    /** @var mixed */
     protected $queryBuilder;
     /** @var  Request */
     protected $request;
 
     /**
      * @param $routeName
-     * @param QueryBuilder|\ModelCriteria $query
+     * @param mixed $query
      * @param Request $request
      */
     function __construct($routeName, $query, Request $request)
@@ -50,7 +49,7 @@ class ListEvent extends Event
     }
 
     /**
-     * @return QueryBuilder|\ModelCriteria
+     * @return mixed
      */
     public function getQueryBuilder()
     {
@@ -76,12 +75,12 @@ class ListEvent extends Event
     }
 
     /**
-     * @param QueryBuilder|\ModelCriteria $queryBuilder
+     * @param mixed $query
      * @return ListEvent
      */
-    public function setQueryBuilder($queryBuilder)
+    public function setQueryBuilder($query)
     {
-        $this->queryBuilder = $queryBuilder;
+        $this->queryBuilder = $query;
         return $this;
     }
 

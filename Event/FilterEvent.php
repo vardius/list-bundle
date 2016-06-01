@@ -10,8 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Event;
 
-use Doctrine\ORM\QueryBuilder;
-
 /**
  * FilterEvent
  *
@@ -19,7 +17,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class FilterEvent
 {
-    /** @var QueryBuilder|\ModelCriteria */
+    /** @var mixed */
     protected $query;
     /** @var string */
     protected $alias;
@@ -30,7 +28,7 @@ class FilterEvent
 
     /**
      * FilterEvent constructor.
-     * @param QueryBuilder|\ModelCriteria $query
+     * @param mixed $query
      * @param string $alias
      * @param string $field
      * @param string $value
@@ -44,7 +42,7 @@ class FilterEvent
     }
 
     /**
-     * @return QueryBuilder|\ModelCriteria
+     * @return mixed
      */
     public function getQuery()
     {
@@ -74,5 +72,4 @@ class FilterEvent
     {
         return $this->field;
     }
-
 }

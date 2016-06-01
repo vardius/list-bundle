@@ -11,9 +11,11 @@
 namespace Vardius\Bundle\ListBundle\Paginator\Factory;
 
 use Doctrine\ORM\QueryBuilder;
+use Elastica\Query;
 use Symfony\Bridge\Twig\TwigEngine;
-use Vardius\Bundle\ListBundle\Paginator\PaginatorInterface;
 use Vardius\Bundle\ListBundle\Paginator\Doctrine\Paginator as DoctrinePaginator;
+use Vardius\Bundle\ListBundle\Paginator\ElasticSearch\Paginator as ElasticSearchPaginator;
+use Vardius\Bundle\ListBundle\Paginator\PaginatorInterface;
 use Vardius\Bundle\ListBundle\Paginator\Propel\Paginator as PropelPaginator;
 
 /**
@@ -39,20 +41,22 @@ class PaginatorFactory
     }
 
     /**
-     * @param QueryBuilder|\ModelCriteria $queryBuilder
+     * @param mixed $query
      * @param $page
      * @param $limit
      * @return PaginatorInterface
      */
-    public function get($queryBuilder, $page, $limit)
+    public function get($query, $page, $limit)
     {
-        if ($queryBuilder instanceof QueryBuilder) {
-            $paginator = new DoctrinePaginator($queryBuilder, $page, $limit);
-        } elseif ($queryBuilder instanceof \ModelCriteria) {
-            $paginator = new PropelPaginator($queryBuilder, $page, $limit);
+        if ($query instanceof QueryBuilder) {
+            $paginator = new DoctrinePaginator($query, $page, $limit);
+        } elseif ($query instanceof \ModelCriteria) {
+            $paginator = new PropelPaginator($query, $page, $limit);
+        } elseif ($query instanceof Query) {
+            $paginator = new ElasticSearchPaginator($query, $page, $limit);
         } else {
             throw new \InvalidArgumentException(
-                'Expected argument of type "QueryBuilder or ModelCriteria", ' . get_class($queryBuilder) . ' given'
+                'Expected argument of type "\Doctrine\ORM\QueryBuilder", "\ModelCriteria" or "\Elastica\Query", ' . get_class($query) . ' given'
             );
         }
 

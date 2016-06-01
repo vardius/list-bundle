@@ -45,10 +45,11 @@ Create your provider class:
             $listView = $this->listViewFactory->get();
 
             $listView
+                ->setDbDriver('orm') //available orm, propel and elasticsearch, default from bundle config
                 ->setTitle('Page title') //set page title
                 ->setLimit(10) // set the entries per page
                 ->addOrder('name', 'DESC') // set order for column
-                ->setQuery($entityManager->getRepository('AppBundle:Product')->getCustomQueryBuilder()) //set custom query builder, or model criteria
+                ->setQuery($entityManager->getRepository('AppBundle:Product')->getCustomQueryBuilder()) //set custom query builder, model criteria or elastic search filtered query
                 ->addColumn('name', 'property', [ // add column
                     'sort' => true, //enable colum sorting
                     'label' => 'My Label', //custom column label
@@ -110,6 +111,13 @@ Create your provider class:
                         
                     //Propel example
                     $queryBuilder->filterByName($name);
+                    
+                    //ElasticSearch Example
+                    $filter = $query->getFilter();
+                    $fieldQuery = new \Elastica\Query\Match();
+                    $fieldQuery->setFieldQuery('title', 'I am a title string');
+                    $filter->addShould($fieldQuery);
+                    $query->setFilter($filter);
 
                     return $queryBuilder;
                 })

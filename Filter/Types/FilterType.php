@@ -29,5 +29,4 @@ abstract class FilterType implements FilterTypeInterface
         ]);
         $resolver->setAllowedTypes('field', 'string');
     }
-
 }

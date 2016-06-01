@@ -11,6 +11,7 @@
 namespace Vardius\Bundle\ListBundle\Event;
 
 use Doctrine\ORM\QueryBuilder;
+use Elastica\Query;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -25,7 +26,7 @@ class ListResultEvent extends ListEvent
 
     /**
      * @param string $routeName
-     * @param QueryBuilder|\ModelCriteria $query
+     * @param mixed $query
      * @param Request $request
      */
     function __construct($routeName, $query, Request $request)
@@ -40,6 +41,8 @@ class ListResultEvent extends ListEvent
             if ($results instanceof \PropelObjectCollection) {
                 $this->results = $results->toArray();
             }
+        } elseif ($query instanceof Query) {
+            $this->results = [];
         }
     }
 

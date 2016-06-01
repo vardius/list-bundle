@@ -38,3 +38,7 @@ RELEASE NOTES
 - Add data providers
 - Add NULL filter type
 - Fixed multiple filters for the same field
+
+**0.7.2**
+
+- Add Elastic Search support

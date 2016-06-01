@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Event;
 
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,12 +22,12 @@ class ListFilterEvent extends ListEvent
 {
     /** @var FormInterface */
     protected $form;
-    /** @var string  */
+    /** @var string */
     protected $alias;
 
     /**
      * @param string $routeName
-     * @param QueryBuilder|\ModelCriteria $query
+     * @param mixed $query
      * @param Request $request
      * @param FormInterface $form
      * @param string $alias

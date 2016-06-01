@@ -10,8 +10,9 @@
 
 namespace Vardius\Bundle\ListBundle\Data\Factory;
 
-use Vardius\Bundle\ListBundle\Data\Provider\Propel\DataProvider as PropelDataProvider;
 use Vardius\Bundle\ListBundle\Data\Provider\Doctrine\DataProvider as DoctrineDataProvider;
+use Vardius\Bundle\ListBundle\Data\Provider\ElasticSearch\DataProvider as ElasticDataProvider;
+use Vardius\Bundle\ListBundle\Data\Provider\Propel\DataProvider as PropelDataProvider;
 
 /**
  * Class DataProviderFactory
@@ -25,6 +26,8 @@ class DataProviderFactory
         switch ($dbDriver) {
             case 'propel':
                 return new PropelDataProvider();
+            case 'elasticsearch':
+                return new ElasticDataProvider();
             default:
                 return new DoctrineDataProvider();
         }

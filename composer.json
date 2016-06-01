@@ -2,7 +2,7 @@
     "name": "vardius/list-bundle",
     "description": "Provides lists builder",
     "keywords": [
-        "list", "list view", "list builder", "symfony2", "bundle", "symfony"
+        "list", "list view", "list builder", "symfony2", "bundle", "symfony", "doctrine", "propel", "elasticsearch", "elastic search", "search", "elastic"
     ],
     "license": "MIT",
     "homepage": "https://github.com/Vardius/list-bundle",
