@@ -125,7 +125,7 @@ class ProductController extends Controller
         
         //ElasticSearch example
         $query = new \Elastica\Query\MatchAll();
-        $filter = new \Elastica\Filter\Bool();
+        $filter = new \Elastica\Filter\BoolFilter();
         $query = new Query\Filtered($query, $filter);
         $listDataEvent = new ListDataEvent($query, $request);
         

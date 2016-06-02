@@ -29,6 +29,9 @@ use Vardius\Bundle\ListBundle\Event\ListResultEvent;
 
 class ListResultsSubscriber implements EventSubscriberInterface
 {
+    /** @var ContainerInterface */
+    protected $container;
+    
     /**
      * ListResultsSubscriber constructor.
      * @param ContainerInterface $container
@@ -55,8 +58,9 @@ class ListResultsSubscriber implements EventSubscriberInterface
         //Check if it is ElasticSearch Query
         //Otherwise it could be Propel or DOctrine list action
         if ($query instanceof Query) {
-            $finder = $this->$this->container('fos_elastica.finder.app.products');
-            $this->results = $finder->find($query);
+            $finder = $this->container->get('fos_elastica.finder.app.products');
+            $results = $finder->find($query);
+            $event->setResults($results);
         }
     }
 }

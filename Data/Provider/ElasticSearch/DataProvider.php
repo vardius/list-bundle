@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\ListBundle\Data\Provider\ElasticSearch;
 
+use Elastica\Filter\BoolFilter;
 use Elastica\Filter\Terms;
 use Elastica\Query;
 use Elastica\Query\Filtered;
@@ -62,7 +63,7 @@ class DataProvider implements DataProviderInterface
         }
 
         if (!empty($ids)) {
-            /** @var \Elastica\Filter\Bool $filter */
+            /** @var BoolFilter $filter */
             $filter = $query->getFilter();
             $idsFilter = new Terms();
             $idsFilter->setTerms('id', $ids);
