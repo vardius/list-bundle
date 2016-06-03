@@ -42,3 +42,4 @@ RELEASE NOTES
 **0.7.2**
 
 - Add Elastic Search support
+- End support for PHP<7.0.0

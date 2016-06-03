@@ -48,7 +48,7 @@ class ListView
     protected $view;
     /** @var array */
     protected $order = [];
-    /** @var boolean */
+    /** @var bool */
     protected $paginator;
     /** @var  ContainerInterface */
     protected $container;
@@ -62,12 +62,12 @@ class ListView
     protected $query = null;
 
     /**
-     * @param ContainerInterface $container
      * @param int $limit
      * @param string $dbDriver
-     * @param boolean $paginator
+     * @param bool $paginator
+     * @param ContainerInterface $container
      */
-    function __construct($limit, $dbDriver, $paginator, ContainerInterface $container)
+    function __construct(int $limit, string $dbDriver, bool $paginator, ContainerInterface $container)
     {
         $this->limit = $limit;
         $this->dbDriver = $dbDriver;
@@ -80,11 +80,11 @@ class ListView
 
     /**
      * @param ListDataEvent $event
-     * @param boolean $onlyResults
-     * @param boolean $returnQueryBuilder
+     * @param bool $onlyResults
+     * @param bool $returnQueryBuilder
      * @return mixed
      */
-    public function getData(ListDataEvent $event, $onlyResults = false, $returnQueryBuilder = false)
+    public function getData(ListDataEvent $event, bool $onlyResults = false, bool $returnQueryBuilder = false)
     {
         /** @var string|null $alias */
         $alias = null;
@@ -175,10 +175,10 @@ class ListView
      * The ui parameter tells us if user interface is enable (buttons, links etc.)
      *
      * @param ListDataEvent $event
-     * @param $ui
+     * @param bool $ui
      * @return string
      */
-    public function render(ListDataEvent $event, $ui = true)
+    public function render(ListDataEvent $event, bool $ui = true):string
     {
         $data = $this->getData($event, !$ui);
         $params = array_merge(
@@ -196,16 +196,16 @@ class ListView
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle():string
     {
         return $this->title;
     }
 
     /**
      * @param string $title
-     * @return $this
+     * @return ListView
      */
-    public function setTitle($title)
+    public function setTitle(string $title):self
     {
         $this->title = $title;
 
@@ -215,16 +215,16 @@ class ListView
     /**
      * @return int
      */
-    public function getLimit()
+    public function getLimit():int
     {
         return $this->limit;
     }
 
     /**
-     * @param $limit
-     * @return $this
+     * @param int $limit
+     * @return ListView
      */
-    public function setLimit($limit)
+    public function setLimit(int $limit):self
     {
         $this->limit = $limit;
 
@@ -234,7 +234,7 @@ class ListView
     /**
      * @return string
      */
-    public function getDbDriver()
+    public function getDbDriver():string
     {
         return $this->dbDriver;
     }
@@ -243,7 +243,7 @@ class ListView
      * @param string $dbDriver
      * @return ListView
      */
-    public function setDbDriver($dbDriver)
+    public function setDbDriver(string $dbDriver):self
     {
         $this->dbDriver = $dbDriver;
         return $this;
@@ -252,7 +252,7 @@ class ListView
     /**
      * @return array
      */
-    public function getOrder()
+    public function getOrder():array
     {
         return $this->order;
     }
@@ -260,9 +260,9 @@ class ListView
     /**
      * @param string $column
      * @param string $order
-     * @return $this
+     * @return ListView
      */
-    public function addOrder($column, $order = 'asc')
+    public function addOrder(string $column, string $order = 'asc'):self
     {
         $this->order[$column] = $order;
 
@@ -271,9 +271,9 @@ class ListView
 
     /**
      * @param string $column
-     * @return $this
+     * @return ListView
      */
-    public function removeOrder($column)
+    public function removeOrder(string $column):self
     {
         if (array_key_exists($column, $this->order)) {
             unset($this->order[$column]);
@@ -285,7 +285,7 @@ class ListView
     /**
      * @return ColumnCollection|ColumnInterface[]
      */
-    public function getColumns()
+    public function getColumns():ColumnCollection
     {
         return $this->columns;
     }
@@ -294,9 +294,9 @@ class ListView
      * @param string $name
      * @param string $type
      * @param array $options
-     * @return $this
+     * @return ListView
      */
-    public function addColumn($name, $type, array $options = [])
+    public function addColumn(string $name, string $type, array $options = []):self
     {
         $this->columns->add($name, $type, $options);
 
@@ -305,9 +305,9 @@ class ListView
 
     /**
      * @param Column $column
-     * @return $this
+     * @return ListView
      */
-    public function removeColumn(Column $column)
+    public function removeColumn(Column $column):self
     {
         $this->columns->removeElement($column);
 
@@ -315,9 +315,9 @@ class ListView
     }
 
     /**
-     * @return ArrayCollection
+     * @return ActionCollection
      */
-    public function getActions()
+    public function getActions():ActionCollection
     {
         return $this->actions;
     }
@@ -327,9 +327,9 @@ class ListView
      * @param string $path
      * @param string $icon
      * @param array $parameters
-     * @return $this
+     * @return ListView
      */
-    public function addAction($path, $name = null, $icon = null, $parameters = [])
+    public function addAction(string $path, string $name = null, string $icon = null, array $parameters = []):self
     {
         $this->actions->add($path, $name, $icon, $parameters);
 
@@ -338,9 +338,9 @@ class ListView
 
     /**
      * @param Action $column
-     * @return $this
+     * @return ListView
      */
-    public function removeAction(Action $column)
+    public function removeAction(Action $column):self
     {
         $this->actions->removeElement($column);
 
@@ -348,19 +348,19 @@ class ListView
     }
 
     /**
-     * @return ArrayCollection
+     * @return FilterCollection
      */
-    public function getFilters()
+    public function getFilters():FilterCollection
     {
         return $this->filters;
     }
 
     /**
-     * @param ResolvedFormTypeInterface|FormTypeInterface|string $formType
+     * @param mixed $formType
      * @param callable|string $filter
-     * @return $this
+     * @return ListView
      */
-    public function addFilter($formType, $filter)
+    public function addFilter($formType, $filter):self
     {
         $this->filters->add($formType, $filter);
 
@@ -369,9 +369,9 @@ class ListView
 
     /**
      * @param ListViewFilter $filter
-     * @return $this
+     * @return ListView
      */
-    public function removeFilter(ListViewFilter $filter)
+    public function removeFilter(ListViewFilter $filter):self
     {
         $this->filters->removeElement($filter);
 
@@ -388,9 +388,9 @@ class ListView
 
     /**
      * @param mixed $query
-     * @return $this
+     * @return ListView
      */
-    public function setQuery($query)
+    public function setQuery($query):self
     {
         $this->query = $query;
 
@@ -400,16 +400,16 @@ class ListView
     /**
      * @return string
      */
-    public function getView()
+    public function getView():string
     {
         return $this->view;
     }
 
     /**
      * @param string $view
-     * @return $this
+     * @return ListView
      */
-    public function setView($view)
+    public function setView(string $view):self
     {
         $this->view = $view;
 
@@ -417,22 +417,21 @@ class ListView
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isPagination()
+    public function isPagination():bool
     {
         return $this->paginator;
     }
 
     /**
-     * @param $pagination
-     * @return $this
+     * @param bool $pagination
+     * @return ListView
      */
-    public function setPagination($pagination)
+    public function setPagination(bool $pagination):self
     {
         $this->paginator = $pagination;
 
         return $this;
     }
 }
-

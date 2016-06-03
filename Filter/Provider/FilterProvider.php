@@ -13,6 +13,7 @@ namespace Vardius\Bundle\ListBundle\Filter\Provider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vardius\Bundle\ListBundle\Filter\Factory\FilterFactory;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
+use Vardius\Bundle\ListBundle\Filter\Types\FilterTypeInterface;
 
 /**
  * FilterProvider
@@ -52,13 +53,13 @@ abstract class FilterProvider implements FilterProviderInterface
      */
     protected function addFilter(string $field, $type, array $options = []):self
     {
-        if (is_string($type) || $type instanceof FilterType) {
+        if (is_string($type) || $type instanceof FilterTypeInterface) {
             $filter = $this->factory->get($type, $options);
         } elseif (is_callable($type)) {
             $filter = $type;
         } else {
             throw new \InvalidArgumentException(
-                'Expected argument of type "callable", "string" or class Vardius\Bundle\ListBundle\Filter\Types\FilterType, ' . get_class(
+                'Expected argument of type "callable", "string" or class Vardius\Bundle\ListBundle\Filter\Types\FilterTypeInterface, ' . get_class(
                     $type
                 ) . ' given'
             );

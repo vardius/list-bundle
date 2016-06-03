@@ -25,10 +25,10 @@ class Paginator extends BasePaginator
 
     /**
      * @param Query $query
-     * @param $page
-     * @param $limit
+     * @param int $page
+     * @param int $limit
      */
-    function __construct(Query $query, $page, $limit)
+    function __construct(Query $query, int $page, int $limit)
     {
         $this->page = $page;
         $this->limit = $limit;

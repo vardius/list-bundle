@@ -10,8 +10,8 @@
 
 namespace Vardius\Bundle\ListBundle\Paginator\Propel;
 
-use Vardius\Bundle\ListBundle\Paginator\Paginator as BasePaginator;
 use Doctrine\ORM\NoResultException;
+use Vardius\Bundle\ListBundle\Paginator\Paginator as BasePaginator;
 
 /**
  * Paginator
@@ -25,10 +25,10 @@ class Paginator extends BasePaginator
 
     /**
      * @param \ModelCriteria $query
-     * @param $page
-     * @param $limit
+     * @param int $page
+     * @param int $limit
      */
-    function __construct(\ModelCriteria $query, $page, $limit)
+    function __construct(\ModelCriteria $query, int $page, int $limit)
     {
         $this->page = $page;
         $this->limit = $limit;

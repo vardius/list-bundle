@@ -34,7 +34,7 @@ class PaginatorFactory
      * @param TwigEngine $templating
      * @param string $templatePath
      */
-    function __construct(TwigEngine $templating, $templatePath = 'VardiusListBundle:Paginator:')
+    function __construct(TwigEngine $templating, string $templatePath = 'VardiusListBundle:Paginator:')
     {
         $this->templating = $templating;
         $this->templatePath = $templatePath;
@@ -42,11 +42,11 @@ class PaginatorFactory
 
     /**
      * @param mixed $query
-     * @param $page
-     * @param $limit
+     * @param int $page
+     * @param int $limit
      * @return PaginatorInterface
      */
-    public function get($query, $page, $limit)
+    public function get($query, int $page, int $limit):PaginatorInterface
     {
         if ($query instanceof QueryBuilder) {
             $paginator = new DoctrinePaginator($query, $page, $limit);

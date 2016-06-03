@@ -33,7 +33,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function render()
+    public function render():string
     {
         return $this->templating->render($this->getTemplatePath() . 'paginator.html.twig', [
             'currentPage' => $this->getCurrentPage(),
@@ -46,7 +46,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastPage()
+    public function getLastPage():int
     {
         return ceil($this->total / $this->limit);
     }
@@ -54,7 +54,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getCurrentPage()
+    public function getCurrentPage():int
     {
         return $this->page;
     }
@@ -62,7 +62,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getPreviousPage()
+    public function getPreviousPage():float
     {
         return ($this->page > 1 ? ($this->page - 1) : 1);
     }
@@ -70,7 +70,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getNextPage()
+    public function getNextPage():float
     {
         return ($this->page < $this->getLastPage() ? $this->page + 1 : $this->page);
     }
@@ -78,7 +78,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getTemplating()
+    public function getTemplating():TwigEngine
     {
         return $this->templating;
     }
@@ -86,15 +86,16 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function setTemplating($templating)
+    public function setTemplating(TwigEngine $templating):self
     {
         $this->templating = $templating;
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getTemplatePath()
+    public function getTemplatePath():string
     {
         return $this->templatePath;
     }
@@ -102,9 +103,9 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function setTemplatePath($templatePath)
+    public function setTemplatePath(string $templatePath)
     {
         $this->templatePath = $templatePath;
+        return $this;
     }
-
 }

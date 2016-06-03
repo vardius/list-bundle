@@ -12,7 +12,7 @@ namespace Vardius\Bundle\ListBundle\Filter\Factory;
 
 use Vardius\Bundle\ListBundle\Filter\Filter;
 use Vardius\Bundle\ListBundle\Filter\FilterInterface;
-use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
+use Vardius\Bundle\ListBundle\Filter\Types\FilterTypeInterface;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterTypePool;
 
 /**
@@ -43,13 +43,12 @@ class FilterFactory
     {
         if (is_string($type)) {
             $type = $this->pool->getType($type);
-        } elseif (!is_callable($type) && !$type instanceof FilterType) {
+        } elseif (!is_callable($type) && !$type instanceof FilterTypeInterface) {
             throw new \InvalidArgumentException(
-                'The type mast be instance of Vardius\Bundle\ListBundle\Filter\Types\FilterType or callback. ' . get_class($type) . ' given'
+                'The type mast be instance of Vardius\Bundle\ListBundle\Filter\Types\FilterTypeInterface or callback. ' . get_class($type) . ' given'
             );
         }
 
         return new Filter($type, $options);
     }
-
 }

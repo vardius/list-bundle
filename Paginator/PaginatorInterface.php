@@ -33,54 +33,55 @@ interface PaginatorInterface
      *
      * @return string
      */
-    public function render();
+    public function render():string;
 
     /**
      * Returns last page number
      *
      * @return float
      */
-    public function getLastPage();
+    public function getLastPage():float;
 
     /**
      * Returns current page number
      *
      * @return int
      */
-    public function getCurrentPage();
+    public function getCurrentPage():int;
 
     /**
      * Returns previous page number
      *
      * @return int
      */
-    public function getPreviousPage();
+    public function getPreviousPage():int;
 
     /**
      * Returns next page number
      *
      * @return float
      */
-    public function getNextPage();
+    public function getNextPage():float;
 
     /**
      * @return TwigEngine
      */
-    public function getTemplating();
+    public function getTemplating():TwigEngine;
 
     /**
      * @param TwigEngine $templating
+     * @return PaginatorInterface
      */
-    public function setTemplating($templating);
+    public function setTemplating(TwigEngine $templating):self;
 
     /**
      * @return string
      */
-    public function getTemplatePath();
+    public function getTemplatePath():string;
 
     /**
      * @param string $templatePath
+     * @return PaginatorInterface
      */
-    public function setTemplatePath($templatePath);
-
+    public function setTemplatePath(string $templatePath):self;
 }

@@ -24,7 +24,7 @@ class ListViewFactory
     protected $limit;
     /** @var string */
     protected $driver;
-    /** @var boolean */
+    /** @var bool */
     protected $paginator;
     /** @var ContainerInterface */
     protected $container;
@@ -32,10 +32,10 @@ class ListViewFactory
     /**
      * @param int $limit
      * @param string $driver
-     * @param boolean $paginator
+     * @param bool $paginator
      * @param ContainerInterface $container
      */
-    function __construct($limit, $driver, $paginator, ContainerInterface $container)
+    function __construct(int $limit, string $driver, bool $paginator, ContainerInterface $container)
     {
         $this->limit = $limit;
         $this->driver = $driver;
@@ -46,7 +46,7 @@ class ListViewFactory
     /**
      * @return ListView
      */
-    public function get()
+    public function get():ListView
     {
         $listView = new ListView($this->limit, $this->driver, $this->paginator, $this->container);
 

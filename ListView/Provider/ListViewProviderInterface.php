@@ -24,5 +24,5 @@ interface ListViewProviderInterface
      *
      * @return ListView
      */
-    public function buildListView();
+    public function buildListView():ListView;
 }
