@@ -11,6 +11,7 @@
 namespace Vardius\Bundle\ListBundle\Filter\Factory;
 
 use Vardius\Bundle\ListBundle\Filter\Filter;
+use Vardius\Bundle\ListBundle\Filter\FilterInterface;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterTypePool;
 
@@ -34,11 +35,11 @@ class FilterFactory
     }
 
     /**
-     * @param $type
+     * @param mixed $type
      * @param array $options
-     * @return Filter
+     * @return FilterInterface
      */
-    public function get($type, array $options = [])
+    public function get($type, array $options = []):FilterInterface
     {
         if (is_string($type)) {
             $type = $this->pool->getType($type);

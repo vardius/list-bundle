@@ -29,7 +29,7 @@ class ListResultEvent extends ListEvent
      * @param mixed $query
      * @param Request $request
      */
-    function __construct($routeName, $query, Request $request)
+    function __construct(string $routeName, $query, Request $request)
     {
         parent::__construct($routeName, $query, $request);
 
@@ -49,7 +49,7 @@ class ListResultEvent extends ListEvent
     /**
      * @return array
      */
-    public function getResults()
+    public function getResults():array
     {
         return $this->results;
     }
@@ -58,7 +58,7 @@ class ListResultEvent extends ListEvent
      * @param array $results
      * @return ListResultEvent
      */
-    public function setResults(array $results)
+    public function setResults(array $results):self
     {
         $this->results = $results;
         return $this;

@@ -22,7 +22,7 @@ class ListFilterEvent extends ListEvent
 {
     /** @var FormInterface */
     protected $form;
-    /** @var string */
+    /** @var string|null */
     protected $alias;
 
     /**
@@ -30,9 +30,9 @@ class ListFilterEvent extends ListEvent
      * @param mixed $query
      * @param Request $request
      * @param FormInterface $form
-     * @param string $alias
+     * @param string|null $alias
      */
-    function __construct($routeName, $query, Request $request, FormInterface $form, $alias)
+    function __construct(string $routeName, $query, Request $request, FormInterface $form, string $alias = null)
     {
         parent::__construct($routeName, $query, $request);
 
@@ -43,7 +43,7 @@ class ListFilterEvent extends ListEvent
     /**
      * @return FormInterface
      */
-    public function getForm()
+    public function getForm():FormInterface
     {
         return $this->form;
     }
@@ -51,15 +51,15 @@ class ListFilterEvent extends ListEvent
     /**
      * @return array
      */
-    public function getData()
+    public function getData():array
     {
         return $this->form->getData();
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getAlias()
+    public function getAlias():string
     {
         return $this->alias;
     }

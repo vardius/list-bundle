@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Filter\Types;
 
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 
@@ -26,7 +25,7 @@ interface FilterTypeInterface
      *
      * @param FilterEvent $event
      * @param array $options
-     * @return QueryBuilder
+     * @return mixed
      */
     public function apply(FilterEvent $event, array $options);
 
@@ -42,5 +41,5 @@ interface FilterTypeInterface
      *
      * @return string
      */
-    public function getName();
+    public function getName():string;
 }

@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Event;
 
-use Elastica\Query;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,7 +23,7 @@ class ListEvent extends Event
     /** @var  string */
     protected $routeName;
     /** @var mixed */
-    protected $queryBuilder;
+    protected $query;
     /** @var  Request */
     protected $request;
 
@@ -33,17 +32,17 @@ class ListEvent extends Event
      * @param mixed $query
      * @param Request $request
      */
-    function __construct($routeName, $query, Request $request)
+    function __construct(string $routeName, $query, Request $request)
     {
         $this->routeName = $routeName;
-        $this->queryBuilder = $query;
+        $this->query = $query;
         $this->request = $request;
     }
 
     /**
      * @return string
      */
-    public function getRouteName()
+    public function getRouteName():string
     {
         return $this->routeName;
     }
@@ -51,15 +50,15 @@ class ListEvent extends Event
     /**
      * @return mixed
      */
-    public function getQueryBuilder()
+    public function getQuery()
     {
-        return $this->queryBuilder;
+        return $this->query;
     }
 
     /**
      * @return Request
      */
-    public function getRequest()
+    public function getRequest():Request
     {
         return $this->request;
     }
@@ -68,7 +67,7 @@ class ListEvent extends Event
      * @param string $routeName
      * @return ListEvent
      */
-    public function setRouteName($routeName)
+    public function setRouteName(string $routeName):self
     {
         $this->routeName = $routeName;
         return $this;
@@ -78,9 +77,9 @@ class ListEvent extends Event
      * @param mixed $query
      * @return ListEvent
      */
-    public function setQueryBuilder($query)
+    public function setQuery($query):self
     {
-        $this->queryBuilder = $query;
+        $this->query = $query;
         return $this;
     }
 
@@ -88,7 +87,7 @@ class ListEvent extends Event
      * @param Request $request
      * @return ListEvent
      */
-    public function setRequest($request)
+    public function setRequest(Request $request):self
     {
         $this->request = $request;
         return $this;

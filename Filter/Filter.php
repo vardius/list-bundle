@@ -13,6 +13,7 @@ namespace Vardius\Bundle\ListBundle\Filter;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
+use Vardius\Bundle\ListBundle\Filter\Types\FilterTypeInterface;
 
 /**
  * Filter
@@ -62,28 +63,27 @@ class Filter implements FilterInterface
     /**
      * @inheritDoc
      */
-    public function getOptions()
+    public function getOptions():array
     {
         return $this->options;
     }
 
     /**
-     * @return FilterType
+     * @return FilterTypeInterface
      */
-    public function getType()
+    public function getType():FilterTypeInterface
     {
         return $this->type;
     }
 
     /**
-     * @param FilterType $type
+     * @param FilterTypeInterface $type
      * @return Filter
      */
-    public function setType($type)
+    public function setType(FilterTypeInterface $type):self
     {
         $this->type = $type;
 
         return $this;
     }
-
 }

@@ -18,9 +18,9 @@ namespace Vardius\Bundle\ListBundle\View;
 interface RendererInterface
 {
     /**
-     * @param $view
-     * @param $params
+     * @param string $view
+     * @param array $params
      * @return string
      */
-    public function renderView($view, $params);
+    public function renderView(string $view, array $params = []):string;
 }

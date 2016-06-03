@@ -26,7 +26,7 @@ interface ColumnTypeInterface
      * @param array $options
      * @return array
      */
-    public function getData($entity = null, array $options = []);
+    public function getData($entity = null, array $options = []):array;
 
     /**
      * Configure options array
@@ -43,6 +43,6 @@ interface ColumnTypeInterface
      *
      * @return string
      */
-    public function getName();
+    public function getName():string;
 
 }

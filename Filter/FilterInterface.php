@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Filter;
 
-use Doctrine\ORM\QueryBuilder;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
 
 /**
@@ -24,7 +23,7 @@ interface FilterInterface
      * Filter body, method is invoked when the filter is called from lsit view
      *
      * @param FilterEvent $event
-     * @return QueryBuilder
+     * @return mixed
      */
     public function apply(FilterEvent $event);
 
@@ -33,13 +32,14 @@ interface FilterInterface
      *
      * @return array
      */
-    public function getOptions();
+    public function getOptions():array;
 
     /**
      * Set the configuration array
      *
      * @param array $options
+     * @return FilterInterface
      */
-    public function setOptions(array $options = []);
+    public function setOptions(array $options = []):self;
 
 }

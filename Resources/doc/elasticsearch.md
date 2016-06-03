@@ -53,7 +53,7 @@ class ListResultsSubscriber implements EventSubscriberInterface
 
     public function onResults(ListResultEvent $event)
     {
-        $query = $event->getQueryBuilder();
+        $query = $event->getQuery();
         
         //Check if it is ElasticSearch Query
         //Otherwise it could be Propel or DOctrine list action

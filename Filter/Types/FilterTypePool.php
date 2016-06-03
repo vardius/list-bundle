@@ -33,15 +33,16 @@ class FilterTypePool
     /**
      * @return ArrayCollection
      */
-    public function getTypes()
+    public function getTypes():ArrayCollection
     {
         return $this->types;
     }
 
     /**
      * @param FilterType $type
+     * @return FilterTypePool
      */
-    public function addType(FilterType $type)
+    public function addType(FilterType $type):self
     {
         $this->types->set($type->getName(), $type);
     }
@@ -50,9 +51,8 @@ class FilterTypePool
      * @param string $id
      * @return FilterType
      */
-    public function getType($id)
+    public function getType(string $id):FilterType
     {
         return $this->types->get($id);
     }
-
 }

@@ -23,7 +23,7 @@ class ImageColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null, array $options = [])
+    public function getData($entity = null, array $options = []):array
     {
         $property = null;
         $callable = $options['callback'];
@@ -63,7 +63,7 @@ class ImageColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'image';
     }

@@ -24,11 +24,9 @@ use Vardius\Bundle\ListBundle\Data\DataProviderInterface;
 class DataProvider implements DataProviderInterface
 {
     /**
-     * @param Filtered $data
-     * @param Filtered|null $query
-     * @return array
+     * @inheritDoc
      */
-    public function getQuery($data, $query = null)
+    public function getQuery($data, $query = null):array
     {
         $data = $query !== null ? $query : $data;
         if ($data instanceof Filtered) {
@@ -47,14 +45,9 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * @param Filtered $query
-     * @param string|null $alias
-     * @param string|null $column
-     * @param string|null $sort
-     * @param array $ids
-     * @return mixed
+     * @inheritDoc
      */
-    public function applyQueries($query, $alias, $column, $sort, $ids = [])
+    public function applyQueries($query, string $alias = null, string $column = null, string $sort = null, array $ids = [])
     {
         if (!$query instanceof Filtered) {
             throw new \InvalidArgumentException(

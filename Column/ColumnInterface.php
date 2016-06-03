@@ -22,28 +22,33 @@ interface ColumnInterface
      * @param string $responseType
      * @return mixed
      */
-    public function getData($entity, $responseType = 'html');
+    public function getData($entity, string $responseType = 'html');
 
     /**
      * @return string|null
      */
-    public function getLabel();
+    public function getLabel():string;
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function getSort();
+    public function getSort():bool;
+
+    /**
+     * @return string
+     */
+    public function getProperty():string;
 
     /**
      * @return array
      */
-    public function getAttr();
+    public function getAttr():array;
 
     /**
      * Tells if column belongs to user interface
      *
      * @return bool
      */
-    public function isUi();
+    public function isUi():bool;
 
 }

@@ -61,7 +61,7 @@ class NumericType extends FilterType
     /**
      * @inheritDoc
      */
-    public function getName()
+    public function getName():string
     {
         return 'numeric';
     }

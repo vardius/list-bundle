@@ -37,7 +37,7 @@ class ListDataEvent
     /**
      * @return Request
      */
-    public function getRequest()
+    public function getRequest():Request
     {
         return $this->request;
     }
@@ -53,7 +53,7 @@ class ListDataEvent
     /**
      * @return string
      */
-    public function getRouteName()
+    public function getRouteName():string
     {
 
         return $this->request->get('_route');
@@ -62,7 +62,7 @@ class ListDataEvent
     /**
      * @return int
      */
-    public function getPage()
+    public function getPage():int
     {
 
         return $this->request->get('page', 1);
@@ -71,7 +71,7 @@ class ListDataEvent
     /**
      * @return string|null
      */
-    public function getColumn()
+    public function getColumn():string
     {
 
         return $this->request->get('column', null);
@@ -81,7 +81,7 @@ class ListDataEvent
      * asc|desc
      * @return string|null
      */
-    public function getSort()
+    public function getSort():string
     {
         return $this->request->get('sort', null);
     }
@@ -89,7 +89,7 @@ class ListDataEvent
     /**
      * @return int|null
      */
-    public function getLimit()
+    public function getLimit():int
     {
         return $this->request->get('limit', null);
     }

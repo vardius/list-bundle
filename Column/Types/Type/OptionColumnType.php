@@ -35,7 +35,7 @@ class OptionColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null, array $options = [])
+    public function getData($entity = null, array $options = []):array
     {
         return [
             'option' => $this,
@@ -58,7 +58,7 @@ class OptionColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'option';
     }

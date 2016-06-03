@@ -13,7 +13,6 @@ namespace Vardius\Bundle\ListBundle\Filter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\ResolvedFormTypeInterface;
-use Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider;
 
 /**
  * ListViewFilter
@@ -22,22 +21,22 @@ use Vardius\Bundle\ListBundle\Filter\Provider\FilterProvider;
  */
 class ListViewFilter
 {
-    /** @var ResolvedFormTypeInterface|FormTypeInterface|string */
+    /** @var mixed */
     protected $formType;
     /** @var  callable|ArrayCollection */
     protected $filter;
 
     /**
-     * @param ResolvedFormTypeInterface|FormTypeInterface|string $formType
+     * @param mixed $formType
      * @param callable|ArrayCollection $filter
      */
     function __construct($formType, $filter)
     {
         if (!is_callable($filter) && !$filter instanceof ArrayCollection) {
             throw new \InvalidArgumentException(
-                'Expected argument of type "callable" or Collection of Vardius\Bundle\ListBundle\Filter\Filter, '.get_class(
+                'Expected argument of type "callable" or Collection of Vardius\Bundle\ListBundle\Filter\Filter, ' . get_class(
                     $filter
-                ).' given'
+                ) . ' given'
             );
         }
 
@@ -46,7 +45,7 @@ class ListViewFilter
     }
 
     /**
-     * @return ResolvedFormTypeInterface|FormTypeInterface|string
+     * @return mixed
      */
     public function getFormType()
     {
@@ -54,9 +53,10 @@ class ListViewFilter
     }
 
     /**
-     * @param ResolvedFormTypeInterface|FormTypeInterface|string $formType
+     * @param mixed $formType
+     * @return ListViewFilter
      */
-    public function setFormType($formType)
+    public function setFormType($formType):self
     {
         $this->formType = $formType;
     }
@@ -71,8 +71,9 @@ class ListViewFilter
 
     /**
      * @param callable|ArrayCollection $filter
+     * @return ListViewFilter
      */
-    public function setFilter($filter)
+    public function setFilter($filter):self
     {
         $this->filter = $filter;
     }

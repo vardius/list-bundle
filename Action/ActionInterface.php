@@ -23,45 +23,49 @@ interface ActionInterface
      * @param string $icon
      * @param array $parameters
      */
-    function __construct($path, $name = null, $icon = null, $parameters = []);
+    function __construct(string $path, string $name = null, string $icon = null, array $parameters = []);
 
     /**
      * @return string
      */
-    public function getName();
+    public function getName():string;
 
     /**
      * @param string $name
+     * @return ActionInterface
      */
-    public function setName($name);
+    public function setName(string $name):self;
 
     /**
      * @return string
      */
-    public function getPath();
+    public function getPath():string;
 
     /**
      * @param string $path
+     * @return ActionInterface
      */
-    public function setPath($path);
+    public function setPath(string $path):self;
 
     /**
      * @return string
      */
-    public function getIcon();
+    public function getIcon():string;
 
     /**
      * @param string $icon
+     * @return ActionInterface
      */
-    public function setIcon($icon);
+    public function setIcon(string $icon):self;
 
     /**
      * @return array
      */
-    public function getParameters();
+    public function getParameters(): array;
 
     /**
      * @param array $parameters
+     * @return ActionInterface
      */
-    public function setParameters($parameters);
+    public function setParameters(array $parameters):self;
 }

@@ -21,6 +21,7 @@ use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
  */
 class ActionColumnType extends ColumnType
 {
+    /** @var ActionFactory */
     protected $actionFactory;
 
     function __construct(ActionFactory $actionFactory)
@@ -31,7 +32,7 @@ class ActionColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null, array $options = [])
+    public function getData($entity = null, array $options = []):array
     {
         $items = [];
         if (array_key_exists('actions', $options)) {
@@ -70,7 +71,7 @@ class ActionColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'action';
     }

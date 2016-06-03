@@ -22,7 +22,7 @@ class PropertyColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null, array $options = [])
+    public function getData($entity = null, array $options = []):array
     {
         $property = null;
         if ($entity !== null) {
@@ -48,7 +48,7 @@ class PropertyColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'property';
     }

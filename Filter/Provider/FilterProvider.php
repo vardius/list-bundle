@@ -39,7 +39,7 @@ abstract class FilterProvider implements FilterProviderInterface
     /**
      * @return ArrayCollection
      */
-    public function getFilters()
+    public function getFilters():ArrayCollection
     {
         return $this->filters;
     }
@@ -48,9 +48,9 @@ abstract class FilterProvider implements FilterProviderInterface
      * @param string $field
      * @param string|callable|FilterType $type
      * @param array $options
-     * @return $this
+     * @return FilterProvider
      */
-    protected function addFilter($field, $type, array $options = [])
+    protected function addFilter(string $field, $type, array $options = []):self
     {
         if (is_string($type) || $type instanceof FilterType) {
             $filter = $this->factory->get($type, $options);
@@ -70,10 +70,10 @@ abstract class FilterProvider implements FilterProviderInterface
     }
 
     /**
-     * @param $key
-     * @return $this
+     * @param string $key
+     * @return FilterProvider
      */
-    protected function removeFilter($key)
+    protected function removeFilter(string $key):self
     {
         $this->filters->remove($key);
 

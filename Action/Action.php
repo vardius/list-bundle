@@ -29,7 +29,7 @@ class Action implements ActionInterface
     /**
      * @inheritDoc
      */
-    function __construct($path, $name = null, $icon = null, $parameters = [])
+    function __construct(string $path, string $name = null, string $icon = null, array $parameters = [])
     {
         $this->name = $name;
         $this->path = $path;
@@ -40,7 +40,7 @@ class Action implements ActionInterface
     /**
      * @inheritDoc
      */
-    public function getName()
+    public function getName():string
     {
         return $this->name;
     }
@@ -48,15 +48,16 @@ class Action implements ActionInterface
     /**
      * @inheritDoc
      */
-    public function setName($name)
+    public function setName(string $name):self
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function getPath()
+    public function getPath():string
     {
         return $this->path;
     }
@@ -64,15 +65,16 @@ class Action implements ActionInterface
     /**
      * @inheritDoc
      */
-    public function setPath($path)
+    public function setPath(string $path):self
     {
         $this->path = $path;
+        return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function getIcon()
+    public function getIcon():string
     {
         return $this->icon;
     }
@@ -80,15 +82,16 @@ class Action implements ActionInterface
     /**
      * @inheritDoc
      */
-    public function setIcon($icon)
+    public function setIcon(string $icon):self
     {
         $this->icon = $icon;
+        return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function getParameters()
+    public function getParameters():array
     {
         return $this->parameters;
     }
@@ -96,8 +99,9 @@ class Action implements ActionInterface
     /**
      * @inheritDoc
      */
-    public function setParameters($parameters)
+    public function setParameters(array $parameters):self
     {
         $this->parameters = $parameters;
+        return $this;
     }
 }

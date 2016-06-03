@@ -37,28 +37,28 @@ class ActionCollection implements \IteratorAggregate
     /**
      * @inheritDoc
      */
-    public function getIterator()
+    public function getIterator():Iterator
     {
         return new Iterator($this->items);
     }
 
     /**
      * @param Action $element
-     * @return mixed
+     * @return bool
      */
-    public function contains(Action $element)
+    public function contains(Action $element):bool
     {
         return in_array($element, $this->items, true);
     }
 
     /**
-     * @param string $name
      * @param string $path
-     * @param string $icon
+     * @param string|null $name
+     * @param string|null $icon
      * @param array $parameters
-     * @return $this
+     * @return ActionCollection
      */
-    public function add($path, $name = null, $icon = null, $parameters = [])
+    public function add(string $path, string $name = null, string $icon = null, array $parameters = []):self
     {
         $element = $this->factory->get($path, $name, $icon, $parameters);
         $this->items[] = $element;
@@ -67,10 +67,10 @@ class ActionCollection implements \IteratorAggregate
     }
 
     /**
-     * @param $key
+     * @param int $key
      * @return mixed|null
      */
-    public function remove($key)
+    public function remove(int $key):Action
     {
         if (!isset($this->items[$key]) && !array_key_exists($key, $this->items)) {
             return null;
@@ -86,7 +86,7 @@ class ActionCollection implements \IteratorAggregate
      * @param Action $element
      * @return bool
      */
-    public function removeElement(Action $element)
+    public function removeElement(Action $element):bool
     {
         $key = array_search($element, $this->items, true);
 
@@ -100,10 +100,10 @@ class ActionCollection implements \IteratorAggregate
     }
 
     /**
-     * @param $key
-     * @return mixed|null
+     * @param int $key
+     * @return Action|null
      */
-    public function get($key)
+    public function get(int $key):Action
     {
         return isset($this->items[$key]) ? $this->items[$key] : null;
     }
@@ -111,7 +111,7 @@ class ActionCollection implements \IteratorAggregate
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray():array
     {
         return $this->items;
     }

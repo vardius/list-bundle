@@ -37,27 +37,27 @@ class ColumnCollection implements \IteratorAggregate
     /**
      * @inheritDoc
      */
-    public function getIterator()
+    public function getIterator():Iterator
     {
         return new Iterator($this->items);
     }
 
     /**
      * @param Column $element
-     * @return mixed
+     * @return bool
      */
-    public function contains(Column $element)
+    public function contains(Column $element):bool
     {
         return in_array($element, $this->items, true);
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param $type
      * @param array $options
-     * @return $this
+     * @return ColumnCollection
      */
-    public function add($name, $type, array $options = [])
+    public function add(string $name, $type, array $options = []):self
     {
         $element = $this->factory->get($name, $type, $options);
         $this->items[] = $element;
@@ -66,10 +66,10 @@ class ColumnCollection implements \IteratorAggregate
     }
 
     /**
-     * @param $key
-     * @return mixed|null
+     * @param int $key
+     * @return Column
      */
-    public function remove($key)
+    public function remove(int $key):Column
     {
         if (!isset($this->items[$key]) && !array_key_exists($key, $this->items)) {
             return null;
@@ -85,7 +85,7 @@ class ColumnCollection implements \IteratorAggregate
      * @param Column $element
      * @return bool
      */
-    public function removeElement(Column $element)
+    public function removeElement(Column $element):bool
     {
         $key = array_search($element, $this->items, true);
 
@@ -99,10 +99,10 @@ class ColumnCollection implements \IteratorAggregate
     }
 
     /**
-     * @param $key
-     * @return mixed|null
+     * @param int $key
+     * @return Column|null
      */
-    public function get($key)
+    public function get(int $key):Column
     {
         return isset($this->items[$key]) ? $this->items[$key] : null;
     }
@@ -110,7 +110,7 @@ class ColumnCollection implements \IteratorAggregate
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray():array
     {
         return $this->items;
     }

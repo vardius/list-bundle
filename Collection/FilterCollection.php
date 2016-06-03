@@ -39,26 +39,26 @@ class FilterCollection implements \IteratorAggregate
     /**
      * @inheritDoc
      */
-    public function getIterator()
+    public function getIterator():Iterator
     {
         return new Iterator($this->items);
     }
 
     /**
      * @param ListViewFilter $element
-     * @return mixed
+     * @return bool
      */
-    public function contains(ListViewFilter $element)
+    public function contains(ListViewFilter $element):bool
     {
         return in_array($element, $this->items, true);
     }
 
     /**
-     * @param ResolvedFormTypeInterface|FormTypeInterface|string $formType
+     * @param mixed $formType
      * @param callable|string $filter
-     * @return $this
+     * @return FilterCollection
      */
-    public function add($formType, $filter)
+    public function add($formType, $filter):self
     {
         $column = $this->factory->get($formType, $filter);
         $this->items[] = $column;
@@ -67,10 +67,10 @@ class FilterCollection implements \IteratorAggregate
     }
 
     /**
-     * @param $key
+     * @param int $key
      * @return mixed|null
      */
-    public function remove($key)
+    public function remove(int $key):ListViewFilter
     {
         if (!isset($this->items[$key]) && !array_key_exists($key, $this->items)) {
             return null;
@@ -86,7 +86,7 @@ class FilterCollection implements \IteratorAggregate
      * @param ListViewFilter $element
      * @return bool
      */
-    public function removeElement(ListViewFilter $element)
+    public function removeElement(ListViewFilter $element):bool
     {
         $key = array_search($element, $this->items, true);
 
@@ -100,10 +100,10 @@ class FilterCollection implements \IteratorAggregate
     }
 
     /**
-     * @param $key
-     * @return mixed|null
+     * @param int $key
+     * @return ListViewFilter|null
      */
-    public function get($key)
+    public function get(int $key):ListViewFilter
     {
         return isset($this->items[$key]) ? $this->items[$key] : null;
     }
@@ -111,7 +111,7 @@ class FilterCollection implements \IteratorAggregate
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray():array
     {
         return $this->items;
     }

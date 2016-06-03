@@ -38,7 +38,7 @@ class Renderer implements RendererInterface
     /**
      * {@inheritdoc}
      */
-    public function renderView($view, $params)
+    public function renderView(string $view, array $params = []):string
     {
         $template = null;
         if ($this->templating->exists($this->getTemplateName())) {
@@ -70,7 +70,7 @@ class Renderer implements RendererInterface
     /**
      * @return string
      */
-    protected function getTemplateName()
+    protected function getTemplateName():string
     {
         return 'list';
     }

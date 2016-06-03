@@ -24,6 +24,5 @@ interface FilterProviderInterface
      *
      * @return ArrayCollection
      */
-    public function build();
-
+    public function build():ArrayCollection;
 }

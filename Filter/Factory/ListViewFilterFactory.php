@@ -14,7 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Vardius\Bundle\ListBundle\Filter\ListViewFilter;
-use Vardius\Bundle\ListBundle\ListView\ListView;
 
 /**
  * ListViewFilterFactory
@@ -30,19 +29,19 @@ class ListViewFilterFactory
      * ListViewFilterFactory constructor.
      * @param ContainerInterface $container
      */
-    public function __construct( $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
     /**
-     * @param ResolvedFormTypeInterface|FormTypeInterface|string $formType
+     * @param mixed $formType
      * @param callable|string $filter
-     * @return ListView
+     * @return ListViewFilter
      */
-    public function get($formType, $filter)
+    public function get($formType, $filter):ListViewFilter
     {
-        if(is_string($filter)){
+        if (is_string($filter)) {
             $filterProvider = $this->container->get($filter);
             $filterProvider->build();
             $filter = $filterProvider->getFilters();

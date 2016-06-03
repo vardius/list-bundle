@@ -24,7 +24,7 @@ class Iterator implements \Iterator
      * Iterator constructor.
      * @param array $items
      */
-    public function __construct(array $items = [])
+    public function __construct(array $items)
     {
         $this->items = $items;
     }
@@ -72,7 +72,7 @@ class Iterator implements \Iterator
     /**
      * @inheritDoc
      */
-    public function valid()
+    public function valid(): bool
     {
         $key = key($this->items);
         return ($key !== NULL && $key !== FALSE);
@@ -85,5 +85,4 @@ class Iterator implements \Iterator
     {
         reset($this->items);
     }
-
 }

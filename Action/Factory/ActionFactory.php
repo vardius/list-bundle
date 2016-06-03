@@ -10,8 +10,8 @@
 
 namespace Vardius\Bundle\ListBundle\Action\Factory;
 
-use Vardius\Bundle\CrudBundle\Actions\ActionInterface;
 use Vardius\Bundle\ListBundle\Action\Action;
+use Vardius\Bundle\ListBundle\Action\ActionInterface;
 
 /**
  * ActionFactory
@@ -27,14 +27,10 @@ class ActionFactory
      * @param array $parameters
      * @return ActionInterface
      */
-    public function get($path, $name = null, $icon = null, $parameters = [])
+    public function get(string $path, string $name = null, string $icon = null, array $parameters = []) : ActionInterface
     {
         if ($name === null && $icon === null) {
             throw new \InvalidArgumentException('One of the arguments (name or icon) has to be provided');
-        }
-
-        if (!is_array($parameters)) {
-            throw new \InvalidArgumentException('The $parameters mast be an array. ' . $parameters . ' given');
         }
 
         return new Action($path, $name, $icon, $parameters);

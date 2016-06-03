@@ -13,6 +13,7 @@ namespace Vardius\Bundle\ListBundle\Column;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnTypeInterface;
 
 /**
  * Column
@@ -32,10 +33,10 @@ class Column implements ColumnInterface
 
     /**
      * @param string $property
-     * @param ColumnType $type
+     * @param ColumnTypeInterface $type
      * @param array $options
      */
-    function __construct($property, ColumnType $type, array $options = [], TwigEngine $templating)
+    function __construct(string $property, ColumnTypeInterface $type, array $options = [], TwigEngine $templating)
     {
         $this->type = $type;
         $this->templating = $templating;
@@ -48,7 +49,7 @@ class Column implements ColumnInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($entity, $responseType = 'html')
+    public function getData($entity, string $responseType = 'html')
     {
         $data = $this->type->getData($entity, $this->options);
         if ($responseType === 'html') {
@@ -65,7 +66,7 @@ class Column implements ColumnInterface
     /**
      * {@inheritdoc}
      */
-    public function getLabel()
+    public function getLabel():string
     {
         return $this->options['label'];
     }
@@ -73,7 +74,7 @@ class Column implements ColumnInterface
     /**
      * {@inheritdoc}
      */
-    public function getSort()
+    public function getSort():bool
     {
         return $this->options['sort'];
     }
@@ -81,7 +82,7 @@ class Column implements ColumnInterface
     /**
      * {@inheritdoc}
      */
-    public function getProperty()
+    public function getProperty():string
     {
         return $this->options['property'];
     }
@@ -89,12 +90,12 @@ class Column implements ColumnInterface
     /**
      * {@inheritdoc}
      */
-    public function getAttr()
+    public function getAttr():array
     {
         return $this->options['attr'];
     }
 
-    public function isUi()
+    public function isUi():bool
     {
         return $this->options['ui'];
     }

@@ -20,11 +20,9 @@ use Vardius\Bundle\ListBundle\Data\DataProviderInterface;
 class DataProvider implements DataProviderInterface
 {
     /**
-     * @param \ModelCriteria $data
-     * @param \ModelCriteria|null $query
-     * @return array
+     * @inheritDoc
      */
-    public function getQuery($data, $query = null)
+    public function getQuery($data, $query = null):array
     {
         $data = $query !== null ? $query : $data;
         if ($data instanceof \ModelCriteria) {
@@ -43,14 +41,9 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * @param \ModelCriteria $query
-     * @param string|null $alias
-     * @param string|null $column
-     * @param string|null $sort
-     * @param array $ids
-     * @return mixed
+     * @inheritDoc
      */
-    public function applyQueries($query, $alias, $column, $sort, $ids = [])
+    public function applyQueries($query, string $alias = null, string $column = null, string $sort = null, array $ids = [])
     {
         if (!$query instanceof \ModelCriteria) {
             throw new \InvalidArgumentException(

@@ -23,7 +23,7 @@ class CallableColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null, array $options = [])
+    public function getData($entity = null, array $options = []):array
     {
         $callback = null;
         $callable = $options['callback'];
@@ -58,7 +58,7 @@ class CallableColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'callable';
     }

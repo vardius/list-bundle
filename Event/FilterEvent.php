@@ -19,7 +19,7 @@ class FilterEvent
 {
     /** @var mixed */
     protected $query;
-    /** @var string */
+    /** @var string|null */
     protected $alias;
     /** @var string */
     protected $field;
@@ -33,7 +33,7 @@ class FilterEvent
      * @param string $field
      * @param string $value
      */
-    public function __construct($query, $alias, $field, $value)
+    public function __construct($query, string $alias = null, string $field, string $value)
     {
         $this->query = $query;
         $this->alias = $alias;
@@ -50,9 +50,9 @@ class FilterEvent
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getAlias()
+    public function getAlias():string
     {
         return $this->alias;
     }
@@ -60,7 +60,7 @@ class FilterEvent
     /**
      * @return string
      */
-    public function getValue()
+    public function getValue():string
     {
         return $this->value;
     }
@@ -68,7 +68,7 @@ class FilterEvent
     /**
      * @return string
      */
-    public function getField()
+    public function getField():string
     {
         return $this->field;
     }

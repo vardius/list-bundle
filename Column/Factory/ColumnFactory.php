@@ -12,7 +12,8 @@ namespace Vardius\Bundle\ListBundle\Column\Factory;
 
 use Symfony\Bridge\Twig\TwigEngine;
 use Vardius\Bundle\ListBundle\Column\Column;
-use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
+use Vardius\Bundle\ListBundle\Column\ColumnInterface;
+use Vardius\Bundle\ListBundle\Column\Types\ColumnTypeInterface;
 use Vardius\Bundle\ListBundle\Column\Types\ColumnTypePool;
 
 /**
@@ -40,15 +41,15 @@ class ColumnFactory
      * @param string $property
      * @param $type
      * @param array $options
-     * @return Column
+     * @return ColumnInterface
      */
-    public function get($property, $type, array $options = [])
+    public function get(string $property, $type, array $options = []):ColumnInterface
     {
         if (is_string($type)) {
             $type = $this->columnTypePool->getType($type);
         }
 
-        if (!$type instanceof ColumnType) {
+        if (!$type instanceof ColumnTypeInterface) {
             throw new \InvalidArgumentException('The $type mast be instance of ColumnTypeInterface. ' . get_class($type) . ' given');
         }
 

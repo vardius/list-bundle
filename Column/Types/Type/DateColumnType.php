@@ -23,7 +23,7 @@ class DateColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getData($entity = null, array $options = [])
+    public function getData($entity = null, array $options = []):array
     {
         $property = null;
         $callable = $options['callback'];
@@ -66,7 +66,7 @@ class DateColumnType extends ColumnType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'date';
     }

@@ -33,7 +33,7 @@ class ColumnTypePool
     /**
      * @return ArrayCollection
      */
-    public function getTypes()
+    public function getTypes():ArrayCollection
     {
         return $this->types;
     }
@@ -48,9 +48,9 @@ class ColumnTypePool
 
     /**
      * @param string $id
-     * @return ColumnTypeInterface
+     * @return ColumnTypeInterface|null
      */
-    public function getType($id)
+    public function getType($id):ColumnTypeInterface
     {
         if ($this->types->containsKey($id)) {
             return $this->types[$id];
