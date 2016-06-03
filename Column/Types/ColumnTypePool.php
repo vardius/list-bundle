@@ -50,7 +50,7 @@ class ColumnTypePool
      * @param string $id
      * @return ColumnTypeInterface|null
      */
-    public function getType($id):ColumnTypeInterface
+    public function getType(string $id):ColumnTypeInterface
     {
         if ($this->types->containsKey($id)) {
             return $this->types[$id];
