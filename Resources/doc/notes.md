@@ -39,7 +39,7 @@ RELEASE NOTES
 - Add NULL filter type
 - Fixed multiple filters for the same field
 
-**0.7.2**
+**0.8.0**
 
 - Add Elastic Search support
 - End support for PHP<7.0.0
