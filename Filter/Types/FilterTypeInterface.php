@@ -35,11 +35,4 @@ interface FilterTypeInterface
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver);
-
-    /**
-     * Returns filter type name
-     *
-     * @return string
-     */
-    public function getName():string;
 }

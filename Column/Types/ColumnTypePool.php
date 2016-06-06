@@ -43,17 +43,17 @@ class ColumnTypePool
      */
     public function addType(ColumnTypeInterface $type)
     {
-        $this->types->set($type->getName(), $type);
+        $this->types->set(get_class($type), $type);
     }
 
     /**
-     * @param string $id
+     * @param string $class
      * @return ColumnTypeInterface|null
      */
-    public function getType(string $id):ColumnTypeInterface
+    public function getType(string $class):ColumnTypeInterface
     {
-        if ($this->types->containsKey($id)) {
-            return $this->types[$id];
+        if ($this->types->containsKey($class)) {
+            return $this->types[$class];
         }
 
         return null;

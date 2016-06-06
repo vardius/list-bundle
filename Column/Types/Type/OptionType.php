@@ -12,14 +12,14 @@ namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\AbstractType;
 
 /**
- * OptionColumnType
+ * OptionType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class OptionColumnType extends ColumnType
+class OptionType extends AbstractType
 {
     /** @var TwigEngine */
     protected $templating;
@@ -53,13 +53,5 @@ class OptionColumnType extends ColumnType
         $resolver->setDefault('label', $this->templating->render($templatePath . $this->getName() . '.html.twig'));
         $resolver->remove('url');
         $resolver->remove('sort');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'option';
     }
 }

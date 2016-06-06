@@ -12,7 +12,6 @@ namespace Vardius\Bundle\ListBundle\Filter;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
-use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterTypeInterface;
 
 /**
@@ -24,7 +23,7 @@ class Filter implements FilterInterface
 {
     /** @var array */
     protected $options;
-    /** @var  FilterType|callable */
+    /** @var  FilterTypeInterface|callable */
     protected $type;
 
     /**

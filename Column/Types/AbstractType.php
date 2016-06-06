@@ -13,11 +13,11 @@ namespace Vardius\Bundle\ListBundle\Column\Types;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ColumnType
+ * AbstractType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-abstract class ColumnType implements ColumnTypeInterface
+abstract class AbstractType implements ColumnTypeInterface
 {
     /**
      * @inheritDoc
@@ -42,5 +42,4 @@ abstract class ColumnType implements ColumnTypeInterface
         $resolver->setAllowedTypes('attr', 'array');
         $resolver->setAllowedTypes('row_action', 'array');
     }
-
 }

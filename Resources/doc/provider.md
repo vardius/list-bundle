@@ -18,7 +18,7 @@ services:
     app.form.type.product_filter:
         class: AppBundle\Form\Type\Filter\ProductFilterType
         tags:
-            - { name: form.type, alias: product_filter }
+            - { name: form.type }
 ```
 
 ###### XML

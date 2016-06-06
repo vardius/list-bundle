@@ -85,7 +85,7 @@ class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterPr
     {
         $this
             ->addFilter('dateFrom', new DateType()); //you can pass name of filter or pass it by new ClassType() declaration
-            ->addFilter('dateTo', 'date', [
+            ->addFilter('dateTo', DateType::class, [
                 'field' => 'date',
             ])
             ->addFilter('dateFrom', function (FilterEvent $event) {
@@ -114,12 +114,14 @@ class FilterProvider extends \Vardius\Bundle\ListBundle\Filter\Provider\FilterPr
 
 ### Available filters
 
-`date` - available options: `['filed' => 'field name', 'condition' => 'eq|neq|lt|lte|gt|gte']`
+`DateType` - available options: `['filed' => 'field name', 'condition' => 'eq|neq|lt|lte|gt|gte']`
 
-`null` - available options: `['filed' => 'field name']`
+`NullType` - available options: `['filed' => 'field name']`
 
-`text` - available options: `['filed' => 'field name']`
+`PropertyType` - available options: `['filed' => 'field name']`
 
-`numeric` - available options: `['filed' => 'field name', 'condition' => 'eq|neq|lt|lte|gt|gte']`
+`TextType` - available options: `['filed' => 'field name']`
 
-`entity` - available options: `['filed' => 'field name', 'property' => 'property name', 'joinType' => 'join|leftJoin|innerJoin']`
+`NumericType` - available options: `['filed' => 'field name', 'condition' => 'eq|neq|lt|lte|gt|gte']`
+
+`EntityType` - available options: `['filed' => 'field name', 'property' => 'property name', 'joinType' => 'join|leftJoin|innerJoin']`

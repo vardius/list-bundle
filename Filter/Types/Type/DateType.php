@@ -13,14 +13,14 @@ namespace Vardius\Bundle\ListBundle\Filter\Types\Type;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
-use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
+use Vardius\Bundle\ListBundle\Filter\Types\AbstractType;
 
 /**
  * DateType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class DateType extends FilterType
+class DateType extends AbstractType
 {
     /**
      * @inheritDoc
@@ -41,7 +41,7 @@ class DateType extends FilterType
     {
         $queryBuilder = $event->getQuery();
         if (!$queryBuilder instanceof QueryBuilder) {
-            throw new \Exception('Vardius\Bundle\ListBundle\Filter\Types\FilterType supports only doctrine filters for now. To filter Propel or ElasticSearch Queries use callbacks or create your own FilterType classes');
+            throw new \Exception('Vardius\Bundle\ListBundle\Filter\Types\DateType supports only doctrine filters for now. To filter Propel or ElasticSearch Queries use callbacks or create your own FilterType classes');
         }
 
         $value = $event->getValue();
@@ -56,13 +56,5 @@ class DateType extends FilterType
         }
 
         return $queryBuilder;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getName():string
-    {
-        return 'date';
     }
 }

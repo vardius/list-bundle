@@ -12,7 +12,6 @@ namespace Vardius\Bundle\ListBundle\Filter\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Vardius\Bundle\ListBundle\Filter\Factory\FilterFactory;
-use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
 use Vardius\Bundle\ListBundle\Filter\Types\FilterTypeInterface;
 
 /**
@@ -47,7 +46,7 @@ abstract class FilterProvider implements FilterProviderInterface
 
     /**
      * @param string $field
-     * @param string|callable|FilterType $type
+     * @param mixed $type
      * @param array $options
      * @return FilterProvider
      */

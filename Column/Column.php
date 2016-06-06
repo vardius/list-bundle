@@ -12,7 +12,6 @@ namespace Vardius\Bundle\ListBundle\Column;
 
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
 use Vardius\Bundle\ListBundle\Column\Types\ColumnTypeInterface;
 
 /**
@@ -22,7 +21,7 @@ use Vardius\Bundle\ListBundle\Column\Types\ColumnTypeInterface;
  */
 class Column implements ColumnInterface
 {
-    /** @var  ColumnType */
+    /** @var  ColumnTypeInterface */
     protected $type;
     /** @var  array */
     protected $options;
@@ -99,5 +98,4 @@ class Column implements ColumnInterface
     {
         return $this->options['ui'];
     }
-
 }

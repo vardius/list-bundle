@@ -10,22 +10,26 @@
 
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
-use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vardius\Bundle\ListBundle\Column\Types\AbstractType;
 
 /**
- * PropertyColumnType
+ * RawType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class PropertyColumnType extends ColumnType
+class RawType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function getData($entity = null, array $options = []):array
     {
+        $callable = $options['callback'];
         $property = null;
-        if ($entity !== null) {
+        if (is_callable($callable)) {
+            $property = call_user_func_array($callable, [$entity]);
+        } else {
             $method = ucfirst($options['property']);
             if (method_exists($entity, 'get' . $method)) {
                 $property = $entity->{'get' . $method}();
@@ -35,7 +39,7 @@ class PropertyColumnType extends ColumnType
         }
 
         $action = $options['row_action'];
-        if (is_array($action) && !empty($action) && $entity !== null && method_exists($entity, 'getId')) {
+        if (is_array($action) && !empty($action) && $entity !== null) {
             $action['parameters']['id'] = $entity->getId();
         }
 
@@ -46,10 +50,13 @@ class PropertyColumnType extends ColumnType
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function getName():string
+    public function configureOptions(OptionsResolver $resolver, $property, $templatePath)
     {
-        return 'property';
+        parent::configureOptions($resolver, $property, $templatePath);
+
+        $resolver->setDefault('callback', null);
+        $resolver->setAllowedTypes('callback', ['closure', 'null', 'array']);
     }
 }

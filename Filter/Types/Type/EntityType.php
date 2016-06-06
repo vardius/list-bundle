@@ -14,14 +14,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
-use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
+use Vardius\Bundle\ListBundle\Filter\Types\AbstractType;
 
 /**
  * EntityType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class EntityType extends FilterType
+class EntityType extends AbstractType
 {
     /**
      * @inheritDoc
@@ -46,7 +46,7 @@ class EntityType extends FilterType
     {
         $queryBuilder = $event->getQuery();
         if (!$queryBuilder instanceof QueryBuilder) {
-            throw new \Exception('Vardius\Bundle\ListBundle\Filter\Types\FilterType supports only doctrine filters for now. To filter Propel or ElasticSearch Queries use callbacks or create your own FilterType classes');
+            throw new \Exception('Vardius\Bundle\ListBundle\Filter\Types\EntityType supports only doctrine filters for now. To filter Propel or ElasticSearch Queries use callbacks or create your own FilterType classes');
         }
 
         $value = $event->getValue();
@@ -70,13 +70,5 @@ class EntityType extends FilterType
         }
 
         return $queryBuilder;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getName():string
-    {
-        return 'entity';
     }
 }

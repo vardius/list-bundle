@@ -12,14 +12,14 @@ namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\ListBundle\Action\Factory\ActionFactory;
-use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\AbstractType;
 
 /**
- * ActionColumnType
+ * ActionType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class ActionColumnType extends ColumnType
+class ActionType extends AbstractType
 {
     /** @var ActionFactory */
     protected $actionFactory;
@@ -67,13 +67,4 @@ class ActionColumnType extends ColumnType
         $resolver->setRequired('actions');
         $resolver->setAllowedTypes('actions', 'array');
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'action';
-    }
-
 }

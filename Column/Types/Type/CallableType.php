@@ -11,14 +11,14 @@
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\AbstractType;
 
 /**
- * CallableColumnType
+ * CallableType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class CallableColumnType extends ColumnType
+class CallableType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -53,13 +53,5 @@ class CallableColumnType extends ColumnType
         $resolver->setDefault('callback', null);
         $resolver->setAllowedTypes('callback', ['closure', 'null', 'array']);
         $resolver->setRequired('callback');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'callable';
     }
 }

@@ -11,14 +11,14 @@
 namespace Vardius\Bundle\ListBundle\Column\Types\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vardius\Bundle\ListBundle\Column\Types\ColumnType;
+use Vardius\Bundle\ListBundle\Column\Types\AbstractType;
 
 /**
- * ImageColumnType
+ * ImageType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class ImageColumnType extends ColumnType
+class ImageType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -58,13 +58,5 @@ class ImageColumnType extends ColumnType
 
         $resolver->setDefault('callback', null);
         $resolver->setAllowedTypes('callback', ['closure', 'null', 'array']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'image';
     }
 }

@@ -13,11 +13,11 @@ namespace Vardius\Bundle\ListBundle\Filter\Types;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * FilterType
+ * AbstractType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-abstract class FilterType implements FilterTypeInterface
+abstract class AbstractType implements FilterTypeInterface
 {
     /**
      * @inheritDoc

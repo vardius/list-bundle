@@ -39,20 +39,20 @@ class FilterTypePool
     }
 
     /**
-     * @param FilterType $type
+     * @param FilterTypeInterface $type
      * @return FilterTypePool
      */
-    public function addType(FilterType $type):self
+    public function addType(FilterTypeInterface $type):self
     {
-        $this->types->set($type->getName(), $type);
+        $this->types->set(get_class($type), $type);
     }
 
     /**
-     * @param string $id
-     * @return FilterType
+     * @param string $class
+     * @return FilterTypeInterface
      */
-    public function getType(string $id):FilterType
+    public function getType(string $class):FilterTypeInterface
     {
-        return $this->types->get($id);
+        return $this->types->get($class);
     }
 }

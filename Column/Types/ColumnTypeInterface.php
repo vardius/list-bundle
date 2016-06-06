@@ -37,12 +37,4 @@ interface ColumnTypeInterface
      * @return mixed
      */
     public function configureOptions(OptionsResolver $resolver, $property, $templatePath);
-
-    /**
-     * Returns action name
-     *
-     * @return string
-     */
-    public function getName():string;
-
 }

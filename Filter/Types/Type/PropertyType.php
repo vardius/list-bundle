@@ -12,14 +12,14 @@ namespace Vardius\Bundle\ListBundle\Filter\Types\Type;
 
 use Doctrine\ORM\QueryBuilder;
 use Vardius\Bundle\ListBundle\Event\FilterEvent;
-use Vardius\Bundle\ListBundle\Filter\Types\FilterType;
+use Vardius\Bundle\ListBundle\Filter\Types\AbstractType;
 
 /**
  * PropertyType
  *
  * @author Rafał Lorenz <vardius@gmail.com>
  */
-class PropertyType extends FilterType
+class PropertyType extends AbstractType
 {
     /**
      * @inheritDoc
@@ -28,7 +28,7 @@ class PropertyType extends FilterType
     {
         $queryBuilder = $event->getQuery();
         if (!$queryBuilder instanceof QueryBuilder) {
-            throw new \Exception('Vardius\Bundle\ListBundle\Filter\Types\FilterType supports only doctrine filters for now. To filter Propel or ElasticSearch Queries use callbacks or create your own FilterType classes');
+            throw new \Exception('Vardius\Bundle\ListBundle\Filter\Types\PropertyType supports only doctrine filters for now. To filter Propel or ElasticSearch Queries use callbacks or create your own FilterType classes');
         }
 
         $value = $event->getValue();
@@ -42,13 +42,5 @@ class PropertyType extends FilterType
         }
 
         return $queryBuilder;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getName():string
-    {
-        return 'property';
     }
 }
