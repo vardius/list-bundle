@@ -69,9 +69,9 @@ class ListDataEvent
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getColumn():string
+    public function getColumn()
     {
 
         return $this->request->get('column', null);
@@ -79,17 +79,17 @@ class ListDataEvent
 
     /**
      * asc|desc
-     * @return string|null
+     * @return string
      */
-    public function getSort():string
+    public function getSort()
     {
         return $this->request->get('sort', null);
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getLimit():int
+    public function getLimit()
     {
         return $this->request->get('limit', null);
     }

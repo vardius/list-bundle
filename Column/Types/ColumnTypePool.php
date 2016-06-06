@@ -48,9 +48,9 @@ class ColumnTypePool
 
     /**
      * @param string $class
-     * @return ColumnTypeInterface|null
+     * @return ColumnTypeInterface
      */
-    public function getType(string $class):ColumnTypeInterface
+    public function getType(string $class)
     {
         if ($this->types->containsKey($class)) {
             return $this->types[$class];

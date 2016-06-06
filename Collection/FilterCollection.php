@@ -68,9 +68,9 @@ class FilterCollection implements \IteratorAggregate
 
     /**
      * @param int $key
-     * @return mixed|null
+     * @return ListViewFilter
      */
-    public function remove(int $key):ListViewFilter
+    public function remove(int $key)
     {
         if (!isset($this->items[$key]) && !array_key_exists($key, $this->items)) {
             return null;
@@ -101,7 +101,7 @@ class FilterCollection implements \IteratorAggregate
 
     /**
      * @param int $key
-     * @return ListViewFilter|null
+     * @return ListViewFilter
      */
     public function get(int $key):ListViewFilter
     {

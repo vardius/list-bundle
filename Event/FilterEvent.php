@@ -50,9 +50,9 @@ class FilterEvent
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getAlias():string
+    public function getAlias()
     {
         return $this->alias;
     }

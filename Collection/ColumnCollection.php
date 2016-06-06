@@ -100,9 +100,9 @@ class ColumnCollection implements \IteratorAggregate
 
     /**
      * @param int $key
-     * @return Column|null
+     * @return Column
      */
-    public function get(int $key):Column
+    public function get(int $key)
     {
         return isset($this->items[$key]) ? $this->items[$key] : null;
     }

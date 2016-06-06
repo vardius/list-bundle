@@ -68,9 +68,9 @@ class ActionCollection implements \IteratorAggregate
 
     /**
      * @param int $key
-     * @return mixed|null
+     * @return Action
      */
-    public function remove(int $key):Action
+    public function remove(int $key)
     {
         if (!isset($this->items[$key]) && !array_key_exists($key, $this->items)) {
             return null;
@@ -101,9 +101,9 @@ class ActionCollection implements \IteratorAggregate
 
     /**
      * @param int $key
-     * @return Action|null
+     * @return Action
      */
-    public function get(int $key):Action
+    public function get(int $key)
     {
         return isset($this->items[$key]) ? $this->items[$key] : null;
     }

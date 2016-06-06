@@ -25,9 +25,9 @@ interface ColumnInterface
     public function getData($entity, string $responseType = 'html');
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getLabel():string;
+    public function getLabel();
 
     /**
      * @return bool
