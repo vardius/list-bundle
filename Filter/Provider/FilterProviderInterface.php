@@ -10,8 +10,6 @@
 
 namespace Vardius\Bundle\ListBundle\Filter\Provider;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 /**
  * FilterProviderInterface
  *
@@ -21,8 +19,6 @@ interface FilterProviderInterface
 {
     /**
      * Provides filters for list view
-     *
-     * @return ArrayCollection
      */
-    public function build():ArrayCollection;
+    public function build();
 }
