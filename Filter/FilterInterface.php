@@ -40,6 +40,6 @@ interface FilterInterface
      * @param array $options
      * @return FilterInterface
      */
-    public function setOptions(array $options = []):self;
+    public function setOptions(array $options = []);
 
 }
