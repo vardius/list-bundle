@@ -40,9 +40,8 @@ class FilterTypePool
 
     /**
      * @param FilterTypeInterface $type
-     * @return FilterTypePool
      */
-    public function addType(FilterTypeInterface $type):self
+    public function addType(FilterTypeInterface $type)
     {
         $this->types->set(get_class($type), $type);
     }
