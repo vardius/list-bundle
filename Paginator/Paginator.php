@@ -46,7 +46,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastPage():int
+    public function getLastPage():float
     {
         return ceil($this->total / $this->limit);
     }
@@ -62,7 +62,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getPreviousPage():float
+    public function getPreviousPage():int
     {
         return ($this->page > 1 ? ($this->page - 1) : 1);
     }
@@ -86,7 +86,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function setTemplating(TwigEngine $templating):self
+    public function setTemplating(TwigEngine $templating):PaginatorInterface
     {
         $this->templating = $templating;
         return $this;

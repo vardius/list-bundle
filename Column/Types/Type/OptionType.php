@@ -50,7 +50,8 @@ class OptionType extends AbstractType
     {
         parent::configureOptions($resolver, $property, $templatePath);
 
-        $resolver->setDefault('label', $this->templating->render($templatePath . $this->getName() . '.html.twig'));
+        $class = get_class($this);
+        $resolver->setDefault('label', $this->templating->render($templatePath . strtolower(str_replace('Type', '', substr($class, strrpos($class, '\\') + 1))) . '.html.twig'));
         $resolver->remove('url');
         $resolver->remove('sort');
     }
