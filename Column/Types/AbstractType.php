@@ -24,6 +24,7 @@ abstract class AbstractType implements ColumnTypeInterface
      */
     public function configureOptions(OptionsResolver $resolver, $property, $templatePath)
     {
+        $class = get_class($this);
         $resolver->setDefaults([
             'property' => $property,
             'label' => $property,
@@ -31,7 +32,7 @@ abstract class AbstractType implements ColumnTypeInterface
             'ui' => false,
             'attr' => [],
             'row_action' => [],
-            'view' => $templatePath . $this->getName() . '.html.twig'
+            'view' => $templatePath . strtolower(str_replace('Type', '', substr($class, strrpos($class, '\\') + 1))) . '.html.twig'
         ]);
 
         $resolver->setAllowedTypes('label', 'string');
