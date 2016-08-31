@@ -103,7 +103,7 @@ abstract class Paginator implements PaginatorInterface
     /**
      * {@inheritdoc}
      */
-    public function setTemplatePath(string $templatePath)
+    public function setTemplatePath(string $templatePath):PaginatorInterface
     {
         $this->templatePath = $templatePath;
         return $this;
