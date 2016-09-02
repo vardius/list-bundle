@@ -43,7 +43,7 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritDoc
      */
-    public function applyQueries($query, string $alias = null, string $column = null, string $sort = null, array $ids = [])
+    public function applyQueries($query, $alias = null, string $column = null, string $sort = null, array $ids = [])
     {
         if (!$query instanceof \ModelCriteria) {
             throw new \InvalidArgumentException(

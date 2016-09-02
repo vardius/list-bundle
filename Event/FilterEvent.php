@@ -33,7 +33,7 @@ class FilterEvent
      * @param string $field
      * @param string $value
      */
-    public function __construct($query, string $alias = null, string $field, string $value)
+    public function __construct($query, $alias = null, string $field, string $value)
     {
         $this->query = $query;
         $this->alias = $alias;
