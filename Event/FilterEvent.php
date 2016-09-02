@@ -33,7 +33,7 @@ class FilterEvent
      * @param string $field
      * @param string $value
      */
-    public function __construct($query, $alias = null, string $field, string $value)
+    public function __construct($query, $alias = null, string $field, $value)
     {
         $this->query = $query;
         $this->alias = $alias;
@@ -60,7 +60,7 @@ class FilterEvent
     /**
      * @return string
      */
-    public function getValue():string
+    public function getValue()
     {
         return $this->value;
     }
@@ -68,7 +68,7 @@ class FilterEvent
     /**
      * @return string
      */
-    public function getField():string
+    public function getField()
     {
         return $this->field;
     }
