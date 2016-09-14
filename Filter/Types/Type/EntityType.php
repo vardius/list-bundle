@@ -60,8 +60,13 @@ class EntityType extends AbstractType
             $queryBuilder->{$options['joinType']}($event->getAlias() . '.' . $field, $field);
 
             if ($options['multiple']) {
-                $value = is_array($value) ?: [$value];
-                $queryBuilder->where($field . '.' . $options['property'] . ' IN(:vardius_entity_' . $event->getField() . ')');
+                $value = is_array($value) ? $value : [$value];
+                $ids = [];
+                foreach ($value as $entity){
+                    $ids[] = $entity->getId();
+                }
+                $value = $ids;
+                $queryBuilder->andWhere($field . '.' . $options['property'] . ' IN(:vardius_entity_' . $event->getField() . ')');
             } else {
                 $queryBuilder->andWhere($field . '.' . $options['property'] . ' = :vardius_entity_' . $event->getField());
             }
