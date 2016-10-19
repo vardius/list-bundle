@@ -43,7 +43,7 @@ class DataProvider implements DataProviderInterface
     /**
      * @inheritDoc
      */
-    public function applyQueries($query, $alias = null, string $column = null, string $sort = null, array $ids = [])
+    public function applyQueries($query, $alias = null, string $column = null, string $sort = null, array $ids = [], array $order = [])
     {
         if (!$query instanceof \ModelCriteria) {
             throw new \InvalidArgumentException(
@@ -56,10 +56,10 @@ class DataProvider implements DataProviderInterface
         }
         unset($sort);
 
-        if (!empty($this->order)) {
-            foreach ($this->order as $sort => $order) {
+        if (!empty($order)) {
+            foreach ($order as $sort => $o) {
                 if ($column !== $sort) {
-                    $query->orderBy($sort, $order);
+                    $query->orderBy($sort, $o);
                 }
             }
         }

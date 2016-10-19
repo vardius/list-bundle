@@ -32,5 +32,5 @@ interface DataProviderInterface
      * @param array $ids
      * @return mixed
      */
-    function applyQueries($query, $alias = null, string $column = null, string $sort = null, array $ids = []);
+    function applyQueries($query, $alias = null, string $column = null, string $sort = null, array $ids = [], array $order = []);
 }
