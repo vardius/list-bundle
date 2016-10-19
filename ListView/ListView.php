@@ -103,6 +103,7 @@ class ListView
         $ids = $request->get('ids', []);
         $filterForms = [];
         $paginator = null;
+        $order = $this->getOrder();
 
         $dispatcher = $this->container->get('event_dispatcher');
         $dispatcher->dispatch(ListEvents::PRE_QUERY_BUILDER, new ListEvent($routeName, $query, $request));
@@ -137,8 +138,7 @@ class ListView
                 $filterForms[] = $form->createView();
             }
         }
-
-        $query = $dataProvider->applyQueries($query, $alias, $column, $sort, $ids);
+        $query = $dataProvider->applyQueries($query, $alias, $column, $sort, $ids, $order);
 
         if ($this->paginator && empty($ids)) {
             $dispatcher->dispatch(ListEvents::PRE_PAGINATOR, new ListEvent($routeName, $query, $request));
