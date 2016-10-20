@@ -50,7 +50,7 @@ class FilterTypePool
      * @param string $class
      * @return FilterTypeInterface
      */
-    public function getType(string $class)
+    public function getType(string $class):FilterTypeInterface
     {
         return $this->types->get($class);
     }
