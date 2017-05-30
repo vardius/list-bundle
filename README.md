@@ -6,6 +6,11 @@ Supports: **Doctrine**, **Propel** and **ElasticSearch**
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/faea1bb4-c6ee-4be3-ab78-12e0eb19c11e/big.png)](https://insight.sensiolabs.com/projects/faea1bb4-c6ee-4be3-ab78-12e0eb19c11e)
 
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/vardius/list-bundle/badge.svg?style=beer-square)](https://beerpay.io/vardius/list-bundle)  [![Beerpay](https://beerpay.io/vardius/list-bundle/make-wish.svg?style=flat-square)](https://beerpay.io/vardius/list-bundle?focus=wish)
+
 ABOUT
 ==================================================
 Contributors:
@@ -33,8 +38,3 @@ License
 This bundle is released under the MIT license. See the complete license in the bundle:
 
 [LICENSE](LICENSE)
-
-## Support on Beerpay
-Hey dude! Help me out for a couple of :beers:!
-
-[![Beerpay](https://beerpay.io/vardius/list-bundle/badge.svg?style=beer-square)](https://beerpay.io/vardius/list-bundle)  [![Beerpay](https://beerpay.io/vardius/list-bundle/make-wish.svg?style=flat-square)](https://beerpay.io/vardius/list-bundle?focus=wish)
