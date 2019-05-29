@@ -1,7 +1,5 @@
 Vardius - List Bundle
 ======================================
-[![Beerpay](https://beerpay.io/vardius/list-bundle/badge.svg?style=beer-square)](https://beerpay.io/vardius/list-bundle)  [![Beerpay](https://beerpay.io/vardius/list-bundle/make-wish.svg?style=flat-square)](https://beerpay.io/vardius/list-bundle?focus=wish)
-
 List Bundle provides list view build
 Supports: **Doctrine**, **Propel** and **ElasticSearch**
 
