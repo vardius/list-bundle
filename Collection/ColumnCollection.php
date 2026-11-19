@@ -2,7 +2,7 @@
 /**
  * This file is part of the healthbridge_api package.
  *
- * (c) Rafał Lorenz <vardius@gmail.com>
+ * (c) Rafał Lorenz <support@vardius.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@ use Vardius\Bundle\ListBundle\Column\Factory\ColumnFactory;
 /**
  * Class ColumnCollection
  * @package Vardius\Bundle\ListBundle\Collection
- * @author Rafał Lorenz <vardius@gmail.com>
+ * @author Rafał Lorenz <support@vardius.dev>
  */
 class ColumnCollection implements \IteratorAggregate
 {
